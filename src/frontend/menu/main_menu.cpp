@@ -10,8 +10,7 @@ namespace hpaslt {
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
-      if (ImGui::MenuItem("Not Implemented", "", false, false)) {
-      }
+      ImGui::MenuItem("Not Implemented", nullptr, false, false);
       ImGui::EndMenu();
     }
     if (ImGui::BeginMenu("Edit")) {

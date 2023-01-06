@@ -90,6 +90,9 @@ int WindowManager::execute() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+    // Enable dockspace.
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
     // TODO: Remove the demo window here.
     // Show demo window.
     ImGui::ShowDemoWindow(&showDemoWindow);
