@@ -37,7 +37,7 @@ class Logger {
    *
    * @param logDirPath the path to the log directory.
    */
-  Logger(std::string logDirPath);
+  Logger(std::string logDirPath, spdlog::level::level_enum level);
 
   /**
    * @brief Destroy the Logger object

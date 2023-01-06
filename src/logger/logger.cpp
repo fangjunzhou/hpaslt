@@ -4,9 +4,9 @@
 
 namespace hpaslt {
 
-std::unique_ptr<Logger> logger = std::make_unique<Logger>("log");
+std::unique_ptr<Logger> logger = std::make_unique<Logger>("log", spdlog::level::debug);
 
-Logger::Logger(std::string logDirPath) {
+Logger::Logger(std::string logDirPath, spdlog::level::level_enum level) {
   namespace fs = std::filesystem;
   auto coreSinks =
       createSinks((fs::path(logDirPath) / fs::path("core.log")).string());
@@ -17,6 +17,9 @@ Logger::Logger(std::string logDirPath) {
       createSinks((fs::path(logDirPath) / fs::path("ui.log")).string());
   uiLogger =
       std::make_shared<spdlog::logger>("ui", uiSinks.begin(), uiSinks.end());
+
+  coreLogger->set_level(level);
+  uiLogger->set_level(level);
 }
 
 Logger::~Logger() {}
