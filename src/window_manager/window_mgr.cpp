@@ -93,6 +93,13 @@ int WindowManager::execute() {
     // Show demo window.
     ImGui::ShowDemoWindow(&showDemoWindow);
 
+    // Render ImGuiObjects.
+    for (int i = 0; i < m_renderObjs.size(); i++) {
+      if (!m_renderObjs[i].getEnabled()) continue;
+
+      m_renderObjs[i].render();
+    }
+
     // Rendering
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
