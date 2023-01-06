@@ -3,16 +3,17 @@
 
 namespace hpaslt {
 
+std::shared_ptr<WindowManager> windowMgr = nullptr;
+
 WindowManager::WindowManager() {
-  // Start the UI thread.
-  hpaslt::logger->uiLogger->info("WindowManager created.");
+  hpaslt::logger->uiLogger->debug("WindowManager created.");
 
   // Init GLFW.
   if (!glfwInit()) {
     hpaslt::logger->uiLogger->error("GLFW initialization failed!");
     throw std::runtime_error("GLFW initialization failed!");
   }
-  hpaslt::logger->uiLogger->info("GLFW initialization success.");
+  hpaslt::logger->uiLogger->debug("GLFW initialization success.");
 
   // Enable GLFW 4x MSAA.
   glfwWindowHint(GLFW_SAMPLES, 4);
@@ -28,7 +29,7 @@ WindowManager::WindowManager() {
     hpaslt::logger->uiLogger->error("GLFW window creation failed!");
     throw std::runtime_error("GLFW window creation failed!");
   }
-  hpaslt::logger->uiLogger->info("GLFW window creation success.");
+  hpaslt::logger->uiLogger->debug("GLFW window creation success.");
 
   glfwMakeContextCurrent(m_window);
 
@@ -38,12 +39,12 @@ WindowManager::WindowManager() {
     hpaslt::logger->uiLogger->error("GLEW initialization failed!");
     throw std::runtime_error("GLEW initialization failed!");
   }
-  hpaslt::logger->uiLogger->info("GLEW initialization success.");
+  hpaslt::logger->uiLogger->debug("GLEW initialization success.");
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  hpaslt::logger->uiLogger->info("ImGui context created.");
+  hpaslt::logger->uiLogger->debug("ImGui context created.");
   m_io = &ImGui::GetIO();
   m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -95,9 +96,9 @@ int WindowManager::execute() {
 
     // Render ImGuiObjects.
     for (int i = 0; i < m_renderObjs.size(); i++) {
-      if (!m_renderObjs[i].getEnabled()) continue;
+      if (!m_renderObjs[i]->getEnabled()) continue;
 
-      m_renderObjs[i].render();
+      m_renderObjs[i]->render();
     }
 
     // Rendering
@@ -122,6 +123,10 @@ int WindowManager::execute() {
 
   hpaslt::logger->uiLogger->info("GLFW window closed, exiting main loop.");
   return EXIT_SUCCESS;
+}
+
+void WindowManager::pushRenderObject(std::shared_ptr<ImGuiObject> renderObj) {
+  m_renderObjs.push_back(renderObj);
 }
 
 }  // namespace hpaslt

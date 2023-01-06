@@ -8,17 +8,6 @@ class ImGuiObject {
 
  public:
   /**
-   * @brief Construct a new Im Gui Object object
-   *
-   */
-  ImGuiObject();
-  /**
-   * @brief Destroy the Im Gui Object object
-   *
-   */
-  ~ImGuiObject();
-
-  /**
    * @brief Get the enable status of the ImGuiObject.
    *
    * @return true when the ImGuiObject should be rendered.
@@ -37,7 +26,7 @@ class ImGuiObject {
    * @brief Render method.
    *
    */
-  virtual void render();
+  virtual void render() {}
 };
 
 }  // namespace hpaslt

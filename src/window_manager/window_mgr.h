@@ -32,7 +32,7 @@ class WindowManager {
    * @brief All the ImGuiObjects to be rendered.
    *
    */
-  std::vector<ImGuiObject> m_renderObjs;
+  std::vector<std::shared_ptr<ImGuiObject>> m_renderObjs;
 
  public:
   /**
@@ -53,6 +53,13 @@ class WindowManager {
    * @return int the execution result.
    */
   int execute();
+
+  /**
+   * @brief Push a new render object to the vector.
+   *
+   * @param renderObj the reference to the new object.
+   */
+  void pushRenderObject(std::shared_ptr<ImGuiObject> renderObj);
 };
 
 extern std::shared_ptr<WindowManager> windowMgr;
