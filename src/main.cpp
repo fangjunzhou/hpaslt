@@ -5,7 +5,7 @@
 #include "frontend/frontend.h"
 
 int main(int argc, char const* argv[]) {
-  hpaslt::logger->coreLogger->info("HPASLT Started.");
+  hpaslt::logger->coreLogger->info("HPASLT started.");
 
   hpaslt::logger->coreLogger->debug("Creating WindowManager.");
   // Create the window manager, start the UI thread.
@@ -20,6 +20,8 @@ int main(int argc, char const* argv[]) {
 
   // Join UI thread, get the execution result.
   int exitRes = hpaslt::windowMgr->execute();
+
+  hpaslt::logger->coreLogger->info("HPASLT terminated.");
 
   return exitRes;
 }

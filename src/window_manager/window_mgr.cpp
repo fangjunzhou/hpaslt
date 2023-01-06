@@ -121,7 +121,7 @@ int WindowManager::execute() {
     glfwSwapBuffers(m_window);
   }
 
-  hpaslt::logger->uiLogger->info("GLFW window closed, exiting main loop.");
+  hpaslt::logger->uiLogger->debug("GLFW window closed, exiting main loop.");
   return EXIT_SUCCESS;
 }
 
