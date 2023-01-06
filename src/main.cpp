@@ -6,14 +6,11 @@
 #include "logger/logger.h"
 
 int main(int argc, char const *argv[]) {
-  std::unique_ptr<hpaslt::Logger> logger =
-      std::make_unique<hpaslt::Logger>("log");
-
-  logger->coreLogger->info("HPASLT Started.");
+  hpaslt::logger->coreLogger->info("HPASLT Started.");
 
   // Init GLFW.
   if (!glfwInit()) {
-    logger->uiLogger->error("GLFW Init Failed!");
+    hpaslt::logger->uiLogger->error("GLFW Init Failed!");
     return EXIT_FAILURE;
   }
 
@@ -28,7 +25,7 @@ int main(int argc, char const *argv[]) {
 
   GLFWwindow *window = glfwCreateWindow(960, 540, "HPASLT", nullptr, nullptr);
   if (!window) {
-    logger->uiLogger->error("GLFW Window Creation Failed!");
+    hpaslt::logger->uiLogger->error("GLFW Window Creation Failed!");
     glfwTerminate();
     return EXIT_FAILURE;
   }
@@ -37,7 +34,7 @@ int main(int argc, char const *argv[]) {
   // Init GLEW.
   glewExperimental = true;
   if (glewInit() != GLEW_OK) {
-    logger->uiLogger->error("GLEW Init Failed!");
+    hpaslt::logger->uiLogger->error("GLEW Init Failed!");
     glfwTerminate();
     return EXIT_FAILURE;
   }

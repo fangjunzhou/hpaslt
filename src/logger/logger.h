@@ -8,6 +8,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 
 namespace hpaslt {
+
 class Logger {
  private:
   /**
@@ -44,4 +45,7 @@ class Logger {
    */
   ~Logger();
 };
+
+extern std::unique_ptr<Logger> logger;
+
 }  // namespace hpaslt

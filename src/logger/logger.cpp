@@ -4,6 +4,8 @@
 
 namespace hpaslt {
 
+std::unique_ptr<Logger> logger = std::make_unique<Logger>("log");
+
 Logger::Logger(std::string logDirPath) {
   namespace fs = std::filesystem;
   auto coreSinks =
