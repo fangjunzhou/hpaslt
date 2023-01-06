@@ -1,55 +1,22 @@
 #include <memory>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "logger/logger.h"
+#include "window_manager/window_mgr.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const* argv[]) {
   hpaslt::logger->coreLogger->info("HPASLT Started.");
 
-  // Init GLFW.
-  if (!glfwInit()) {
-    hpaslt::logger->uiLogger->error("GLFW Init Failed!");
+  hpaslt::logger->coreLogger->info("Creating WindowManager.");
+  // Create the window manager, start the UI thread.
+  std::shared_ptr<hpaslt::WindowManager> windowMgr;
+  try {
+    windowMgr = std::make_shared<hpaslt::WindowManager>();
+  } catch (const std::system_error& e) {
     return EXIT_FAILURE;
   }
 
-  // Enable GLFW 4x MSAA.
-  glfwWindowHint(GLFW_SAMPLES, 4);
-  // Set OpenGL version.
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  // Mac compatability.
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  // Join UI thread, get the execution result.
+  int exitRes = windowMgr->execute();
 
-  GLFWwindow *window = glfwCreateWindow(960, 540, "HPASLT", nullptr, nullptr);
-  if (!window) {
-    hpaslt::logger->uiLogger->error("GLFW Window Creation Failed!");
-    glfwTerminate();
-    return EXIT_FAILURE;
-  }
-  glfwMakeContextCurrent(window);
-
-  // Init GLEW.
-  glewExperimental = true;
-  if (glewInit() != GLEW_OK) {
-    hpaslt::logger->uiLogger->error("GLEW Init Failed!");
-    glfwTerminate();
-    return EXIT_FAILURE;
-  }
-
-  // Main loop.
-  while (!glfwWindowShouldClose(window)) {
-    // Event polling.
-    glfwPollEvents();
-
-    // Clear color and depth buffer.
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Swap render buffer.
-    glfwSwapBuffers(window);
-  }
-
-  return EXIT_SUCCESS;
+  return exitRes;
 }

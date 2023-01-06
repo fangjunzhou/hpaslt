@@ -5,28 +5,22 @@ project(HPASLT)
 # ----------------------------- Project settings ----------------------------- #
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
 
 # ------------------------------ CMake variables ----------------------------- #
 
-set(INCLUDES "")
 set(LIBS "")
 
 # ---------------------------- External Libraries ---------------------------- #
 
 # SPDLog
 add_subdirectory(external/spdlog)
-list(APPEND INCLUDES external/spdlog/include)
-list(APPEND LIBS spdlog)
 
 # GLEW
 add_subdirectory(external/glew)
-list(APPEND INCLUDES external/glew/include)
-list(APPEND LIBS libglew_static)
 
 # GLFW
 add_subdirectory(external/glfw)
-list(APPEND INCLUDES external/glfw/include)
-list(APPEND LIBS glfw)
 
 # ---------------------------------- HPASLT ---------------------------------- #
 
@@ -43,7 +37,33 @@ target_include_directories(hpaslt_logger PUBLIC external/spdlog/include)
 target_link_libraries(hpaslt_logger spdlog)
 list(APPEND LIBS hpaslt_logger)
 
+# Window Manager.
+set(HPASLT_WINDOW_MGR_SRC "")
+list(
+    APPEND
+    HPASLT_WINDOW_MGR_SRC
+    src/window_manager/window_mgr.h
+    src/window_manager/window_mgr.cpp
+)
+add_library(hpaslt_window_mgr ${HPASLT_WINDOW_MGR_SRC})
+target_include_directories(
+    hpaslt_window_mgr
+    PUBLIC
+    external/spdlog/include
+    external/glew/include
+    external/glfw/include
+    src
+)
+target_link_libraries(
+    hpaslt_window_mgr
+    hpaslt_logger
+    spdlog
+    libglew_static
+    glfw
+)
+list(APPEND LIBS hpaslt_window_mgr)
+
 # Main executable.
 add_executable(hpaslt src/main.cpp)
-target_include_directories(hpaslt PUBLIC src ${INCLUDES})
+target_include_directories(hpaslt PUBLIC src)
 target_link_libraries(hpaslt ${LIBS})
