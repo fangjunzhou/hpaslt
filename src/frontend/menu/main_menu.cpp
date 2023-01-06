@@ -9,8 +9,6 @@ namespace hpaslt {
 
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
-    hpaslt::logger->uiLogger->trace("Main menu rendered.");
-
     if (ImGui::BeginMenu("File")) {
       if (ImGui::MenuItem("Not Implemented", "", false, false)) {
       }
