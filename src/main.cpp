@@ -1,17 +1,19 @@
+#include <memory>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-
-auto consoleLogger = spdlog::stdout_color_mt("console");
+#include "logger/logger.h"
 
 int main(int argc, char const *argv[]) {
-  consoleLogger->info("HPASLT Started.");
+  std::unique_ptr<hpaslt::Logger> logger =
+      std::make_unique<hpaslt::Logger>("log");
+
+  logger->coreLogger->info("HPASLT Started.");
 
   // Init GLFW.
   if (!glfwInit()) {
-    consoleLogger->error("GLFW Init Failed!");
+    logger->uiLogger->error("GLFW Init Failed!");
     return EXIT_FAILURE;
   }
 
@@ -26,7 +28,7 @@ int main(int argc, char const *argv[]) {
 
   GLFWwindow *window = glfwCreateWindow(960, 540, "HPASLT", nullptr, nullptr);
   if (!window) {
-    consoleLogger->error("GLFW Window Creation Failed!");
+    logger->uiLogger->error("GLFW Window Creation Failed!");
     glfwTerminate();
     return EXIT_FAILURE;
   }
@@ -35,7 +37,7 @@ int main(int argc, char const *argv[]) {
   // Init GLEW.
   glewExperimental = true;
   if (glewInit() != GLEW_OK) {
-    consoleLogger->error("GLEW Init Failed!");
+    logger->uiLogger->error("GLEW Init Failed!");
     glfwTerminate();
     return EXIT_FAILURE;
   }
