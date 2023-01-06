@@ -51,12 +51,11 @@ target_link_libraries(
 # ---------------------------------- HPASLT ---------------------------------- #
 
 # Logger.
-set(HPASLT_LOGGER_SRC "")
-list(
-    APPEND
+file(
+    GLOB_RECURSE
     HPASLT_LOGGER_SRC
-    src/logger/logger.h
-    src/logger/logger.cpp
+    src/logger/*.cpp
+    src/logger/*.h
 )
 add_library(hpaslt_logger ${HPASLT_LOGGER_SRC})
 target_include_directories(hpaslt_logger PUBLIC external/spdlog/include)
@@ -64,12 +63,11 @@ target_link_libraries(hpaslt_logger spdlog)
 list(APPEND LIBS hpaslt_logger)
 
 # Window Manager.
-set(HPASLT_WINDOW_MGR_SRC "")
-list(
-    APPEND
+file(
+    GLOB_RECURSE
     HPASLT_WINDOW_MGR_SRC
-    src/window_manager/window_mgr.h
-    src/window_manager/window_mgr.cpp
+    src/window_manager/*.cpp
+    src/window_manager/*.h
 )
 add_library(hpaslt_window_mgr ${HPASLT_WINDOW_MGR_SRC})
 target_include_directories(
@@ -91,6 +89,31 @@ target_link_libraries(
     imgui
 )
 list(APPEND LIBS hpaslt_window_mgr)
+
+# Frontend.
+file(
+    GLOB_RECURSE
+    HPASLT_FRONTEND_SRC
+    src/frontend/*.cpp
+    src/frontend/*.h
+)
+add_library(hpaslt_frontend ${HPASLT_FRONTEND_SRC})
+target_include_directories(
+    hpaslt_frontend
+    PUBLIC
+    external/spdlog/include
+    external/imgui
+    external/imgui/backends
+    src
+)
+target_link_libraries(
+    hpaslt_frontend
+    hpaslt_window_mgr
+    hpaslt_logger
+    spdlog
+    imgui
+)
+list(APPEND LIBS hpaslt_frontend)
 
 # Main executable.
 add_executable(hpaslt src/main.cpp)
