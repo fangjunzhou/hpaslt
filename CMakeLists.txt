@@ -22,6 +22,32 @@ add_subdirectory(external/glew)
 # GLFW
 add_subdirectory(external/glfw)
 
+# ImGui
+file(
+    GLOB
+    IMGUI_SRC
+    external/imgui/*.cpp
+    external/imgui/*.h
+    external/imgui/backends/imgui_impl_glfw.h
+    external/imgui/backends/imgui_impl_glfw.cpp
+    external/imgui/backends/imgui_impl_opengl3.h
+    external/imgui/backends/imgui_impl_opengl3.cpp
+)
+add_library(imgui ${IMGUI_SRC})
+target_include_directories(
+    imgui
+    PUBLIC
+    external/imgui
+    external/imgui/backends
+    external/glew/include
+    external/glfw/include
+)
+target_link_libraries(
+    imgui
+    libglew_static
+    glfw
+)
+
 # ---------------------------------- HPASLT ---------------------------------- #
 
 # Logger.
@@ -52,6 +78,8 @@ target_include_directories(
     external/spdlog/include
     external/glew/include
     external/glfw/include
+    external/imgui
+    external/imgui/backends
     src
 )
 target_link_libraries(
@@ -60,6 +88,7 @@ target_link_libraries(
     spdlog
     libglew_static
     glfw
+    imgui
 )
 list(APPEND LIBS hpaslt_window_mgr)
 

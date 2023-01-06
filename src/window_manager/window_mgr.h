@@ -5,6 +5,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 namespace hpaslt {
 
 class WindowManager {
@@ -13,7 +17,13 @@ class WindowManager {
    * @brief the main GLFW window.
    *
    */
-  GLFWwindow *m_window;
+  GLFWwindow* m_window;
+
+  /**
+   * @brief ImGui IO pointer.
+   *
+   */
+  ImGuiIO* m_io;
 
  public:
   /**
