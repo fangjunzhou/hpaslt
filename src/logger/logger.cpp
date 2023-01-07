@@ -1,22 +1,34 @@
+#include <iostream>
 #include <filesystem>
+#include <ctime>
+#include <sstream>
 
 #include "logger.h"
 
 namespace hpaslt {
 
-std::unique_ptr<Logger> logger = std::make_unique<Logger>("log", spdlog::level::debug);
+std::unique_ptr<Logger> logger =
+    std::make_unique<Logger>("log", spdlog::level::debug);
 
 Logger::Logger(std::string logDirPath, spdlog::level::level_enum level) {
   namespace fs = std::filesystem;
-  auto coreSinks =
-      createSinks((fs::path(logDirPath) / fs::path("core.log")).string());
-  coreLogger = std::make_shared<spdlog::logger>("core", coreSinks.begin(),
-                                                coreSinks.end());
 
-  auto uiSinks =
-      createSinks((fs::path(logDirPath) / fs::path("ui.log")).string());
-  uiLogger =
-      std::make_shared<spdlog::logger>("ui", uiSinks.begin(), uiSinks.end());
+  auto t = std::time(nullptr);
+  auto tm = std::localtime(&t);
+  std::ostringstream ss;
+  ss << std::put_time(tm, "%Y-%m-%d_%H-%M-%S");
+  std::string currTime = ss.str();
+  std::string fileName = currTime + ".log";
+
+  auto logFullPath = (fs::path(logDirPath) / fs::path(fileName));
+  std::cout << "Log file " << logFullPath.string() << " generated."
+            << std::endl;
+
+  auto sinks = createSinks(logFullPath.string());
+
+  coreLogger =
+      std::make_shared<spdlog::logger>("core", sinks.begin(), sinks.end());
+  uiLogger = std::make_shared<spdlog::logger>("ui", sinks.begin(), sinks.end());
 
   coreLogger->set_level(level);
   uiLogger->set_level(level);

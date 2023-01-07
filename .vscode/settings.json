@@ -93,7 +93,9 @@
     "stop_token": "cpp",
     "cfenv": "cpp",
     "cinttypes": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "any": "cpp",
+    "list": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++17",
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
