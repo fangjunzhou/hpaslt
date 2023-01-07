@@ -11,3 +11,6 @@
 	path = external/imgui
 	url = git@github.com:ocornut/imgui.git
 	branch = docking
+[submodule "external/eventpp"]
+	path = external/eventpp
+	url = git@github.com:wqking/eventpp.git
