@@ -74,7 +74,6 @@ WindowManager::~WindowManager() {
 }
 
 int WindowManager::execute() {
-  bool showDemoWindow;
   // Main loop.
   while (!glfwWindowShouldClose(m_window)) {
     // Event polling.
@@ -92,10 +91,6 @@ int WindowManager::execute() {
 
     // Enable dockspace.
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-
-    // TODO: Remove the demo window here.
-    // Show demo window.
-    ImGui::ShowDemoWindow(&showDemoWindow);
 
     // Render ImGuiObjects.
     for (int i = 0; i < m_renderObjs.size(); i++) {

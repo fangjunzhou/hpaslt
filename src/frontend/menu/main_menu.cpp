@@ -5,6 +5,8 @@
 #include "main_menu.h"
 #include "logger/logger.h"
 
+#include "frontend/imgui_example/imgui_example.h"
+
 namespace hpaslt {
 
 void MainMenu::render() {
@@ -13,6 +15,7 @@ void MainMenu::render() {
       ImGui::MenuItem("Not Implemented", nullptr, false, false);
       ImGui::EndMenu();
     }
+
     if (ImGui::BeginMenu("Edit")) {
       if (ImGui::MenuItem("Undo", "CTRL+Z")) {
       }
@@ -27,6 +30,14 @@ void MainMenu::render() {
       }
       ImGui::EndMenu();
     }
+
+    if (ImGui::BeginMenu("Debug")) {
+      if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
+        ImGuiExample::s_onEnable(m_showExample);
+      }
+      ImGui::EndMenu();
+    }
+
     ImGui::EndMainMenuBar();
   }
 }

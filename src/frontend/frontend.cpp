@@ -3,6 +3,7 @@
 
 #include "frontend.h"
 #include "menu/main_menu.h"
+#include "imgui_example/imgui_example.h"
 
 namespace hpaslt {
 
@@ -11,7 +12,9 @@ void registerAllImGuiObjs() {
 
   // Main Menu.
   hpaslt::windowMgr->pushRenderObject(std::make_shared<MainMenu>());
-  hpaslt::logger->uiLogger->debug("MainMenu registered.");
+
+  // ImGui Example.
+  hpaslt::windowMgr->pushRenderObject(std::make_shared<ImGuiExample>());
 }
 
 }  // namespace hpaslt
