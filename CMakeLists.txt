@@ -16,6 +16,9 @@ set(LIBS "")
 # SPDLog
 add_subdirectory(external/spdlog)
 
+# eventpp
+add_subdirectory(external/eventpp)
+
 # GLEW
 add_subdirectory(external/glew)
 
@@ -74,6 +77,7 @@ target_include_directories(
     hpaslt_window_mgr
     PUBLIC
     external/spdlog/include
+    external/eventpp/include
     external/glew/include
     external/glfw/include
     external/imgui
@@ -84,6 +88,7 @@ target_link_libraries(
     hpaslt_window_mgr
     hpaslt_logger
     spdlog
+    eventpp
     libglew_static
     glfw
     imgui
@@ -102,6 +107,7 @@ target_include_directories(
     hpaslt_frontend
     PUBLIC
     external/spdlog/include
+    external/eventpp/include
     external/imgui
     external/imgui/backends
     src
@@ -111,6 +117,7 @@ target_link_libraries(
     hpaslt_window_mgr
     hpaslt_logger
     spdlog
+    eventpp
     imgui
 )
 list(APPEND LIBS hpaslt_frontend)
