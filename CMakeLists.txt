@@ -16,7 +16,7 @@ set(LIBS "")
 # SPDLog
 add_subdirectory(external/spdlog)
 
-# eventpp
+# Eventpp
 add_subdirectory(external/eventpp)
 
 # GLEW
@@ -95,6 +95,30 @@ target_link_libraries(
 )
 list(APPEND LIBS hpaslt_window_mgr)
 
+# Serialization.
+file(
+    GLOB_RECURSE
+    HPASLT_SERIALIZATION_SRC
+    src/serialization/*.cpp
+    src/serialization/*.h
+)
+add_library(hpaslt_serialization ${HPASLT_SERIALIZATION_SRC})
+target_include_directories(
+    hpaslt_serialization
+    PUBLIC
+    external/spdlog/include
+    external/eventpp/include
+    external/cereal/include
+    src
+)
+target_link_libraries(
+    hpaslt_serialization
+    hpaslt_logger
+    spdlog
+    eventpp
+)
+list(APPEND LIBS hpaslt_serialization)
+
 # Frontend.
 file(
     GLOB_RECURSE
@@ -116,6 +140,7 @@ target_link_libraries(
     hpaslt_frontend
     hpaslt_window_mgr
     hpaslt_logger
+    hpaslt_serialization
     spdlog
     eventpp
     imgui
