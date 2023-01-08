@@ -16,6 +16,8 @@ namespace hpaslt {
 
 class WindowManager {
  private:
+  static WindowManager* s_windowMgr;
+
   /**
    * @brief the main GLFW window.
    *
@@ -35,6 +37,37 @@ class WindowManager {
   std::vector<std::shared_ptr<ImGuiObject>> m_renderObjs;
 
  public:
+  /**
+   * @brief Get the WindowManager singleton.
+   * If the singleton does not exist, create one on the heap.
+   *
+   * @return WindowManager&
+   */
+  static WindowManager* getSingleton() {
+    if (!s_windowMgr) {
+      s_windowMgr = new WindowManager;
+    }
+    return s_windowMgr;
+  }
+
+  /**
+   * @brief Call this method to free the singleton.
+   *
+   * After this call, all the objects using WindowManager
+   * singleton should expired.
+   *
+   */
+  static void freeSingleton() {
+    delete s_windowMgr;
+    s_windowMgr = nullptr;
+  }
+
+  /**
+   * @brief Disable the copy constructor for WindowManager.
+   *
+   */
+  WindowManager(const WindowManager&) = delete;
+
   /**
    * @brief Construct a new Window Manager object.
    *
@@ -61,7 +94,5 @@ class WindowManager {
    */
   void pushRenderObject(std::shared_ptr<ImGuiObject> renderObj);
 };
-
-extern std::shared_ptr<WindowManager> windowMgr;
 
 }  // namespace hpaslt

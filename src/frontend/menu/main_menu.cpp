@@ -12,7 +12,8 @@ namespace hpaslt {
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu("File")) {
-      ImGui::MenuItem("Not Implemented", nullptr, false, false);
+      // TODO: Implement file load, save.
+      // ImGui::MenuItem("Not Implemented", nullptr, false, false);
       ImGui::EndMenu();
     }
 

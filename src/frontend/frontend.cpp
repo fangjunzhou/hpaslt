@@ -11,10 +11,12 @@ void registerAllImGuiObjs() {
   hpaslt::logger->uiLogger->debug("Frontend entry point.");
 
   // Main Menu.
-  hpaslt::windowMgr->pushRenderObject(std::make_shared<MainMenu>());
+  hpaslt::WindowManager::getSingleton()->pushRenderObject(
+      std::make_shared<MainMenu>());
 
   // ImGui Example.
-  hpaslt::windowMgr->pushRenderObject(std::make_shared<ImGuiExample>());
+  hpaslt::WindowManager::getSingleton()->pushRenderObject(
+      std::make_shared<ImGuiExample>());
 }
 
 }  // namespace hpaslt

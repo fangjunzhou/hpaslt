@@ -3,7 +3,7 @@
 
 namespace hpaslt {
 
-std::shared_ptr<WindowManager> windowMgr = nullptr;
+WindowManager* WindowManager::s_windowMgr = nullptr;
 
 WindowManager::WindowManager() {
   hpaslt::logger->uiLogger->debug("WindowManager created.");
