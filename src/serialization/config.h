@@ -1,10 +1,19 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
+
+#include "logger/logger.h"
 
 namespace hpaslt {
 
 class Config {
+ private:
+  // Base directories for all config files.
+  static const std::string m_baseDir;
+
+  void checkAndCreateDir(const std::filesystem::path& fullPath);
+
  protected:
   /**
    * @brief The save path of current config file.
@@ -13,7 +22,12 @@ class Config {
   std::string m_savePath;
 
  public:
-  Config(const std::string& savePath) : m_savePath(savePath) {}
+  /**
+   * @brief Construct a new Config object
+   *
+   * @param fileName the name of the config file.
+   */
+  Config(const std::string& fileName);
 
   /**
    * @brief Method to save the current config to the m_savePath;

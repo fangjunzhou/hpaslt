@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "main_menu_config.h"
+#include "logger/logger.h"
 
 namespace hpaslt {
 
@@ -12,6 +13,7 @@ void MainMenuConfig::save() {
 
   // Serialize the data.
   jsonArchive(*this);
+  logger->coreLogger->debug("Main menu config saved to {}", m_savePath);
 }
 
 void MainMenuConfig::load() {
@@ -22,6 +24,7 @@ void MainMenuConfig::load() {
 
   // Deserialize the data.
   jsonArchive(*this);
+  logger->coreLogger->debug("Main menu config loaded from {}", m_savePath);
 }
 
 }  // namespace hpaslt

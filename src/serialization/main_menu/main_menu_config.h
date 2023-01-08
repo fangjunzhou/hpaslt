@@ -10,7 +10,7 @@ namespace hpaslt {
 
 class MainMenuConfig : public Config {
  public:
-  MainMenuConfig(std::string savePath) : Config(savePath) {}
+  MainMenuConfig(std::string fileName) : Config(fileName) {}
 
   bool showExample;
 
