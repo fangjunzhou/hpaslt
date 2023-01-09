@@ -12,11 +12,11 @@ ImGuiExample::ImGuiExample() : ImGuiObject("ImGui Example") {
   m_enabled = false;
 
   // Listen to the change event.
-  m_callbackHandle =
+  m_enableCallbackHandle =
       s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
 }
 
-ImGuiExample::~ImGuiExample() { s_onEnable.remove(m_callbackHandle); }
+ImGuiExample::~ImGuiExample() { s_onEnable.remove(m_enableCallbackHandle); }
 
 void ImGuiExample::render() {
   // Show demo window.

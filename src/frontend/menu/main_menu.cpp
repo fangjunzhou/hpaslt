@@ -6,8 +6,26 @@
 #include "logger/logger.h"
 
 #include "frontend/imgui_example/imgui_example.h"
+#include "frontend/frontend.h"
 
 namespace hpaslt {
+
+MainMenu::MainMenu() : ImGuiObject("Main Menu") {
+  namespace fs = std::filesystem;
+  m_config = std::make_unique<MainMenuConfig>("main_menu.json");
+  // Try to load the config.
+  m_config->load();
+
+  // When all the ImGuiObjects are registered, sync the config.
+  m_finishRegisterCallbackHandle = finishRegisterImGuiObjs.append([&]() {
+    m_showExample = m_config->showExample;
+    ImGuiExample::s_onEnable(m_showExample);
+  });
+}
+
+MainMenu::~MainMenu() {
+  finishRegisterImGuiObjs.remove(m_finishRegisterCallbackHandle);
+}
 
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
@@ -35,6 +53,9 @@ void MainMenu::render() {
     if (ImGui::BeginMenu("Debug")) {
       if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
+        // Save the config.
+        m_config->showExample = m_showExample;
+        m_config->save();
       }
       ImGui::EndMenu();
     }

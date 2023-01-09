@@ -1,5 +1,7 @@
 #pragma once
 
+#include <eventpp/callbacklist.h>
+
 #include "serialization/main_menu/main_menu_config.h"
 
 #include "window_manager/imgui_object.h"
@@ -14,10 +16,17 @@ class MainMenu : public ImGuiObject {
   bool m_showExample = false;
 
  public:
-  MainMenu() : ImGuiObject("Main Menu") {
-    m_config = std::make_unique<MainMenuConfig>("main_menu.json");
-    m_config->save();
-  }
+  /**
+   * @brief Construct a new Main Menu object
+   *
+   */
+  MainMenu();
+
+  /**
+   * @brief Destroy the Main Menu object
+   *
+   */
+  ~MainMenu();
 
   virtual void render() override;
 };
