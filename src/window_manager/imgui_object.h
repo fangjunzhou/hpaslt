@@ -28,7 +28,13 @@ class ImGuiObject {
    * @brief ImGuiObject enable callback handle.
    *
    */
-  eventpp::CallbackList<void(bool)>::Handle m_callbackHandle;
+  eventpp::CallbackList<void(bool)>::Handle m_enableCallbackHandle;
+
+  /**
+   * @brief Callback handle for all ImGuiObjects finish register event.
+   *
+   */
+  eventpp::CallbackList<void()>::Handle m_finishRegisterCallbackHandle;
 
  public:
   ImGuiObject(std::string name) : m_name(name) {}

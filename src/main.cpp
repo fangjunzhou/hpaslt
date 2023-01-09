@@ -12,6 +12,7 @@ int main(int argc, char const* argv[]) {
 
   hpaslt::logger->coreLogger->debug("Entering frontend entry point.");
   hpaslt::registerAllImGuiObjs();
+  hpaslt::finishRegisterImGuiObjs();
 
   // Join UI thread, get the execution result.
   int exitRes = hpaslt::WindowManager::getSingleton()->execute();

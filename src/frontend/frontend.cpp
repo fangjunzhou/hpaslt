@@ -7,6 +7,8 @@
 
 namespace hpaslt {
 
+eventpp::CallbackList<void()> finishRegisterImGuiObjs;
+
 void registerAllImGuiObjs() {
   hpaslt::logger->uiLogger->debug("Frontend entry point.");
 
