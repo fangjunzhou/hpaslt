@@ -3,6 +3,7 @@
 #include <string>
 
 #include <cereal/archives/json.hpp>
+#include <cereal/details/helpers.hpp>
 
 #include "serialization/config.h"
 
@@ -12,7 +13,7 @@ class MainMenuConfig : public Config {
  public:
   MainMenuConfig(std::string fileName) : Config(fileName) {}
 
-  bool showExample;
+  bool showExample = false;
 
   template <class Archive>
   void serialize(Archive& archive) {
