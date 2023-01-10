@@ -17,3 +17,6 @@
 [submodule "external/cereal"]
 	path = external/cereal
 	url = git@github.com:USCiLab/cereal.git
+[submodule "external/audiofile"]
+	path = external/audiofile
+	url = git@github.com:adamstark/AudioFile.git
