@@ -23,3 +23,6 @@
 [submodule "external/imgui-console"]
 	path = external/imgui-console
 	url = git@github.com:Fangjun-Zhou/imgui-console.git
+[submodule "external/csys"]
+	path = external/csys
+	url = git@github.com:rmxbalanque/csys.git
