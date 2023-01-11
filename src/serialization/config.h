@@ -67,6 +67,7 @@ class Config {
 
     try {
       jsonArchive = std::make_unique<cereal::JSONInputArchive>(fstream);
+      (*jsonArchive)(target);
     } catch (const cereal::Exception& e) {
       // Handle deserialization failed.
       logger->coreLogger->error("Cereal JSON parser error.");
@@ -74,8 +75,6 @@ class Config {
       logger->coreLogger->info("Override the old config with default value.");
       return;
     }
-
-    (*jsonArchive)(target);
 
     logger->coreLogger->debug("Main menu config loaded from {}", m_savePath);
   }
