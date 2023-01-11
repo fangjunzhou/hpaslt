@@ -19,6 +19,9 @@ add_subdirectory(external/spdlog)
 # Eventpp
 add_subdirectory(external/eventpp)
 
+# Audio File
+add_subdirectory(external/audiofile)
+
 # GLEW
 add_subdirectory(external/glew)
 
@@ -50,6 +53,32 @@ target_link_libraries(
     libglew_static
     glfw
 )
+
+# ------------------------------- ImGui Console ------------------------------ #
+
+set(IMGUI_CONSOLE_DIR external/imgui-console)
+
+# CSYS
+add_library(csys INTERFACE)
+target_include_directories(csys INTERFACE ${IMGUI_CONSOLE_DIR}/include)
+target_compile_features(csys INTERFACE cxx_std_17)
+
+# ImGui Console
+file(
+    GLOB
+    IMGUI_CONSOLE_SRC
+    ${IMGUI_CONSOLE_DIR}/src/imgui_console.cpp
+    ${IMGUI_CONSOLE_DIR}/include/imgui_console/imgui_console.h
+)
+add_library(imgui_console STATIC ${IMGUI_CONSOLE_SRC})
+target_include_directories(
+    imgui_console
+    PUBLIC
+    external/imgui
+    ${IMGUI_CONSOLE_DIR}/include/imgui_console
+)
+target_compile_features(imgui_console PUBLIC cxx_std_17)
+target_link_libraries(imgui_console PUBLIC csys)
 
 # ---------------------------------- HPASLT ---------------------------------- #
 
@@ -134,6 +163,7 @@ target_include_directories(
     external/eventpp/include
     external/imgui
     external/imgui/backends
+    external/imgui-console/include
     src
 )
 target_link_libraries(
@@ -144,6 +174,7 @@ target_link_libraries(
     spdlog
     eventpp
     imgui
+    imgui_console
 )
 list(APPEND LIBS hpaslt_frontend)
 
