@@ -14,10 +14,11 @@ class MainMenuConfig : public Config {
   MainMenuConfig(std::string fileName) : Config(fileName) {}
 
   bool showExample = false;
+  bool showConsole = false;
 
   template <class Archive>
   void serialize(Archive& archive) {
-    archive(CEREAL_NVP(showExample));
+    archive(CEREAL_NVP(showExample), CEREAL_NVP(showConsole));
   }
 
   virtual void save() override;

@@ -6,6 +6,7 @@
 #include "logger/logger.h"
 
 #include "frontend/imgui_example/imgui_example.h"
+#include "frontend/console/console.h"
 #include "frontend/frontend.h"
 
 namespace hpaslt {
@@ -20,6 +21,8 @@ MainMenu::MainMenu() : ImGuiObject("Main Menu") {
   m_finishRegisterCallbackHandle = finishRegisterImGuiObjs.append([&]() {
     m_showExample = m_config->showExample;
     ImGuiExample::s_onEnable(m_showExample);
+    m_showConsole = m_config->showConsole;
+    Console::s_onEnable(m_showConsole);
   });
 }
 
@@ -50,6 +53,17 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
+    if (ImGui::BeginMenu("Views")) {
+      if (ImGui::MenuItem("Console", nullptr, &m_showConsole)) {
+        Console::s_onEnable(m_showConsole);
+        // Save the config.
+        m_config->showConsole = m_showConsole;
+        m_config->save();
+      }
+
+      ImGui::EndMenu();
+    }
+
     if (ImGui::BeginMenu("Debug")) {
       if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
@@ -57,6 +71,7 @@ void MainMenu::render() {
         m_config->showExample = m_showExample;
         m_config->save();
       }
+
       ImGui::EndMenu();
     }
 

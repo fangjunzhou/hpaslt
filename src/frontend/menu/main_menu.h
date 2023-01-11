@@ -12,6 +12,12 @@ class MainMenu : public ImGuiObject {
  private:
   std::unique_ptr<MainMenuConfig> m_config;
 
+  /* -------------------------- Views ------------------------- */
+
+  bool m_showConsole = false;
+
+  /* -------------------------- Debug ------------------------- */
+
   // If ImGuiExample window is displayed.
   bool m_showExample = false;
 
