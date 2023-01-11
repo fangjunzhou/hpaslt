@@ -41,7 +41,7 @@ class WindowManager {
    * @brief Get the WindowManager singleton.
    * If the singleton does not exist, create one on the heap.
    *
-   * @return WindowManager&
+   * @return WindowManager*
    */
   static WindowManager* getSingleton() {
     if (!s_windowMgr) {
