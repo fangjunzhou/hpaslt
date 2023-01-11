@@ -8,9 +8,17 @@
 namespace hpaslt {
 
 std::unique_ptr<Logger> logger =
-    std::make_unique<Logger>("log", spdlog::level::debug);
+    std::make_unique<Logger>("log", spdlog::level::debug, true);
 
-Logger::Logger(std::string logDirPath, spdlog::level::level_enum level) {
+Logger::Logger(std::string logDirPath, spdlog::level::level_enum level,
+               bool enableConsoleSink) {
+  // Setup console ostringstream.
+  if (enableConsoleSink) {
+    m_consoleOutputStream = std::make_shared<std::ostringstream>();
+  } else {
+    m_consoleOutputStream = nullptr;
+  }
+
   namespace fs = std::filesystem;
 
   auto t = std::time(nullptr);
@@ -42,7 +50,11 @@ std::vector<spdlog::sink_ptr> Logger::createSinks(std::string filePath) {
   sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
   sinks.push_back(
       std::make_shared<spdlog::sinks::basic_file_sink_mt>(filePath));
-  // TODO: Add ImGui console sink.
+  // Add ImGui console sink.
+  if (m_consoleOutputStream) {
+    sinks.push_back(std::make_shared<spdlog::sinks::ostream_sink_mt>(
+        *m_consoleOutputStream));
+  }
 
   return sinks;
 }

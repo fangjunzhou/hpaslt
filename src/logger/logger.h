@@ -1,16 +1,24 @@
 #pragma once
 
+#include <sstream>
 #include <string>
 #include <vector>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/ostream_sink.h>
 
 namespace hpaslt {
 
 class Logger {
  private:
+  /**
+   * @brief The ostringstream for console sink.
+   *
+   */
+  std::shared_ptr<std::ostringstream> m_consoleOutputStream;
+
   /**
    * @brief Create a sinks_init_list for logger.
    *
@@ -37,13 +45,24 @@ class Logger {
    *
    * @param logDirPath the path to the log directory.
    */
-  Logger(std::string logDirPath, spdlog::level::level_enum level);
+  Logger(std::string logDirPath, spdlog::level::level_enum level,
+         bool enableConsoleSink = false);
 
   /**
    * @brief Destroy the Logger object
    *
    */
   ~Logger();
+
+  /**
+   * @brief Get the Console ostringsteam object.
+   *
+   * @return std::weak_ptr<std::ostringstream> weak ptr to the console
+   * ostringsteam.
+   */
+  std::weak_ptr<std::ostringstream> getConsoleOutputStream() {
+    return m_consoleOutputStream;
+  }
 };
 
 extern std::unique_ptr<Logger> logger;
