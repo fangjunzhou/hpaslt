@@ -69,6 +69,11 @@ WindowManager::WindowManager() {
 }
 
 WindowManager::~WindowManager() {
+  // Cleanup
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+
   // GLFW window cleanup.
   glfwTerminate();
 }
