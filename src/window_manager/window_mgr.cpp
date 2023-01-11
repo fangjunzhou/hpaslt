@@ -32,6 +32,8 @@ WindowManager::WindowManager() {
   hpaslt::logger->uiLogger->debug("GLFW window creation success.");
 
   glfwMakeContextCurrent(m_window);
+  // Enable vsync.
+  glfwSwapInterval(1);
 
   // Init GLEW.
   glewExperimental = true;
