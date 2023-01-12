@@ -6,6 +6,8 @@
 #include "console.h"
 #include "logger/logger.h"
 
+#include "commands/commands.h"
+
 namespace hpaslt {
 
 eventpp::CallbackList<void(bool)> Console::s_onEnable;
@@ -13,12 +15,18 @@ eventpp::CallbackList<void(bool)> Console::s_onEnable;
 Console::Console() : ImGuiObject("Console") {
   m_enabled = false;
 
+  Commands::setConsoleSystem(&(m_consoleWindow.System()));
+
   // Listen to the change event.
   m_enableCallbackHandle =
       s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
 }
 
-Console::~Console() { s_onEnable.remove(m_enableCallbackHandle); }
+Console::~Console() {
+  s_onEnable.remove(m_enableCallbackHandle);
+
+  Commands::resetConsoleSystem();
+}
 
 void Console::render() {
   // TODO: Use seperate thread to parse log level.
