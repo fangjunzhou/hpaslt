@@ -22,6 +22,9 @@ add_subdirectory(external/eventpp)
 # Audio File
 add_subdirectory(external/audiofile)
 
+# Port Audio
+add_subdirectory(external/portaudio)
+
 # GLEW
 add_subdirectory(external/glew)
 
@@ -56,7 +59,7 @@ target_link_libraries(
 
 # ----------------------- ImGui Console ---------------------- #
 
-set(IMGUI_CONSOLE_DIR external/imgui-console)
+set(IMGUI_CONSOLE_DIR external/imguiconsole)
 
 # CSYS
 add_library(csys INTERFACE)
@@ -211,7 +214,7 @@ target_include_directories(
     external/eventpp/include
     external/imgui
     external/imgui/backends
-    external/imgui-console/include
+    external/imguiconsole/include
     src
 )
 target_link_libraries(
