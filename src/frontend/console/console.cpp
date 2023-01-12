@@ -12,21 +12,22 @@ namespace hpaslt {
 
 eventpp::CallbackList<void(bool)> Console::s_onEnable;
 
-Console::Console() : ImGuiObject("Console") {
-  m_enabled = false;
+ConsoleWindow::ConsoleWindow(std::weak_ptr<csys::System> system)
+    : ImGuiConsole("Console", 256, system.lock().get()) {}
 
-  Commands::setConsoleSystem(&(m_consoleWindow.System()));
+Console::Console() : ImGuiObject("Console") {
+  // Initialize the console system with commands system.
+  m_consoleWindow = std::make_unique<ConsoleWindow>(
+      Commands::getSingleton().lock()->getSystem());
+
+  m_enabled = false;
 
   // Listen to the change event.
   m_enableCallbackHandle =
       s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
 }
 
-Console::~Console() {
-  s_onEnable.remove(m_enableCallbackHandle);
-
-  Commands::resetConsoleSystem();
-}
+Console::~Console() { s_onEnable.remove(m_enableCallbackHandle); }
 
 void Console::render() {
   // TODO: Use seperate thread to parse log level.
@@ -61,11 +62,11 @@ void Console::render() {
         }
       }
 
-      m_consoleWindow.System().Log(logLevel) << line << csys::endl;
+      m_consoleWindow->System().Log(logLevel) << line << csys::endl;
     }
   }
 
-  m_consoleWindow.Draw();
+  m_consoleWindow->Draw();
 }
 
 }  // namespace hpaslt

@@ -12,12 +12,13 @@ namespace hpaslt {
  *
  */
 class ConsoleWindow : public ImGuiConsole {
-  // TODO: Customize the ImGuiConsole.
+ public:
+  ConsoleWindow(std::weak_ptr<csys::System> system);
 };
 
 class Console : public ImGuiObject {
  private:
-  ConsoleWindow m_consoleWindow;
+  std::unique_ptr<ConsoleWindow> m_consoleWindow;
 
  public:
   /**
