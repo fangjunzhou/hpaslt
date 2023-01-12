@@ -8,11 +8,6 @@
 namespace hpaslt {
 
 class ImGuiExample : public ImGuiObject {
- private:
-  using SetConsoleCallback = eventpp::CallbackList<void(csys::System*)>;
-
-  SetConsoleCallback::Handle m_setConsoleHandle;
-
  public:
   /**
    * @brief callback event when open the window from other place.

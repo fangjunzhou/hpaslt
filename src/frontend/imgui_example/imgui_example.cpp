@@ -15,20 +15,9 @@ ImGuiExample::ImGuiExample() : ImGuiObject("ImGui Example") {
   // Listen to the change event.
   m_enableCallbackHandle =
       s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
-
-  // Register open/close example window command.
-  m_setConsoleHandle =
-      Commands::registerOnSetConsoleSystem([](csys::System* system) {
-        system->RegisterCommand(
-            "setImGuiExample", "Enable or disable ImGui Example window.",
-            [](bool enable) { s_onEnable(enable); }, csys::Arg<bool>("enable"));
-      });
 }
 
-ImGuiExample::~ImGuiExample() {
-  s_onEnable.remove(m_enableCallbackHandle);
-  Commands::unregisterOnSetConsoleSystem(m_setConsoleHandle);
-}
+ImGuiExample::~ImGuiExample() { s_onEnable.remove(m_enableCallbackHandle); }
 
 void ImGuiExample::render() {
   // Show demo window.
