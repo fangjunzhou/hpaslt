@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.25.1)
 
 project(HPASLT)
 
-# ----------------------------- Project settings ----------------------------- #
+# --------------------- Project settings --------------------- #
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
-# ------------------------------ CMake variables ----------------------------- #
+# ---------------------- CMake variables --------------------- #
 
 set(LIBS "")
 
-# ---------------------------- External Libraries ---------------------------- #
+# -------------------- External Libraries -------------------- #
 
 # SPDLog
 add_subdirectory(external/spdlog)
@@ -54,7 +54,7 @@ target_link_libraries(
     glfw
 )
 
-# ------------------------------- ImGui Console ------------------------------ #
+# ----------------------- ImGui Console ---------------------- #
 
 set(IMGUI_CONSOLE_DIR external/imgui-console)
 
@@ -80,7 +80,23 @@ target_include_directories(
 target_compile_features(imgui_console PUBLIC cxx_std_17)
 target_link_libraries(imgui_console PUBLIC csys)
 
-# ---------------------------------- HPASLT ---------------------------------- #
+# ------------------------------------------------------------ #
+#                            HPASLT                            #
+# ------------------------------------------------------------ #
+
+# ---------------------- Infrastructure ---------------------- #
+
+# Logger.
+file(
+    GLOB_RECURSE
+    HPASLT_LOGGER_SRC
+    src/logger/*.cpp
+    src/logger/*.h
+)
+add_library(hpaslt_logger ${HPASLT_LOGGER_SRC})
+target_include_directories(hpaslt_logger PUBLIC external/spdlog/include)
+target_link_libraries(hpaslt_logger spdlog)
+list(APPEND LIBS hpaslt_logger)
 
 # Commands.
 file(
@@ -99,21 +115,56 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_commands
+    hpaslt_logger
     eventpp
 )
 list(APPEND LIBS hpaslt_commands)
 
-# Logger.
+# Serialization.
 file(
     GLOB_RECURSE
-    HPASLT_LOGGER_SRC
-    src/logger/*.cpp
-    src/logger/*.h
+    HPASLT_SERIALIZATION_SRC
+    src/serialization/*.cpp
+    src/serialization/*.h
 )
-add_library(hpaslt_logger ${HPASLT_LOGGER_SRC})
-target_include_directories(hpaslt_logger PUBLIC external/spdlog/include)
-target_link_libraries(hpaslt_logger spdlog)
-list(APPEND LIBS hpaslt_logger)
+add_library(hpaslt_serialization ${HPASLT_SERIALIZATION_SRC})
+target_include_directories(
+    hpaslt_serialization
+    PUBLIC
+    external/spdlog/include
+    external/eventpp/include
+    external/cereal/include
+    src
+)
+target_link_libraries(
+    hpaslt_serialization
+    hpaslt_logger
+    spdlog
+    eventpp
+)
+list(APPEND LIBS hpaslt_serialization)
+
+# --------------------------- Core --------------------------- #
+
+file(
+    GLOB_RECURSE
+    HPASLT_CORE_SRC
+    src/core/*.cpp
+    src/core/*.h
+)
+add_library(hpaslt_core ${HPASLT_CORE_SRC})
+target_include_directories(
+    hpaslt_core
+    PUBLIC
+    src
+)
+target_link_libraries(
+    hpaslt_core
+    hpaslt_commands
+)
+list(APPEND LIBS hpaslt_core)
+
+# ------------------------- Rendering ------------------------ #
 
 # Window Manager.
 file(
@@ -144,30 +195,6 @@ target_link_libraries(
     imgui
 )
 list(APPEND LIBS hpaslt_window_mgr)
-
-# Serialization.
-file(
-    GLOB_RECURSE
-    HPASLT_SERIALIZATION_SRC
-    src/serialization/*.cpp
-    src/serialization/*.h
-)
-add_library(hpaslt_serialization ${HPASLT_SERIALIZATION_SRC})
-target_include_directories(
-    hpaslt_serialization
-    PUBLIC
-    external/spdlog/include
-    external/eventpp/include
-    external/cereal/include
-    src
-)
-target_link_libraries(
-    hpaslt_serialization
-    hpaslt_logger
-    spdlog
-    eventpp
-)
-list(APPEND LIBS hpaslt_serialization)
 
 # Frontend.
 file(
@@ -200,7 +227,24 @@ target_link_libraries(
 )
 list(APPEND LIBS hpaslt_frontend)
 
-# Main executable.
+# ------------------------------------------------------------ #
+#                        Main executable                       #
+# ------------------------------------------------------------ #
+
 add_executable(hpaslt src/main.cpp)
 target_include_directories(hpaslt PUBLIC src)
 target_link_libraries(hpaslt ${LIBS})
+
+# ------------------------------------------------------------ #
+#                           Resources                          #
+# ------------------------------------------------------------ #
+
+# Fonts
+add_custom_target(
+    hpaslt_fonts ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_SOURCE_DIR}/fonts
+    ${PROJECT_BINARY_DIR}/fonts
+    COMMENT "Copying font resources."
+)
+add_dependencies(hpaslt hpaslt_fonts)

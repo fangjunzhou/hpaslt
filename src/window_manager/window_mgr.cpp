@@ -68,6 +68,7 @@ WindowManager::WindowManager() {
   ImGui_ImplOpenGL3_Init("#version 150");
 
   // TODO: Load fonts here.
+  m_io->Fonts->AddFontFromFileTTF("fonts/roboto/Roboto-Regular.ttf", 15);
 }
 
 WindowManager::~WindowManager() {
