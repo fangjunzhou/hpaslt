@@ -20,12 +20,12 @@
 [submodule "external/audiofile"]
 	path = external/audiofile
 	url = git@github.com:adamstark/AudioFile.git
-[submodule "external/imgui-console"]
-	path = external/imgui-console
-	url = git@github.com:Fangjun-Zhou/imgui-console.git
 [submodule "external/csys"]
 	path = external/csys
 	url = git@github.com:rmxbalanque/csys.git
 [submodule "external/portaudio"]
 	path = external/portaudio
 	url = git@github.com:PortAudio/portaudio.git
+[submodule "external/imguiconsole"]
+	path = external/imguiconsole
+	url = git@github.com:Fangjun-Zhou/imgui-console.git
