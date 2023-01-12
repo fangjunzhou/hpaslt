@@ -16,18 +16,18 @@ void registerAllImGuiObjs() {
   hpaslt::logger->uiLogger->debug("Frontend entry point.");
 
   // Main Menu.
-  hpaslt::WindowManager::getSingleton()->pushRenderObject(
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<MainMenu>());
 
   /* -------------------------- Views ------------------------- */
 
-  hpaslt::WindowManager::getSingleton()->pushRenderObject(
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<Console>());
 
   /* -------------------------- Debug ------------------------- */
 
   // ImGui Example.
-  hpaslt::WindowManager::getSingleton()->pushRenderObject(
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<ImGuiExample>());
 }
 

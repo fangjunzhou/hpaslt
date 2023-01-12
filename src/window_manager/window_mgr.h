@@ -16,7 +16,7 @@ namespace hpaslt {
 
 class WindowManager {
  private:
-  static WindowManager* s_windowMgr;
+  static std::shared_ptr<WindowManager> s_windowMgr;
 
   /**
    * @brief the main GLFW window.
@@ -43,9 +43,9 @@ class WindowManager {
    *
    * @return WindowManager*
    */
-  static WindowManager* getSingleton() {
+  static std::weak_ptr<WindowManager> getSingleton() {
     if (!s_windowMgr) {
-      s_windowMgr = new WindowManager;
+      s_windowMgr = std::make_shared<WindowManager>();
     }
     return s_windowMgr;
   }
@@ -57,10 +57,7 @@ class WindowManager {
    * singleton should expired.
    *
    */
-  static void freeSingleton() {
-    delete s_windowMgr;
-    s_windowMgr = nullptr;
-  }
+  static void freeSingleton() { s_windowMgr = nullptr; }
 
   /**
    * @brief Disable the copy constructor for WindowManager.

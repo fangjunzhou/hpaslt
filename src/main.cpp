@@ -15,7 +15,7 @@ int main(int argc, char const* argv[]) {
   hpaslt::finishRegisterImGuiObjs();
 
   // Join UI thread, get the execution result.
-  int exitRes = hpaslt::WindowManager::getSingleton()->execute();
+  int exitRes = hpaslt::WindowManager::getSingleton().lock()->execute();
 
   // Free the window manager singleton.
   hpaslt::WindowManager::freeSingleton();
