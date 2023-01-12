@@ -82,6 +82,27 @@ target_link_libraries(imgui_console PUBLIC csys)
 
 # ---------------------------------- HPASLT ---------------------------------- #
 
+# Commands.
+file(
+    GLOB_RECURSE
+    HPASLT_COMMANDS_SRC
+    src/commands/*.cpp
+    src/commands/*.h
+)
+add_library(hpaslt_commands ${HPASLT_COMMANDS_SRC})
+target_include_directories(
+    hpaslt_commands
+    PUBLIC
+    external/eventpp/include
+    external/csys/include
+    src
+)
+target_link_libraries(
+    hpaslt_commands
+    eventpp
+)
+list(APPEND LIBS hpaslt_commands)
+
 # Logger.
 file(
     GLOB_RECURSE
@@ -168,6 +189,7 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_frontend
+    hpaslt_commands
     hpaslt_window_mgr
     hpaslt_logger
     hpaslt_serialization
