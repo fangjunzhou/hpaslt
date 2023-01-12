@@ -7,59 +7,56 @@
 
 namespace hpaslt {
 
-namespace Commands {
+class Commands {
+ private:
+  static std::shared_ptr<Commands> s_commands;
 
-using SetConsoleCallback = eventpp::CallbackList<void(csys::System*)>;
+  std::shared_ptr<csys::System> m_system;
 
-/**
- * @brief Register the callback function, when console system is set.
- * Call the function immediately if the console exists.
- *
- */
-extern SetConsoleCallback::Handle registerOnSetConsoleSystem(
-    std::function<void(csys::System*)> func);
+ public:
+  /**
+   * @brief Get the Commands singleton.
+   * If the singleton does not exist, create one on the heap.
+   *
+   * @return std::weak_ptr<Commands>
+   */
+  static std::weak_ptr<Commands> getSingleton() {
+    if (!s_commands) {
+      s_commands = std::make_shared<Commands>();
+    }
+    return s_commands;
+  }
 
-/**
- * @brief Unregister a set console system callback handle.
- *
- * @param handle
- */
-extern void unregisterOnSetConsoleSystem(SetConsoleCallback::Handle handle);
+  /**
+   * @brief Call this method to free the singleton.
+   *
+   */
+  static void freeSingleton() { s_commands = nullptr; }
 
-using ResetConsoleCallback = eventpp::CallbackList<void()>;
-/**
- * @brief Register the callback function when console system is reset.
- *
- */
-extern ResetConsoleCallback::Handle registerOnResetConsoleSystem(
-    std::function<void()> func);
+  /**
+   * @brief Disable the default copy constructor for Commands.
+   *
+   */
+  Commands(const Commands&) = delete;
 
-/**
- * @brief Unregister a reset console system callback handle.
- *
- * @param handle
- */
-extern void unregisterOnResetConsoleSystem(ResetConsoleCallback::Handle handle);
+  /**
+   * @brief Construct a new Commands object
+   *
+   */
+  Commands();
 
-/**
- * @brief Set the static console system to an external system.
- *
- * @param consoleSystem
- */
-extern void setConsoleSystem(csys::System* consoleSystem);
+  /**
+   * @brief Destroy the Commands object
+   *
+   */
+  ~Commands();
 
-/**
- * @brief Get the Console System object
- *
- * @return csys::System*
- */
-extern csys::System* getConsoleSystem();
-
-/**
- * @brief Reset the console system to nullptr.
- *
- */
-extern void resetConsoleSystem();
-};  // namespace Commands
+  /**
+   * @brief Get the csys::System object.
+   *
+   * @return std::weak_ptr<csys::System>
+   */
+  std::weak_ptr<csys::System> getSystem() { return m_system; }
+};
 
 }  // namespace hpaslt
