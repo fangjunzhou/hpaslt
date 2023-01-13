@@ -5,6 +5,7 @@
 #include "commands/commands.h"
 /* -------------------------- Core -------------------------- */
 #include "core/audio_player/audio_player.h"
+#include "core/audio_workspace/audio_workspace.h"
 /* ------------------------ Rendering ----------------------- */
 #include "window_manager/window_mgr.h"
 #include "frontend/frontend.h"
@@ -25,6 +26,12 @@ int main(int argc, char const* argv[]) {
   // Audio player.
   hpaslt::logger->coreLogger->debug("Creating AudioPlayer.");
   hpaslt::AudioPlayer::getSingleton();
+  // Audio Workspace.
+  hpaslt::logger->coreLogger->debug("Creating the main workspace.");
+  hpaslt::AudioWorkspace::createAudioWorkspace("Main Workspace");
+  hpaslt::logger->coreLogger->debug("Switching to the main workspace");
+  hpaslt::AudioWorkspace::changeAudioWorkspace("Main Workspace");
+  hpaslt::AudioWorkspace::registerConosleCommands();
 
   /* ------------------------ Rendering ----------------------- */
   // Window manager.
@@ -56,6 +63,7 @@ int main(int argc, char const* argv[]) {
   /* -------------------------- Core -------------------------- */
   // Free AudioPlayer singleton.
   hpaslt::AudioPlayer::freeSingleton();
+  hpaslt::logger->coreLogger->debug("AudioPlayer singleton is freed.");
 
   /* --------------------- Infrastructure --------------------- */
   // Commands manager.

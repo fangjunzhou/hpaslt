@@ -173,6 +173,7 @@ target_include_directories(
     hpaslt_core
     PUBLIC
     external/portaudio/include
+    external/audiofile
     src
 )
 target_link_libraries(
