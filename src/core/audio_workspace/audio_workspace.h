@@ -31,13 +31,13 @@ class AudioWorkspace {
    * @brief Audio player for current workspace.
    *
    */
-  std::shared_ptr<AudioPlayer> m_player;
+  AudioPlayer* m_player;
 
   /**
    * @brief The current processing audio object.
    *
    */
-  std::shared_ptr<AudioObject> m_audioObject;
+  AudioObject* m_audioObject;
 
  public:
   /**

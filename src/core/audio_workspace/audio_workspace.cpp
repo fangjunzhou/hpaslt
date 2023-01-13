@@ -56,20 +56,39 @@ void AudioWorkspace::registerConosleCommands() {
       },
       csys::Arg<csys::String>("path"));
 
+  system->RegisterCommand("playAudioCurr",
+                          "Play the audio of current workspace.", []() {
+                            std::shared_ptr<AudioWorkspace> currWorkspace =
+                                AudioWorkspace::getCurrAudioWorkspace().lock();
+
+                            currWorkspace->m_player->play();
+                          });
+
+  system->RegisterCommand("pauseAudioCurr",
+                          "Pause the audio of current workspace.", []() {
+                            std::shared_ptr<AudioWorkspace> currWorkspace =
+                                AudioWorkspace::getCurrAudioWorkspace().lock();
+
+                            currWorkspace->m_player->pause();
+                          });
+
   logger->coreLogger->debug("AudioWorkspace commands registered.");
 }
 
 AudioWorkspace::AudioWorkspace(const std::string& workspaceName)
     : m_workspaceName(workspaceName) {
   // Alloc members.
-  m_player = std::make_shared<AudioPlayer>();
-  m_audioObject = std::make_shared<AudioObject>();
-
-  // Bind audio object to the player.
-  m_player->m_audioObj = m_audioObject;
+  m_player = new AudioPlayer();
+  m_audioObject = new AudioObject();
 }
 
-AudioWorkspace::~AudioWorkspace() {}
+AudioWorkspace::~AudioWorkspace() {
+  // Free audio player first.
+  delete m_player;
+  m_player = nullptr;
+  delete m_audioObject;
+  m_audioObject = nullptr;
+}
 
 void AudioWorkspace::loadAudioFile(const std::string& filePath) {
   // Launch the loading thread.
@@ -85,6 +104,9 @@ void AudioWorkspace::loadAudioFile(const std::string& filePath) {
 
     logger->coreLogger->info("AudioWorkspace {} loaded audio file {}.",
                              m_workspaceName, filePath);
+
+    // Bind audio object to the player.
+    m_player->loadAudioObject(m_audioObject);
   });
   logger->coreLogger->debug("Audio loading thread started.");
   loadThread.detach();
