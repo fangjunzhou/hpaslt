@@ -6,6 +6,7 @@
 #include <AudioFile.h>
 
 #include "core/audio_object/audio_object.h"
+#include "core/audio_player/audio_player.h"
 
 namespace hpaslt {
 
@@ -25,6 +26,12 @@ class AudioWorkspace {
    *
    */
   std::string m_workspaceName;
+
+  /**
+   * @brief Audio player for current workspace.
+   *
+   */
+  std::shared_ptr<AudioPlayer> m_player;
 
   /**
    * @brief The current processing audio object.
