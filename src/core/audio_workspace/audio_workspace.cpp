@@ -58,12 +58,22 @@ void AudioWorkspace::registerConosleCommands() {
 }
 
 AudioWorkspace::AudioWorkspace(const std::string& workspaceName)
-    : m_workspaceName(workspaceName) {}
+    : m_workspaceName(workspaceName) {
+  m_audioObject = std::make_shared<AudioObject>();
+}
 
 AudioWorkspace::~AudioWorkspace() {}
 
 void AudioWorkspace::loadAudioFile(const std::string& filePath) {
-  m_audioFile.load(filePath);
+  // TODO: Use another thread to load audio file.
+  try {
+    m_audioObject->loadAudioFile(filePath);
+  } catch (const std::invalid_argument& e) {
+    logger->coreLogger->error("AudioWorkspace {} cannot load audio file at {}.",
+                              m_workspaceName, filePath);
+    return;
+  }
+
   logger->coreLogger->info("AudioWorkspace {} loaded audio file {}.",
                            m_workspaceName, filePath);
 }

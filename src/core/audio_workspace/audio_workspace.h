@@ -5,6 +5,8 @@
 
 #include <AudioFile.h>
 
+#include "core/audio_object/audio_object.h"
+
 namespace hpaslt {
 
 /* ---------------------------------------------------------- */
@@ -25,10 +27,10 @@ class AudioWorkspace {
   std::string m_workspaceName;
 
   /**
-   * @brief The current processing audio file.
+   * @brief The current processing audio object.
    *
    */
-  AudioFile<float> m_audioFile;
+  std::shared_ptr<AudioObject> m_audioObject;
 
  public:
   /**
