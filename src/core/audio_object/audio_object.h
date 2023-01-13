@@ -20,7 +20,7 @@ class AudioObject {
    * @brief The current processing audio file.
    *
    */
-  AudioFile<double> m_audioFile;
+  AudioFile<float> m_audioFile;
 
   /**
    * @brief Current playing frame.
@@ -39,13 +39,15 @@ class AudioObject {
 
   /**
    * @brief Get the internal AudioFile reference.
+   * This method is not thread safe.
    *
    * @return AudioFile<float>&
    */
-  AudioFile<double>& getAudioFile() { return m_audioFile; }
+  AudioFile<float>& getAudioFile() { return m_audioFile; }
 
   /**
    * @brief Get the mutex lock by reference.
+   * This method is not thread safe.
    *
    * @return std::mutex&
    */
@@ -66,6 +68,13 @@ class AudioObject {
    * @return int
    */
   int getCursor() { return m_cursor; }
+
+  /**
+   * @brief Set the current playing frame.
+   *
+   * @param cursor
+   */
+  void setCursor(int cursor) { m_cursor = cursor; }
 
   /**
    * @brief Reset the playing cursor to start.
