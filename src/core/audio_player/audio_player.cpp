@@ -59,9 +59,9 @@ AudioPlayer::~AudioPlayer() {
   }
 }
 
-void AudioPlayer::loadAudioObject(AudioObject *audioObj) {
+void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
   // Load the object.
-  m_audioObj = audioObj;
+  m_audioObj = audioObj.lock();
 
   // Create the stream.
   PaStreamParameters outputParameters;
@@ -95,7 +95,7 @@ void AudioPlayer::loadAudioObject(AudioObject *audioObj) {
   err = Pa_OpenStream(&m_stream, nullptr, &outputParameters,
                       m_audioObj->getAudioFile().getSampleRate(),
                       paFramesPerBufferUnspecified, paClipOff, paCallback,
-                      m_audioObj);
+                      m_audioObj.get());
   m_audioObj->getMutex().unlock();
 
   if (err != paNoError) {

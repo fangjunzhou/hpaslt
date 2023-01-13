@@ -16,10 +16,9 @@ namespace hpaslt {
 
 class AudioWorkspace {
  private:
-  static std::unordered_map<std::string, std::shared_ptr<AudioWorkspace>>
-      s_audioWorkspacecs;
+  static std::unordered_map<std::string, AudioWorkspace*> s_audioWorkspacecs;
 
-  static std::shared_ptr<AudioWorkspace> s_currAudioWorkspace;
+  static AudioWorkspace* s_currAudioWorkspace;
 
   /**
    * @brief The name of current audio workspace.
@@ -31,13 +30,13 @@ class AudioWorkspace {
    * @brief Audio player for current workspace.
    *
    */
-  AudioPlayer* m_player;
+  std::shared_ptr<AudioPlayer> m_player;
 
   /**
    * @brief The current processing audio object.
    *
    */
-  AudioObject* m_audioObject;
+  std::shared_ptr<AudioObject> m_audioObject;
 
  public:
   /**
@@ -45,7 +44,7 @@ class AudioWorkspace {
    *
    * @return std::weak_ptr<AudioWorkspace>
    */
-  static std::weak_ptr<AudioWorkspace> getCurrAudioWorkspace();
+  static AudioWorkspace* getCurrAudioWorkspace();
 
   /**
    * @brief Create a new AudioWorkspace.
@@ -60,6 +59,12 @@ class AudioWorkspace {
    * @param workspaceName
    */
   static void changeAudioWorkspace(const std::string& workspaceName);
+
+  /**
+   * @brief Free all audio workspaces.
+   *
+   */
+  static void cleanupAudioWorkspace();
 
   /**
    * @brief Register all the commands related to AudioWorkspace.

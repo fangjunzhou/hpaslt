@@ -11,7 +11,7 @@ namespace hpaslt {
 
 class AudioPlayer {
  private:
-  AudioObject *m_audioObj;
+  std::shared_ptr<AudioObject> m_audioObj;
 
   PaStream *m_stream;
 
@@ -82,7 +82,7 @@ class AudioPlayer {
    *
    * @param audioObj
    */
-  void loadAudioObject(AudioObject *audioObj);
+  void loadAudioObject(std::weak_ptr<AudioObject> audioObj);
 
   /**
    * @brief Play the audio file from current cursor position.

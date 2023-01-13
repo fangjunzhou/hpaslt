@@ -7,12 +7,12 @@
 
 namespace hpaslt {
 
-std::unordered_map<std::string, std::shared_ptr<AudioWorkspace>>
+std::unordered_map<std::string, AudioWorkspace*>
     AudioWorkspace::s_audioWorkspacecs;
 
-std::shared_ptr<AudioWorkspace> AudioWorkspace::s_currAudioWorkspace = nullptr;
+AudioWorkspace* AudioWorkspace::s_currAudioWorkspace = nullptr;
 
-std::weak_ptr<AudioWorkspace> AudioWorkspace::getCurrAudioWorkspace() {
+AudioWorkspace* AudioWorkspace::getCurrAudioWorkspace() {
   return s_currAudioWorkspace;
 }
 
@@ -23,8 +23,7 @@ void AudioWorkspace::createAudioWorkspace(const std::string& workspaceName) {
     return;
   }
 
-  std::shared_ptr newWorkspace =
-      std::make_shared<AudioWorkspace>(workspaceName);
+  AudioWorkspace* newWorkspace = new AudioWorkspace(workspaceName);
   s_audioWorkspacecs[workspaceName] = newWorkspace;
   logger->coreLogger->info("AudioWorkspace {} created.", workspaceName);
 }
@@ -41,6 +40,15 @@ void AudioWorkspace::changeAudioWorkspace(const std::string& workspaceName) {
   logger->coreLogger->info("Switched to AudioWorkspace {}.", workspaceName);
 }
 
+void AudioWorkspace::cleanupAudioWorkspace() {
+  std::for_each(s_audioWorkspacecs.begin(), s_audioWorkspacecs.end(),
+                [](std::pair<std::string, AudioWorkspace*> key_value) {
+                  delete key_value.second;
+                });
+  s_audioWorkspacecs.clear();
+  logger->coreLogger->debug("AudioWorkspaces cleaned up.");
+}
+
 void AudioWorkspace::registerConosleCommands() {
   // Get the console system.
   std::shared_ptr<csys::System> system =
@@ -49,28 +57,25 @@ void AudioWorkspace::registerConosleCommands() {
   system->RegisterCommand(
       "loadAudioCurr", "Load audio to current workspace.",
       [](const csys::String& audioFilePath) {
-        std::shared_ptr<AudioWorkspace> currWorkspace =
-            AudioWorkspace::getCurrAudioWorkspace().lock();
+        AudioWorkspace* currWorkspace = AudioWorkspace::getCurrAudioWorkspace();
 
         currWorkspace->loadAudioFile(audioFilePath.m_String);
       },
       csys::Arg<csys::String>("path"));
 
-  system->RegisterCommand("playAudioCurr",
-                          "Play the audio of current workspace.", []() {
-                            std::shared_ptr<AudioWorkspace> currWorkspace =
-                                AudioWorkspace::getCurrAudioWorkspace().lock();
+  system->RegisterCommand(
+      "playAudioCurr", "Play the audio of current workspace.", []() {
+        AudioWorkspace* currWorkspace = AudioWorkspace::getCurrAudioWorkspace();
 
-                            currWorkspace->m_player->play();
-                          });
+        currWorkspace->m_player->play();
+      });
 
-  system->RegisterCommand("pauseAudioCurr",
-                          "Pause the audio of current workspace.", []() {
-                            std::shared_ptr<AudioWorkspace> currWorkspace =
-                                AudioWorkspace::getCurrAudioWorkspace().lock();
+  system->RegisterCommand(
+      "pauseAudioCurr", "Pause the audio of current workspace.", []() {
+        AudioWorkspace* currWorkspace = AudioWorkspace::getCurrAudioWorkspace();
 
-                            currWorkspace->m_player->pause();
-                          });
+        currWorkspace->m_player->pause();
+      });
 
   logger->coreLogger->debug("AudioWorkspace commands registered.");
 }
@@ -78,15 +83,12 @@ void AudioWorkspace::registerConosleCommands() {
 AudioWorkspace::AudioWorkspace(const std::string& workspaceName)
     : m_workspaceName(workspaceName) {
   // Alloc members.
-  m_player = new AudioPlayer();
-  m_audioObject = new AudioObject();
+  m_player = std::make_shared<AudioPlayer>();
+  m_audioObject = std::make_shared<AudioObject>();
 }
 
 AudioWorkspace::~AudioWorkspace() {
-  // Free audio player first.
-  delete m_player;
   m_player = nullptr;
-  delete m_audioObject;
   m_audioObject = nullptr;
 }
 

@@ -61,6 +61,9 @@ int main(int argc, char const* argv[]) {
   hpaslt::logger->coreLogger->debug("WindowManager singleton is freed.");
 
   /* -------------------------- Core -------------------------- */
+  // Cleanup audio workspaces.
+  hpaslt::AudioWorkspace::cleanupAudioWorkspace();
+
   // Free AudioPlayer singleton.
   hpaslt::AudioPlayer::terminateAudioPlayer();
   hpaslt::logger->coreLogger->debug("AudioPlayer terminated.");
