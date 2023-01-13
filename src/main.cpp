@@ -24,8 +24,8 @@ int main(int argc, char const* argv[]) {
 
   /* -------------------------- Core -------------------------- */
   // Audio player.
-  hpaslt::logger->coreLogger->debug("Creating AudioPlayer.");
-  hpaslt::AudioPlayer::getSingleton();
+  hpaslt::logger->coreLogger->debug("Initializaing AudioPlayer.");
+  hpaslt::AudioPlayer::initAudioPlayer();
   // Audio Workspace.
   hpaslt::logger->coreLogger->debug("Creating the main workspace.");
   hpaslt::AudioWorkspace::createAudioWorkspace("Main Workspace");
@@ -62,8 +62,8 @@ int main(int argc, char const* argv[]) {
 
   /* -------------------------- Core -------------------------- */
   // Free AudioPlayer singleton.
-  hpaslt::AudioPlayer::freeSingleton();
-  hpaslt::logger->coreLogger->debug("AudioPlayer singleton is freed.");
+  hpaslt::AudioPlayer::terminateAudioPlayer();
+  hpaslt::logger->coreLogger->debug("AudioPlayer terminated.");
 
   /* --------------------- Infrastructure --------------------- */
   // Commands manager.
