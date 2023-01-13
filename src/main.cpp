@@ -32,11 +32,16 @@ int main(int argc, char const* argv[]) {
   hpaslt::WindowManager::getSingleton();
   /* ---------------------------------------------------------- */
 
+  /* ---------------------------------------------------------- */
+  /*                      Main Entry Point                      */
+  /* ---------------------------------------------------------- */
+
+  // Frontend entry point.
   hpaslt::logger->coreLogger->debug("Entering frontend entry point.");
   hpaslt::registerAllImGuiObjs();
   hpaslt::finishRegisterImGuiObjs();
 
-  // Join UI thread, get the execution result.
+  // WindowManager UI main loop.
   int exitRes = hpaslt::WindowManager::getSingleton().lock()->execute();
 
   /* ---------------------------------------------------------- */
