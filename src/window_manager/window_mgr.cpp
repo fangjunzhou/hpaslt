@@ -67,7 +67,7 @@ WindowManager::WindowManager() {
   ImGui_ImplGlfw_InitForOpenGL(m_window, true);
   ImGui_ImplOpenGL3_Init("#version 150");
 
-  // TODO: Load fonts here.
+  // Load fonts here.
   m_io->Fonts->AddFontFromFileTTF("fonts/ubuntu/Ubuntu-Regular.ttf", 15);
 }
 
