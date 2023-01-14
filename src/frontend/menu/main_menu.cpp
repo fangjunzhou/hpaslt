@@ -34,13 +34,13 @@ MainMenu::~MainMenu() {
 
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
-    if (ImGui::BeginMenu(ICON_MD_FOLDER "File")) {
+    if (ImGui::BeginMenu(ICON_MD_FOLDER " File")) {
       // TODO: Implement file load, save.
       // ImGui::MenuItem("Not Implemented", nullptr, false, false);
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu(ICON_MD_EDIT "Edit")) {
+    if (ImGui::BeginMenu(ICON_MD_EDIT " Edit")) {
       if (ImGui::MenuItem("Undo", "CTRL+Z")) {
       }
       if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
@@ -55,8 +55,8 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu(ICON_MD_WEB_ASSET "Views")) {
-      if (ImGui::MenuItem(ICON_MD_TERMINAL "Console", nullptr,
+    if (ImGui::BeginMenu(ICON_MD_WEB_ASSET " Views")) {
+      if (ImGui::MenuItem(ICON_MD_TERMINAL " Console", nullptr,
                           &m_showConsole)) {
         Console::s_onEnable(m_showConsole);
         // Save the config.
@@ -67,7 +67,7 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu(ICON_MD_BUG_REPORT "Debug")) {
+    if (ImGui::BeginMenu(ICON_MD_BUG_REPORT " Debug")) {
       if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
         // Save the config.
