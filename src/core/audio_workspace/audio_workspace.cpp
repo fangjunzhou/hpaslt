@@ -40,6 +40,22 @@ void AudioWorkspace::registerConosleCommands() {
                             currWorkspace->m_player->pause();
                           });
 
+  system->RegisterCommand("replayAudioCurr",
+                          "Replay the audio of current workspace.", []() {
+                            std::shared_ptr<AudioWorkspace> currWorkspace =
+                                AudioWorkspace::getSingleton().lock();
+
+                            currWorkspace->m_player->replay();
+                          });
+
+  system->RegisterCommand("stopAudioCurr",
+                          "Stop the audio of current workspace.", []() {
+                            std::shared_ptr<AudioWorkspace> currWorkspace =
+                                AudioWorkspace::getSingleton().lock();
+
+                            currWorkspace->m_player->stop();
+                          });
+
   logger->coreLogger->debug("AudioWorkspace commands registered.");
 }
 
