@@ -10,7 +10,8 @@ void AudioObject::loadAudioFile(const std::string& filePath) {
     throw std::invalid_argument("Audio file at path cannot be loaded.");
   }
 
-  resetCursor();
+  // Reset cursor.
+  setCursor(0);
 }
 
 double AudioObject::getLength() {

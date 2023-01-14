@@ -75,13 +75,6 @@ class AudioObject {
    * @param cursor
    */
   void setCursor(int cursor) { m_cursor = cursor; }
-
-  /**
-   * @brief Reset the playing cursor to start.
-   * This method is not thread safe.
-   *
-   */
-  void resetCursor() { m_cursor = 0; }
 };
 
 }  // namespace hpaslt
