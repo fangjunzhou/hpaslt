@@ -5,7 +5,48 @@ namespace hpaslt {
 
 std::shared_ptr<WindowManager> WindowManager::s_windowMgr = nullptr;
 
-WindowManager::WindowManager() {
+void WindowManager::enableDockspace() {
+  // Enable dock space.
+  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->WorkPos);
+  // Resize the work space for status bar.
+  ImVec2 workSize = viewport->WorkSize;
+  workSize.y -= ImGui::GetFrameHeight();
+  ImGui::SetNextWindowSize(workSize);
+  ImGui::SetNextWindowViewport(viewport->ID);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+  // Disable padding.
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+  // Setup docking window flag.
+  // Disable docking to other dockspace.
+  ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+  // Fix window.
+  window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+                  ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+  // Disable nav focus.
+  window_flags |=
+      ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+  // Dockspace flag.
+  static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+  ImGui::Begin("DockSpace", nullptr, window_flags);
+  ImGui::PopStyleVar(3);
+
+  // Submit the DockSpace
+  ImGuiIO& io = ImGui::GetIO();
+  if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+  }
+
+  ImGui::End();
+}
+
+WindowManager::WindowManager()
+    : m_mainMenuBar(nullptr), m_mainStatusBar(nullptr) {
   hpaslt::logger->uiLogger->debug("WindowManager created.");
 
   // Init GLFW.
@@ -97,8 +138,11 @@ int WindowManager::execute() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    // Enable dockspace.
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+    if (m_mainMenuBar) m_mainMenuBar->render();
+
+    enableDockspace();
+
+    if (m_mainStatusBar) m_mainStatusBar->render();
 
     // Render ImGuiObjects.
     for (int i = 0; i < m_renderObjs.size(); i++) {

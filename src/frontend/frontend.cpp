@@ -3,6 +3,7 @@
 
 #include "frontend.h"
 #include "menu/main_menu.h"
+#include "status_bar/status_bar.h"
 
 #include "console/console.h"
 
@@ -16,8 +17,12 @@ void registerAllImGuiObjs() {
   hpaslt::logger->uiLogger->debug("Frontend entry point.");
 
   // Main Menu.
-  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
+  hpaslt::WindowManager::getSingleton().lock()->setMainMenuBar(
       std::make_shared<MainMenu>());
+
+  // Status bar.
+  hpaslt::WindowManager::getSingleton().lock()->setMainStatusBar(
+      std::make_shared<StatusBar>());
 
   /* -------------------------- Views ------------------------- */
 

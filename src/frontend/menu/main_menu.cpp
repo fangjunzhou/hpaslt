@@ -11,7 +11,7 @@
 
 namespace hpaslt {
 
-MainMenu::MainMenu() : ImGuiObject("Main Menu") {
+MainMenu::MainMenu() : ImGuiObject("MainMenuBar") {
   namespace fs = std::filesystem;
   m_config = std::make_unique<MainMenuConfig>("main_menu.json");
   // Try to load the config.
