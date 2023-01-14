@@ -72,18 +72,18 @@ class AudioWorkspace {
   ~AudioWorkspace();
 
   /**
-   * @brief Load a .wav audio file into m_audioFile.
-   *
-   * @param filePath
-   */
-  void loadAudioFile(const std::string& filePath);
-
-  /**
    * @brief Get the AudioPlayer.
    *
    * @return std::weak_ptr<AudioPlayer>
    */
   std::weak_ptr<AudioPlayer> getAudioPlayer() { return m_player; }
+
+  /**
+   * @brief Load a .wav audio file into m_audioFile.
+   *
+   * @param filePath
+   */
+  void loadAudioFile(const std::string& filePath);
 };
 
 }  // namespace hpaslt
