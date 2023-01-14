@@ -4,6 +4,7 @@
 #include "frontend.h"
 #include "menu/main_menu.h"
 #include "status_bar/status_bar.h"
+#include "play_control/play_control.h"
 
 #include "console/console.h"
 
@@ -19,6 +20,9 @@ void registerAllImGuiObjs() {
   // Main Menu.
   hpaslt::WindowManager::getSingleton().lock()->setMainMenuBar(
       std::make_shared<MainMenu>());
+
+    hpaslt::WindowManager::getSingleton().lock()->setPlayControlBar(
+      std::make_shared<PlayControl>());
 
   // Status bar.
   hpaslt::WindowManager::getSingleton().lock()->setMainStatusBar(

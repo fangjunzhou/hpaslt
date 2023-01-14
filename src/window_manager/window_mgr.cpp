@@ -10,10 +10,14 @@ std::shared_ptr<WindowManager> WindowManager::s_windowMgr = nullptr;
 void WindowManager::enableDockspace() {
   // Enable dock space.
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
-  ImGui::SetNextWindowPos(viewport->WorkPos);
+  ImVec2 workPos = viewport->Pos;
+  // Leave space for menu + play control.
+  workPos.y += 2 * ImGui::GetFrameHeight();
+  ImGui::SetNextWindowPos(workPos);
   // Resize the work space for status bar.
-  ImVec2 workSize = viewport->WorkSize;
-  workSize.y -= ImGui::GetFrameHeight();
+  ImVec2 workSize = viewport->Size;
+  // Leave space for status.
+  workSize.y -= 3 * ImGui::GetFrameHeight();
   ImGui::SetNextWindowSize(workSize);
   ImGui::SetNextWindowViewport(viewport->ID);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -48,7 +52,7 @@ void WindowManager::enableDockspace() {
 }
 
 WindowManager::WindowManager()
-    : m_mainMenuBar(nullptr), m_mainStatusBar(nullptr) {
+    : m_mainMenuBar(nullptr), m_mainStatusBar(nullptr), m_playControl(nullptr) {
   hpaslt::logger->uiLogger->debug("WindowManager created.");
 
   // Init GLFW.
@@ -151,6 +155,8 @@ int WindowManager::execute() {
     ImGui::NewFrame();
 
     if (m_mainMenuBar) m_mainMenuBar->render();
+
+    if (m_playControl) m_playControl->render();
 
     enableDockspace();
 

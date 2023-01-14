@@ -43,6 +43,12 @@ class WindowManager {
   std::shared_ptr<ImGuiObject> m_mainMenuBar;
 
   /**
+   * @brief The play control bar.
+   *
+   */
+  std::shared_ptr<ImGuiObject> m_playControl;
+
+  /**
    * @brief The main status bar.
    *
    */
@@ -116,6 +122,15 @@ class WindowManager {
    */
   void setMainMenuBar(std::shared_ptr<ImGuiObject> mainMenuBar) {
     m_mainMenuBar = mainMenuBar;
+  }
+
+  /**
+   * @brief Set the the
+   *
+   * @param mainMenuBar
+   */
+  void setPlayControlBar(std::shared_ptr<ImGuiObject> playControl) {
+    m_playControl = playControl;
   }
 
   /**

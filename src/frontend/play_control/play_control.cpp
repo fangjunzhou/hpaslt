@@ -1,18 +1,20 @@
 #include <imgui.h>
 
-#include "status_bar.h"
+#include <IconsMaterialDesign.h>
+
+#include "play_control.h"
 
 namespace hpaslt {
 
-StatusBar::StatusBar() : ImGuiObject("MainStatusBar") {}
+PlayControl::PlayControl() : ImGuiObject("MainPlayConstrol") {}
 
-StatusBar::~StatusBar() {}
+PlayControl::~PlayControl() {}
 
-void StatusBar::render() {
+void PlayControl::render() {
   // Status bar window.
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
   ImVec2 statusPos = viewport->Pos;
-  statusPos.y += viewport->Size.y - ImGui::GetFrameHeight();
+  statusPos.y += ImGui::GetFrameHeight();
   ImGui::SetNextWindowPos(statusPos);
   // Resize the work space for status bar.
   ImVec2 workSize = viewport->Size;
@@ -37,11 +39,11 @@ void StatusBar::render() {
   // Enable menu bar.
   window_flags |= ImGuiWindowFlags_MenuBar;
 
-  ImGui::Begin("StatusBar", nullptr, window_flags);
+  ImGui::Begin("PlayControl", nullptr, window_flags);
   ImGui::PopStyleVar(4);
 
   if (ImGui::BeginMenuBar()) {
-    ImGui::Text("Status Bar");
+    ImGui::Text("Play Control");
     ImGui::EndMenuBar();
   }
 
