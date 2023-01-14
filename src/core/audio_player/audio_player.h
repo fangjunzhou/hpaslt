@@ -11,9 +11,23 @@ namespace hpaslt {
 
 class AudioPlayer {
  private:
+  /**
+   * @brief Currently playing AudioObject.
+   *
+   */
   std::shared_ptr<AudioObject> m_audioObj;
 
+  /**
+   * @brief Created stream for current AudioObject.
+   *
+   */
   PaStream *m_stream;
+
+  /**
+   * @brief If the player is currently playing.
+   *
+   */
+  bool m_isPlaying;
 
   /**
    * @brief Callback function called by Port Audio.
@@ -95,6 +109,18 @@ class AudioPlayer {
    *
    */
   void pause();
+
+  /**
+   * @brief Reset the cursor to 0 and play.
+   *
+   */
+  void replay();
+
+  /**
+   * @brief Stop and reset the cursor to 0.
+   *
+   */
+  void stop();
 };
 
 }  // namespace hpaslt

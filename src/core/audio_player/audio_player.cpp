@@ -109,23 +109,47 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
 }
 
 void AudioPlayer::play() {
+  if (m_isPlaying) {
+    logger->coreLogger->trace("AudioPlayer already playing.");
+    return;
+  }
+
   PaError err = Pa_StartStream(m_stream);
   if (err != paNoError) {
     portAudioError(err);
     return;
   }
 
-  logger->coreLogger->debug("AudioPlayer played.");
+  m_isPlaying = true;
+
+  logger->coreLogger->trace("AudioPlayer played.");
 }
 
 void AudioPlayer::pause() {
+  if (!m_isPlaying) {
+    logger->coreLogger->trace("AudioPlayer already paused.");
+    return;
+  }
+
   PaError err = Pa_StopStream(m_stream);
   if (err != paNoError) {
     portAudioError(err);
     return;
   }
 
-  logger->coreLogger->debug("AudioPlayer paused.");
+  m_isPlaying = false;
+
+  logger->coreLogger->trace("AudioPlayer paused.");
+}
+
+void AudioPlayer::replay() {
+  m_audioObj->setCursor(0);
+  play();
+}
+
+void AudioPlayer::stop() {
+  pause();
+  m_audioObj->setCursor(0);
 }
 
 }  // namespace hpaslt
