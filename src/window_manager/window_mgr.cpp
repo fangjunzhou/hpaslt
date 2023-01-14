@@ -60,7 +60,7 @@ WindowManager::WindowManager()
     hpaslt::logger->uiLogger->error("GLFW initialization failed!");
     throw std::runtime_error("GLFW initialization failed!");
   }
-  hpaslt::logger->uiLogger->debug("GLFW initialization success.");
+  hpaslt::logger->uiLogger->debug("GLFW initialization succeeded.");
 
   // Enable GLFW 4x MSAA.
   glfwWindowHint(GLFW_SAMPLES, 4);
@@ -76,7 +76,7 @@ WindowManager::WindowManager()
     hpaslt::logger->uiLogger->error("GLFW window creation failed!");
     throw std::runtime_error("GLFW window creation failed!");
   }
-  hpaslt::logger->uiLogger->debug("GLFW window creation success.");
+  hpaslt::logger->uiLogger->debug("GLFW window creation succeeded.");
 
   glfwMakeContextCurrent(m_window);
   // Enable vsync.
@@ -88,7 +88,7 @@ WindowManager::WindowManager()
     hpaslt::logger->uiLogger->error("GLEW initialization failed!");
     throw std::runtime_error("GLEW initialization failed!");
   }
-  hpaslt::logger->uiLogger->debug("GLEW initialization success.");
+  hpaslt::logger->uiLogger->debug("GLEW initialization succeeded.");
 
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
