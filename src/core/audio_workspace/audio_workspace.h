@@ -16,15 +16,11 @@ namespace hpaslt {
 
 class AudioWorkspace {
  private:
-  static std::unordered_map<std::string, AudioWorkspace*> s_audioWorkspacecs;
-
-  static AudioWorkspace* s_currAudioWorkspace;
-
   /**
-   * @brief The name of current audio workspace.
+   * @brief AudioWorkspace singleton.
    *
    */
-  std::string m_workspaceName;
+  static std::shared_ptr<AudioWorkspace> s_audioWorkspace;
 
   /**
    * @brief Audio player for current workspace.
@@ -40,31 +36,23 @@ class AudioWorkspace {
 
  public:
   /**
-   * @brief Get the current active AudioWorkspace.
+   * @brief Get the AudioWorkspace singleton.
    *
    * @return std::weak_ptr<AudioWorkspace>
    */
-  static AudioWorkspace* getCurrAudioWorkspace();
+  static std::weak_ptr<AudioWorkspace> getSingleton() {
+    if (!s_audioWorkspace) {
+      s_audioWorkspace = std::make_shared<AudioWorkspace>();
+    }
+
+    return s_audioWorkspace;
+  }
 
   /**
-   * @brief Create a new AudioWorkspace.
-   *
-   * @param workspaceName
-   */
-  static void createAudioWorkspace(const std::string& workspaceName);
-
-  /**
-   * @brief Change the current AudioWorkspace.
-   *
-   * @param workspaceName
-   */
-  static void changeAudioWorkspace(const std::string& workspaceName);
-
-  /**
-   * @brief Free all audio workspaces.
+   * @brief Free the AudioWorkspace singleton.
    *
    */
-  static void cleanupAudioWorkspace();
+  static void freeSingleton() { s_audioWorkspace = nullptr; }
 
   /**
    * @brief Register all the commands related to AudioWorkspace.
@@ -76,7 +64,7 @@ class AudioWorkspace {
    * @brief Construct a new AudioWorkspace object.
    *
    */
-  AudioWorkspace(const std::string& workspaceName);
+  AudioWorkspace();
   /**
    * @brief Destroy the AudioWorkspace object.
    *

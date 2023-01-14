@@ -28,9 +28,8 @@ int main(int argc, char const* argv[]) {
   hpaslt::AudioPlayer::initAudioPlayer();
   // Audio Workspace.
   hpaslt::logger->coreLogger->debug("Creating the main workspace.");
-  hpaslt::AudioWorkspace::createAudioWorkspace("Main Workspace");
-  hpaslt::logger->coreLogger->debug("Switching to the main workspace");
-  hpaslt::AudioWorkspace::changeAudioWorkspace("Main Workspace");
+  hpaslt::AudioWorkspace::getSingleton();
+  hpaslt::logger->coreLogger->debug("Registering console commands.");
   hpaslt::AudioWorkspace::registerConosleCommands();
 
   /* ------------------------ Rendering ----------------------- */
@@ -62,7 +61,8 @@ int main(int argc, char const* argv[]) {
 
   /* -------------------------- Core -------------------------- */
   // Cleanup audio workspaces.
-  hpaslt::AudioWorkspace::cleanupAudioWorkspace();
+  hpaslt::AudioWorkspace::freeSingleton();
+  hpaslt::logger->coreLogger->debug("AudioWorkspace freed.");
 
   // Free AudioPlayer singleton.
   hpaslt::AudioPlayer::terminateAudioPlayer();
