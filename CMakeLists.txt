@@ -203,6 +203,7 @@ target_include_directories(
     external/glfw/include
     external/imgui
     external/imgui/backends
+    external/iconfont
     src
 )
 target_link_libraries(
@@ -232,6 +233,7 @@ target_include_directories(
     external/imgui
     external/imgui/backends
     external/imguiconsole/include
+    external/iconfont
     src
 )
 target_link_libraries(

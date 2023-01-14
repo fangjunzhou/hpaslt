@@ -2,6 +2,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <IconsMaterialDesign.h>
+
 #include "main_menu.h"
 #include "logger/logger.h"
 
@@ -32,13 +34,13 @@ MainMenu::~MainMenu() {
 
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
-    if (ImGui::BeginMenu("File")) {
+    if (ImGui::BeginMenu(ICON_MD_FOLDER "File")) {
       // TODO: Implement file load, save.
       // ImGui::MenuItem("Not Implemented", nullptr, false, false);
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu("Edit")) {
+    if (ImGui::BeginMenu(ICON_MD_EDIT "Edit")) {
       if (ImGui::MenuItem("Undo", "CTRL+Z")) {
       }
       if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
@@ -53,8 +55,9 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu("Views")) {
-      if (ImGui::MenuItem("Console", nullptr, &m_showConsole)) {
+    if (ImGui::BeginMenu(ICON_MD_WEB_ASSET "Views")) {
+      if (ImGui::MenuItem(ICON_MD_TERMINAL "Console", nullptr,
+                          &m_showConsole)) {
         Console::s_onEnable(m_showConsole);
         // Save the config.
         m_config->showConsole = m_showConsole;
@@ -64,7 +67,7 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu("Debug")) {
+    if (ImGui::BeginMenu(ICON_MD_BUG_REPORT "Debug")) {
       if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
         // Save the config.

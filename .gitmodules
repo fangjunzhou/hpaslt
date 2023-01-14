@@ -29,3 +29,6 @@
 [submodule "external/imguiconsole"]
 	path = external/imguiconsole
 	url = git@github.com:Fangjun-Zhou/imgui-console.git
+[submodule "external/iconfont"]
+	path = external/iconfont
+	url = git@github.com:juliettef/IconFontCppHeaders.git

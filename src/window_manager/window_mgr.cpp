@@ -1,3 +1,5 @@
+#include <IconsMaterialDesign.h>
+
 #include "logger/logger.h"
 #include "window_mgr.h"
 
@@ -109,7 +111,17 @@ WindowManager::WindowManager()
   ImGui_ImplOpenGL3_Init("#version 150");
 
   // Load fonts here.
-  m_io->Fonts->AddFontFromFileTTF("fonts/ubuntu/Ubuntu-Regular.ttf", 15);
+  m_io->Fonts->AddFontFromFileTTF("fonts/ubuntu/Ubuntu-Regular.ttf", 16.0f);
+
+  // Merge icon from material design.
+  static const ImWchar icons_ranges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};
+  ImFontConfig icons_config;
+  icons_config.MergeMode = true;
+  icons_config.PixelSnapH = true;
+  icons_config.GlyphOffset = ImVec2(0, 2.5);
+  m_io->Fonts->AddFontFromFileTTF("fonts/MaterialIcons-Regular.ttf", 16.0f,
+                                  &icons_config, icons_ranges);
+  // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 }
 
 WindowManager::~WindowManager() {
