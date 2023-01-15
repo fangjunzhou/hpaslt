@@ -129,6 +129,8 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
 }
 
 void AudioPlayer::play() {
+  if (!m_audioObj) return;
+
   if (m_isPlaying) {
     logger->coreLogger->trace("AudioPlayer already playing.");
     return;
@@ -147,6 +149,8 @@ void AudioPlayer::play() {
 }
 
 void AudioPlayer::pause() {
+  if (!m_audioObj) return;
+
   if (!m_isPlaying) {
     logger->coreLogger->trace("AudioPlayer already paused.");
     return;
@@ -165,6 +169,8 @@ void AudioPlayer::pause() {
 }
 
 void AudioPlayer::replay() {
+  if (!m_audioObj) return;
+
   m_audioObj->setCursor(0);
   auto timeCallback = m_audioObj->getTimeCallback();
   if (timeCallback)
@@ -173,11 +179,36 @@ void AudioPlayer::replay() {
 }
 
 void AudioPlayer::stop() {
+  if (!m_audioObj) return;
+
   pause();
   m_audioObj->setCursor(0);
   auto timeCallback = m_audioObj->getTimeCallback();
   if (timeCallback)
     (*timeCallback)(m_audioObj->getTime(), m_audioObj->getLength());
+}
+
+void AudioPlayer::setTime(float time) {
+  if (!m_audioObj) return;
+
+  m_audioObj->getMutex().lock();
+
+  // Get the audio file.
+  AudioFile<float> &audioFile = m_audioObj->getAudioFile();
+  // Get the new cursor frame.
+  int cursorFrame = (int)(audioFile.getSampleRate() * time);
+
+  // Bound the frame.
+  int maxFrame = audioFile.getNumSamplesPerChannel();
+  if (cursorFrame < 0) {
+    cursorFrame = 0;
+  } else if (cursorFrame > maxFrame) {
+    cursorFrame = maxFrame;
+  }
+
+  m_audioObj->setCursor(cursorFrame);
+
+  m_audioObj->getMutex().unlock();
 }
 
 }  // namespace hpaslt

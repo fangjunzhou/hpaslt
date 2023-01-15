@@ -152,6 +152,13 @@ class AudioPlayer {
    *
    */
   void stop();
+
+  /**
+   * @brief Set the time of the AudioObject.
+   *
+   * @param time
+   */
+  void setTime(float time);
 };
 
 }  // namespace hpaslt
