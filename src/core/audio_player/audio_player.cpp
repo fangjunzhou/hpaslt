@@ -29,6 +29,12 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
     // Reach the end of the audio.
     if (cursor + i >= sampleNum) {
       audioObj->setCursor(sampleNum);
+      audioObj->getMutex().unlock();
+
+      // Invoke time callback.
+      auto timeCallback = audioObj->getTimeCallback();
+      if (timeCallback)
+        (*timeCallback)(audioObj->getTime(), audioObj->getLength());
       return paComplete;
     }
     // Copy data.
@@ -42,10 +48,14 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
 
   audioObj->getMutex().unlock();
 
+  // Invoke time callback.
+  auto timeCallback = audioObj->getTimeCallback();
+  if (timeCallback) (*timeCallback)(audioObj->getTime(), audioObj->getLength());
+
   return paContinue;
 }
 
-AudioPlayer::AudioPlayer() : m_stream(nullptr) {}
+AudioPlayer::AudioPlayer() : m_stream(nullptr), m_isPlaying(false) {}
 
 AudioPlayer::~AudioPlayer() {
   // Check if need to clean up.
@@ -60,8 +70,18 @@ AudioPlayer::~AudioPlayer() {
 }
 
 void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
+  // Reset previous AudioObject callback.
+  if (m_audioObj) {
+    m_audioObj->resetTimeCallback();
+  }
+
   // Load the object.
   m_audioObj = audioObj.lock();
+
+  // Set AudioObject callback.
+  m_audioObj->setTimeCallback(&m_onChangePlayingTime);
+  // Initialize callback.
+  m_onChangePlayingTime(m_audioObj->getTime(), m_audioObj->getLength());
 
   // Create the stream.
   PaStreamParameters outputParameters;
@@ -121,6 +141,7 @@ void AudioPlayer::play() {
   }
 
   m_isPlaying = true;
+  m_onChangePlayingStatus(true);
 
   logger->coreLogger->trace("AudioPlayer played.");
 }
@@ -138,18 +159,25 @@ void AudioPlayer::pause() {
   }
 
   m_isPlaying = false;
+  m_onChangePlayingStatus(false);
 
   logger->coreLogger->trace("AudioPlayer paused.");
 }
 
 void AudioPlayer::replay() {
   m_audioObj->setCursor(0);
+  auto timeCallback = m_audioObj->getTimeCallback();
+  if (timeCallback)
+    (*timeCallback)(m_audioObj->getTime(), m_audioObj->getLength());
   play();
 }
 
 void AudioPlayer::stop() {
   pause();
   m_audioObj->setCursor(0);
+  auto timeCallback = m_audioObj->getTimeCallback();
+  if (timeCallback)
+    (*timeCallback)(m_audioObj->getTime(), m_audioObj->getLength());
 }
 
 }  // namespace hpaslt

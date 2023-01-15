@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <portaudio.h>
+#include <eventpp/callbacklist.h>
 
 #include "logger/logger.h"
 #include "core/audio_object/audio_object.h"
@@ -28,6 +29,18 @@ class AudioPlayer {
    *
    */
   bool m_isPlaying;
+
+  /**
+   * @brief Callback function when the playing status is changed.
+   *
+   */
+  eventpp::CallbackList<void(bool)> m_onChangePlayingStatus;
+
+  /**
+   * @brief Callback function when the play tiem changed.
+   *
+   */
+  eventpp::CallbackList<void(float, float)> m_onChangePlayingTime;
 
   /**
    * @brief Callback function called by Port Audio.
@@ -90,6 +103,24 @@ class AudioPlayer {
    *
    */
   ~AudioPlayer();
+
+  /**
+   * @brief Get the callback list when changing the playing status.
+   *
+   * @return eventpp::CallbackList<void(bool)>
+   */
+  eventpp::CallbackList<void(bool)> &getOnChangePlayingStatus() {
+    return m_onChangePlayingStatus;
+  }
+
+  /**
+   * @brief Get the callback list when changing the playing time.
+   *
+   * @return eventpp::CallbackList<void(float, float)>&
+   */
+  eventpp::CallbackList<void(float, float)> &getOnChangePlayingTime() {
+    return m_onChangePlayingTime;
+  }
 
   /**
    * @brief Load the AudioObject to the AudioPlayer.
