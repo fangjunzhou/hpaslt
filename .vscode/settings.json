@@ -97,7 +97,12 @@
     "any": "cpp",
     "list": "cpp",
     "valarray": "cpp",
-    "csignal": "cpp"
+    "csignal": "cpp",
+    "xfacet": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xtree": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++20",
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
