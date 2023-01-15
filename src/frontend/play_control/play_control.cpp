@@ -16,7 +16,7 @@ PlayControl::PlayControl()
       m_isPlaying(false),
       m_currTime(0),
       m_sliderTime(0),
-      m_syncSliderTime(false),
+      m_syncSliderTime(true),
       m_totalTime(0) {
   m_onPlayingStatusChangedHandle =
       AudioWorkspace::getSingleton()
@@ -123,8 +123,9 @@ void PlayControl::render() {
       m_sliderTime = m_currTime;
     }
     // Slider.
-    ImGui::SliderFloat(playingTimeStrStream.str().c_str(), &m_sliderTime, 0,
-                       m_totalTime, "%.2f", playTimeSliderFlag);
+    ImGui::PushItemWidth(-100);
+    ImGui::SliderFloat("", &m_sliderTime, 0, m_totalTime, "%.2f",
+                       playTimeSliderFlag);
     if (ImGui::IsItemActivated()) {
       // Disable play slider synchronization.
       m_syncSliderTime = false;
@@ -138,6 +139,13 @@ void PlayControl::render() {
       // Enable play slider synchronization.
       m_syncSliderTime = true;
     }
+
+    // Total time.
+    auto windowWidth = ImGui::GetWindowSize().x;
+    auto textWidth = ImGui::CalcTextSize(playingTimeStrStream.str().c_str()).x;
+    ImGui::SetCursorPosX(windowWidth - 50 - textWidth * 0.5f);
+    ImGui::PushItemWidth(100);
+    ImGui::Text(playingTimeStrStream.str().c_str());
 
     ImGui::EndMenuBar();
   }
