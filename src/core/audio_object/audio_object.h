@@ -43,6 +43,7 @@ class AudioObject {
 
   /**
    * @brief Set the current playing frame.
+   * This method is not thread safe.
    *
    * @param cursor
    */
