@@ -1,14 +1,53 @@
+#include <iomanip>
+#include <sstream>
+
 #include <imgui.h>
 
 #include <IconsMaterialDesign.h>
 
 #include "play_control.h"
 
+#include "core/audio_workspace/audio_workspace.h"
+
 namespace hpaslt {
 
-PlayControl::PlayControl() : ImGuiObject("MainPlayConstrol") {}
+PlayControl::PlayControl()
+    : ImGuiObject("MainPlayConstrol"), m_isPlaying(false) {
+  m_onPlayingStatusChangedHandle =
+      AudioWorkspace::getSingleton()
+          .lock()
+          ->getAudioPlayer()
+          .lock()
+          ->getOnChangePlayingStatus()
+          .append([this](bool isPlaying) { m_isPlaying = isPlaying; });
 
-PlayControl::~PlayControl() {}
+  m_onPlayingTimeChangedHandle =
+      AudioWorkspace::getSingleton()
+          .lock()
+          ->getAudioPlayer()
+          .lock()
+          ->getOnChangePlayingTime()
+          .append([this](float currTime, float totalTime) {
+            m_currTime = currTime;
+            m_totalTime = totalTime;
+          });
+}
+
+PlayControl::~PlayControl() {
+  AudioWorkspace::getSingleton()
+      .lock()
+      ->getAudioPlayer()
+      .lock()
+      ->getOnChangePlayingStatus()
+      .remove(m_onPlayingStatusChangedHandle);
+
+  AudioWorkspace::getSingleton()
+      .lock()
+      ->getAudioPlayer()
+      .lock()
+      ->getOnChangePlayingTime()
+      .remove(m_onPlayingTimeChangedHandle);
+}
 
 void PlayControl::render() {
   // Status bar window.
@@ -44,6 +83,40 @@ void PlayControl::render() {
 
   if (ImGui::BeginMenuBar()) {
     ImGui::Text("Play Control");
+
+    // Play.
+    std::string playIcon = m_isPlaying ? ICON_MD_PAUSE : ICON_MD_PLAY_ARROW;
+    if (ImGui::MenuItem(playIcon.c_str())) {
+      if (!m_isPlaying) {
+        logger->coreLogger->trace("Play");
+        AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->play();
+      } else {
+        logger->coreLogger->trace("Pause");
+        AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->pause();
+      }
+    }
+
+    // Replay.
+    if (ImGui::MenuItem(ICON_MD_REPLAY)) {
+      logger->coreLogger->trace("Replay");
+      AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->replay();
+    }
+
+    // Stop.
+    if (ImGui::MenuItem(ICON_MD_STOP)) {
+      logger->coreLogger->trace("Stop");
+      AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->stop();
+    }
+
+    // Progress slider.
+    std::stringstream playingTimeStrStream;
+    playingTimeStrStream << std::fixed << std::setprecision(2) << m_currTime;
+    playingTimeStrStream << "/";
+    playingTimeStrStream << std::fixed << std::setprecision(2) << m_totalTime;
+    if (ImGui::SliderFloat(playingTimeStrStream.str().c_str(), &m_currTime, 0,
+                           m_totalTime)) {
+    }
+
     ImGui::EndMenuBar();
   }
 

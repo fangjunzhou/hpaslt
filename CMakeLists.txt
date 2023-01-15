@@ -238,6 +238,7 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_frontend
+    hpaslt_core
     hpaslt_commands
     hpaslt_window_mgr
     hpaslt_logger
