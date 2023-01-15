@@ -12,7 +12,12 @@
 namespace hpaslt {
 
 PlayControl::PlayControl()
-    : ImGuiObject("MainPlayConstrol"), m_isPlaying(false) {
+    : ImGuiObject("MainPlayConstrol"),
+      m_isPlaying(false),
+      m_currTime(0),
+      m_sliderTime(0),
+      m_syncSliderTime(false),
+      m_totalTime(0) {
   m_onPlayingStatusChangedHandle =
       AudioWorkspace::getSingleton()
           .lock()
@@ -109,12 +114,29 @@ void PlayControl::render() {
     }
 
     // Progress slider.
+    const ImGuiSliderFlags playTimeSliderFlag =
+        ImGuiSliderFlags_NoInput | ImGuiSliderFlags_NoRoundToFormat;
     std::stringstream playingTimeStrStream;
-    playingTimeStrStream << std::fixed << std::setprecision(2) << m_currTime;
-    playingTimeStrStream << "/";
     playingTimeStrStream << std::fixed << std::setprecision(2) << m_totalTime;
-    if (ImGui::SliderFloat(playingTimeStrStream.str().c_str(), &m_currTime, 0,
-                           m_totalTime)) {
+    // Sync play time.
+    if (m_syncSliderTime) {
+      m_sliderTime = m_currTime;
+    }
+    // Slider.
+    ImGui::SliderFloat(playingTimeStrStream.str().c_str(), &m_sliderTime, 0,
+                       m_totalTime, "%.2f", playTimeSliderFlag);
+    if (ImGui::IsItemActivated()) {
+      // Disable play slider synchronization.
+      m_syncSliderTime = false;
+    }
+    if (ImGui::IsItemDeactivated()) {
+      // Update play time.
+      m_currTime = m_sliderTime;
+      AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->setTime(
+          m_sliderTime);
+
+      // Enable play slider synchronization.
+      m_syncSliderTime = true;
     }
 
     ImGui::EndMenuBar();

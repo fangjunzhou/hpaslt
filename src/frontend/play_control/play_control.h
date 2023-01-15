@@ -12,7 +12,13 @@ class PlayControl : public ImGuiObject {
   bool m_isPlaying;
   eventpp::CallbackList<void(bool)>::Handle m_onPlayingStatusChangedHandle;
   /* ---------------------- Playing Time ---------------------- */
+  // Current playing time.
   float m_currTime;
+  // Slider playing time.
+  float m_sliderTime;
+  // If synchronizing slider time with playing time.
+  bool m_syncSliderTime;
+  // Total time of the audio clip.
   float m_totalTime;
   eventpp::CallbackList<void(float, float)>::Handle
       m_onPlayingTimeChangedHandle;
