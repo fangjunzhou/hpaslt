@@ -35,8 +35,24 @@ MainMenu::~MainMenu() {
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu(ICON_MD_FOLDER " File")) {
-      // TODO: Implement file load, save.
-      // ImGui::MenuItem("Not Implemented", nullptr, false, false);
+      // Open audio file.
+      if (ImGui::MenuItem("Open Audio File", "CTRL+O")) {
+        // TODO: Async open file.
+        nfdchar_t *outPath;
+        nfdfilteritem_t filterItem[2] = {{"Source code", "c,cpp,cc"},
+                                         {"Headers", "h,hpp"}};
+        nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL);
+        if (result == NFD_OKAY) {
+          logger->coreLogger->debug("File opened at {}", std::string(outPath));
+          NFD_FreePath(outPath);
+        } else if (result == NFD_CANCEL) {
+          logger->coreLogger->debug("File opened canceled");
+        } else {
+          logger->coreLogger->error("NativeFileDialog error: {}",
+                                    std::string(NFD_GetError()));
+        }
+      }
+
       ImGui::EndMenu();
     }
 

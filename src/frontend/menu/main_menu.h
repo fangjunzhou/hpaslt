@@ -1,6 +1,7 @@
 #pragma once
 
 #include <eventpp/callbacklist.h>
+#include <nfd.h>
 
 #include "serialization/main_menu/main_menu_config.h"
 
