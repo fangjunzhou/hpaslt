@@ -1,3 +1,5 @@
+#include <nfd.h>
+
 #include "logger/logger.h"
 #include "window_manager/window_mgr.h"
 
@@ -14,6 +16,16 @@ namespace hpaslt {
 
 eventpp::CallbackList<void()> finishRegisterImGuiObjs;
 
+void frontendInit() {
+  NFD_Init();
+  logger->coreLogger->debug("NativeFileDialog initialized.");
+}
+
+void frontendTerminate() {
+  NFD_Quit();
+  logger->coreLogger->debug("NativeFileDialog terminated.");
+}
+
 void registerAllImGuiObjs() {
   hpaslt::logger->uiLogger->debug("Frontend entry point.");
 
@@ -21,7 +33,7 @@ void registerAllImGuiObjs() {
   hpaslt::WindowManager::getSingleton().lock()->setMainMenuBar(
       std::make_shared<MainMenu>());
 
-    hpaslt::WindowManager::getSingleton().lock()->setPlayControlBar(
+  hpaslt::WindowManager::getSingleton().lock()->setPlayControlBar(
       std::make_shared<PlayControl>());
 
   // Status bar.

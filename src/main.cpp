@@ -36,6 +36,8 @@ int main(int argc, char const* argv[]) {
   // Window manager.
   hpaslt::logger->coreLogger->debug("Creating WindowManager.");
   hpaslt::WindowManager::getSingleton();
+  // Frontend.
+  hpaslt::frontendInit();
   /* ---------------------------------------------------------- */
 
   /* ---------------------------------------------------------- */
@@ -58,6 +60,8 @@ int main(int argc, char const* argv[]) {
   // Free the WindowManager singleton.
   hpaslt::WindowManager::freeSingleton();
   hpaslt::logger->coreLogger->debug("WindowManager singleton is freed.");
+  // Frontend.
+  hpaslt::frontendTerminate();
 
   /* -------------------------- Core -------------------------- */
   // Cleanup audio workspaces.
