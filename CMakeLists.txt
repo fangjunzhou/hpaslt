@@ -30,6 +30,9 @@ add_subdirectory(external/audiofile)
 # Port Audio
 add_subdirectory(external/portaudio)
 
+# Native File Dialog
+add_subdirectory(external/nativefiledialog)
+
 # GLEW
 add_subdirectory(external/glew)
 if (BUILD_SHARED_LIBS)
@@ -234,6 +237,7 @@ target_include_directories(
     external/imgui/backends
     external/imguiconsole/include
     external/iconfont
+    external/nativefiledialog/src/include
     src
 )
 target_link_libraries(
@@ -247,6 +251,7 @@ target_link_libraries(
     eventpp
     imgui
     imgui_console
+    nfd
 )
 list(APPEND LIBS hpaslt_frontend)
 
