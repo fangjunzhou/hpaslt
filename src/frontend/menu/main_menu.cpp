@@ -4,6 +4,8 @@
 
 #include <IconsMaterialDesign.h>
 
+#include <chrono>
+
 #include "main_menu.h"
 #include "logger/logger.h"
 
@@ -11,7 +13,31 @@
 #include "frontend/console/console.h"
 #include "frontend/frontend.h"
 
+#include "core/audio_workspace/audio_workspace.h"
+
 namespace hpaslt {
+
+std::string MainMenu::openAudioFile() {
+  std::string res = "";
+
+  // Async open file.
+  nfdchar_t *outPath;
+  nfdfilteritem_t filterItem[1] = {{"WAV Audio", "wav"}};
+  nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, NULL);
+
+  if (result == NFD_OKAY) {
+    res = std::string(outPath);
+    logger->coreLogger->trace("File opened at {}", res);
+    NFD_FreePath(outPath);
+  } else if (result == NFD_CANCEL) {
+    logger->coreLogger->trace("File opened canceled");
+  } else {
+    logger->coreLogger->error("NativeFileDialog error: {}",
+                              std::string(NFD_GetError()));
+  }
+
+  return res;
+}
 
 MainMenu::MainMenu() : ImGuiObject("MainMenuBar") {
   namespace fs = std::filesystem;
@@ -36,21 +62,9 @@ void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {
     if (ImGui::BeginMenu(ICON_MD_FOLDER " File")) {
       // Open audio file.
-      if (ImGui::MenuItem("Open Audio File", "CTRL+O")) {
-        // TODO: Async open file.
-        nfdchar_t *outPath;
-        nfdfilteritem_t filterItem[2] = {{"Source code", "c,cpp,cc"},
-                                         {"Headers", "h,hpp"}};
-        nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, NULL);
-        if (result == NFD_OKAY) {
-          logger->coreLogger->debug("File opened at {}", std::string(outPath));
-          NFD_FreePath(outPath);
-        } else if (result == NFD_CANCEL) {
-          logger->coreLogger->debug("File opened canceled");
-        } else {
-          logger->coreLogger->error("NativeFileDialog error: {}",
-                                    std::string(NFD_GetError()));
-        }
+      if (ImGui::MenuItem(ICON_MD_FILE_OPEN " Open Audio File", "CTRL+O")) {
+        // TODO: Implement sync file dialog on macos.
+        m_audioFilePath = std::async(std::launch::async, openAudioFile, this);
       }
 
       ImGui::EndMenu();
@@ -95,6 +109,23 @@ void MainMenu::render() {
     }
 
     ImGui::EndMainMenuBar();
+  }
+
+  /* -------------------- File Open Handle -------------------- */
+
+  if (m_audioFilePath.valid()) {
+    std::future_status audioFileStatus = m_audioFilePath.wait_for(0s);
+    if (audioFileStatus == std::future_status::ready) {
+      std::string path = m_audioFilePath.get();
+      if (path.length() == 0) {
+        logger->coreLogger->warn("File not opened.");
+      } else {
+        logger->coreLogger->debug("Opening file at {}", path);
+        std::shared_ptr<AudioWorkspace> currWorkspace =
+            AudioWorkspace::getSingleton().lock();
+        currWorkspace->loadAudioFile(path);
+      }
+    }
   }
 }
 
