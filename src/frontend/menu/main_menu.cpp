@@ -98,7 +98,8 @@ void MainMenu::render() {
     }
 
     if (ImGui::BeginMenu(ICON_MD_BUG_REPORT " Debug")) {
-      if (ImGui::MenuItem("ImGui Example", nullptr, &m_showExample)) {
+      if (ImGui::MenuItem(ICON_MD_BUG_REPORT " ImGui Example", nullptr,
+                          &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
         // Save the config.
         m_config->showExample = m_showExample;
