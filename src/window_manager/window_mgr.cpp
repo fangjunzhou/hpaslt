@@ -1,4 +1,5 @@
 #include <IconsMaterialDesign.h>
+#include <implot.h>
 
 #include "logger/logger.h"
 #include "window_mgr.h"
@@ -93,6 +94,7 @@ WindowManager::WindowManager()
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
+  ImPlot::CreateContext();
   hpaslt::logger->uiLogger->debug("ImGui context created.");
   m_io = &ImGui::GetIO();
   m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -133,6 +135,7 @@ WindowManager::~WindowManager() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+  ImPlot::DestroyContext();
 
   // GLFW window cleanup.
   glfwTerminate();

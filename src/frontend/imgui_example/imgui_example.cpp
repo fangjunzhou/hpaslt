@@ -1,6 +1,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <implot.h>
 
 #include "imgui_example.h"
 #include "commands/commands.h"
@@ -22,6 +23,8 @@ ImGuiExample::~ImGuiExample() { s_onEnable.remove(m_enableCallbackHandle); }
 void ImGuiExample::render() {
   // Show demo window.
   ImGui::ShowDemoWindow(nullptr);
+  // Show ImPlot demo window.
+  ImPlot::ShowDemoWindow(nullptr);
 }
 
 }  // namespace hpaslt

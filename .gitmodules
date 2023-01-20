@@ -35,3 +35,6 @@
 [submodule "external/nativefiledialog"]
 	path = external/nativefiledialog
 	url = git@github.com:btzy/nativefiledialog-extended.git
+[submodule "external/implot"]
+	path = external/implot
+	url = git@github.com:epezent/implot.git

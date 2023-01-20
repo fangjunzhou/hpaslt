@@ -99,6 +99,23 @@ target_include_directories(
 target_compile_features(imgui_console PUBLIC cxx_std_17)
 target_link_libraries(imgui_console PUBLIC csys imgui)
 
+# -------------------------- ImPlot -------------------------- #
+
+file(
+    GLOB
+    IMPLOT_SRC
+    external/implot/*.cpp
+    external/implot/*.h
+)
+add_library(implot ${IMPLOT_SRC})
+target_include_directories(
+    implot
+    PUBLIC
+    external/imgui
+    external/implot
+)
+target_link_libraries(implot PUBLIC imgui)
+
 # ------------------------------------------------------------ #
 #                            HPASLT                            #
 # ------------------------------------------------------------ #
@@ -206,6 +223,7 @@ target_include_directories(
     external/glfw/include
     external/imgui
     external/imgui/backends
+    external/implot
     external/iconfont
     src
 )
@@ -217,6 +235,7 @@ target_link_libraries(
     ${GLEW_LIB}
     glfw
     imgui
+    implot
 )
 list(APPEND LIBS hpaslt_window_mgr)
 
@@ -236,6 +255,7 @@ target_include_directories(
     external/imgui
     external/imgui/backends
     external/imguiconsole/include
+    external/implot
     external/iconfont
     external/nativefiledialog/src/include
     src
@@ -251,6 +271,7 @@ target_link_libraries(
     eventpp
     imgui
     imgui_console
+    implot
     nfd
 )
 list(APPEND LIBS hpaslt_frontend)
