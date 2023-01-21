@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <AudioFile.h>
+#include <eventpp/callbacklist.h>
 
 #include "core/audio_object/audio_object.h"
 #include "core/audio_player/audio_player.h"
@@ -59,6 +60,14 @@ class AudioWorkspace {
    *
    */
   static void registerConosleCommands();
+
+  /**
+   * @brief Callback list invoked when audio is loaded successfully.
+   * The function callback list may be executed on another thread.
+   *
+   */
+  static eventpp::CallbackList<void(std::weak_ptr<AudioObject>)>
+      s_onAudioLoaded;
 
   /**
    * @brief Construct a new AudioWorkspace object.

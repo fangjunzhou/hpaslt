@@ -9,6 +9,9 @@ namespace hpaslt {
 
 std::shared_ptr<AudioWorkspace> AudioWorkspace::s_audioWorkspace = nullptr;
 
+eventpp::CallbackList<void(std::weak_ptr<AudioObject>)>
+    AudioWorkspace::s_onAudioLoaded;
+
 void AudioWorkspace::registerConosleCommands() {
   // Get the console system.
   std::shared_ptr<csys::System> system =
@@ -85,6 +88,9 @@ void AudioWorkspace::loadAudioFile(const std::string& filePath) {
 
     // Bind audio object to the player.
     m_player->loadAudioObject(m_audioObject);
+
+    // Call the callback list.
+    s_onAudioLoaded(m_audioObject);
   });
   logger->coreLogger->debug("Audio loading thread started.");
   loadThread.detach();
