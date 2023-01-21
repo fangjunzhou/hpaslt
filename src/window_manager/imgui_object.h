@@ -36,8 +36,40 @@ class ImGuiObject {
    */
   eventpp::CallbackList<void()>::Handle m_finishRegisterCallbackHandle;
 
+  /**
+   * @brief Register the onEnable callback list.
+   *
+   * @param callbackList
+   */
+  void setupEnableCallback(eventpp::CallbackList<void(bool)>& callbackList) {
+    m_enabled = false;
+
+    // Listen to the change event.
+    m_enableCallbackHandle = callbackList.append(
+        [this](bool enabled) { this->setEnabled(enabled); });
+  }
+
+  /**
+   * @brief Reset and clear the callbacks.
+   *
+   * @param callbackList
+   */
+  void resetEnableCallback(eventpp::CallbackList<void(bool)>& callbackList) {
+    callbackList.remove(m_enableCallbackHandle);
+  }
+
  public:
+  /**
+   * @brief Construct a new ImGuiObject object.
+   *
+   * @param name
+   */
   ImGuiObject(std::string name) : m_name(name) {}
+
+  /**
+   * @brief Destroy the ImGuiObject object.
+   *
+   */
   virtual ~ImGuiObject() {}
 
   /**

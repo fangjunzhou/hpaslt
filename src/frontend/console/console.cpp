@@ -20,14 +20,10 @@ Console::Console() : ImGuiObject("Console") {
   m_consoleWindow = std::make_unique<ConsoleWindow>(
       Commands::getSingleton().lock()->getSystem());
 
-  m_enabled = false;
-
-  // Listen to the change event.
-  m_enableCallbackHandle =
-      s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
+  setupEnableCallback(s_onEnable);
 }
 
-Console::~Console() { s_onEnable.remove(m_enableCallbackHandle); }
+Console::~Console() { resetEnableCallback(s_onEnable); }
 
 void Console::render() {
   // TODO: Use seperate thread to parse log level.

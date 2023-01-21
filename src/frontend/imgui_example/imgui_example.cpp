@@ -11,14 +11,10 @@ namespace hpaslt {
 eventpp::CallbackList<void(bool)> ImGuiExample::s_onEnable;
 
 ImGuiExample::ImGuiExample() : ImGuiObject("ImGui Example") {
-  m_enabled = false;
-
-  // Listen to the change event.
-  m_enableCallbackHandle =
-      s_onEnable.append([this](bool enabled) { this->setEnabled(enabled); });
+  setupEnableCallback(s_onEnable);
 }
 
-ImGuiExample::~ImGuiExample() { s_onEnable.remove(m_enableCallbackHandle); }
+ImGuiExample::~ImGuiExample() { resetEnableCallback(s_onEnable); }
 
 void ImGuiExample::render() {
   // Show demo window.
