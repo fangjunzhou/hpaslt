@@ -14,8 +14,6 @@
 
 namespace hpaslt {
 
-eventpp::CallbackList<void()> finishRegisterImGuiObjs;
-
 void frontendInit() {
   NFD_Init();
   logger->coreLogger->debug("NativeFileDialog initialized.");

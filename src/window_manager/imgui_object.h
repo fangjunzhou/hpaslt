@@ -6,6 +6,7 @@
 #include <eventpp/callbacklist.h>
 
 #include "logger/logger.h"
+#include "common.h"
 
 namespace hpaslt {
 
@@ -58,19 +59,31 @@ class ImGuiObject {
     callbackList.remove(m_enableCallbackHandle);
   }
 
+  /**
+   * @brief Callback function executed when all the ImGuiObjs are registered.
+   *
+   */
+  virtual void onFinishRegisterImGuiObjs() {}
+
  public:
   /**
    * @brief Construct a new ImGuiObject object.
    *
    * @param name
    */
-  ImGuiObject(std::string name) : m_name(name) {}
+  ImGuiObject(std::string name) : m_name(name) {
+    // When all the ImGuiObjects are registered, sync the config.
+    m_finishRegisterCallbackHandle = finishRegisterImGuiObjs.append(
+        [this]() { this->onFinishRegisterImGuiObjs(); });
+  }
 
   /**
    * @brief Destroy the ImGuiObject object.
    *
    */
-  virtual ~ImGuiObject() {}
+  virtual ~ImGuiObject() {
+    finishRegisterImGuiObjs.remove(m_finishRegisterCallbackHandle);
+  }
 
   /**
    * @brief Get the enable status of the ImGuiObject.

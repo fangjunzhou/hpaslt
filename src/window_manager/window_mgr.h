@@ -10,6 +10,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "common.h"
 #include "imgui_object.h"
 
 namespace hpaslt {

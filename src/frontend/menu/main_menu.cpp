@@ -39,24 +39,21 @@ std::string MainMenu::openAudioFile() {
   return res;
 }
 
+void MainMenu::onFinishRegisterImGuiObjs() {
+  m_showExample = m_config->showExample;
+  ImGuiExample::s_onEnable(m_showExample);
+  m_showConsole = m_config->showConsole;
+  Console::s_onEnable(m_showConsole);
+}
+
 MainMenu::MainMenu() : ImGuiObject("MainMenuBar") {
   namespace fs = std::filesystem;
   m_config = std::make_unique<MainMenuConfig>("main_menu.json");
   // Try to load the config.
   m_config->load();
-
-  // When all the ImGuiObjects are registered, sync the config.
-  m_finishRegisterCallbackHandle = finishRegisterImGuiObjs.append([&]() {
-    m_showExample = m_config->showExample;
-    ImGuiExample::s_onEnable(m_showExample);
-    m_showConsole = m_config->showConsole;
-    Console::s_onEnable(m_showConsole);
-  });
 }
 
-MainMenu::~MainMenu() {
-  finishRegisterImGuiObjs.remove(m_finishRegisterCallbackHandle);
-}
+MainMenu::~MainMenu() {}
 
 void MainMenu::render() {
   if (ImGui::BeginMainMenuBar()) {

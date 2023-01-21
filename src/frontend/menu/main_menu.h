@@ -36,6 +36,9 @@ class MainMenu : public ImGuiObject {
    */
   std::string openAudioFile();
 
+ protected:
+  virtual void onFinishRegisterImGuiObjs() override;
+
  public:
   /**
    * @brief Construct a new Main Menu object
