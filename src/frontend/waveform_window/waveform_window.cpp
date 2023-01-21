@@ -10,6 +10,24 @@ namespace hpaslt {
 
 eventpp::CallbackList<void(bool)> WaveformWindow::s_onEnable;
 
+void WaveformWindow::downSampleLayer(AudioDataLayer& layer) {
+  std::shared_ptr<std::vector<float>> wx = layer.wx;
+  std::shared_ptr<std::vector<float>> wy = layer.wy;
+
+  layer.sampleSize /= 2;
+  layer.sampleRate /= 2;
+  layer.wx = std::make_shared<std::vector<float>>(layer.sampleSize);
+  layer.wy = std::make_shared<std::vector<float>>(layer.sampleSize);
+
+  for (int i = 0; i < wx->size(); i++) {
+    // Keep odd index.
+    if (i % 2) {
+      (*layer.wx)[i / 2] = (*wx)[i];
+      (*layer.wy)[i / 2] = (*wy)[i];
+    }
+  }
+}
+
 WaveformWindow::WaveformWindow()
     : ImGuiObject("Waveform"),
       m_channelNum(0),
@@ -38,13 +56,24 @@ WaveformWindow::WaveformWindow()
         m_audioChannels.clear();
         AudioChannel audioChannel;
         for (int channel = 0; channel < m_channelNum; channel++) {
-          audioChannel.wx = std::make_shared<std::vector<float>>(m_sampleSize);
-          audioChannel.wy = std::make_shared<std::vector<float>>(m_sampleSize);
-          audioChannel.size = m_sampleSize;
-          for (int i = 0; i < audioChannel.size; i++) {
-            (*audioChannel.wx)[i] = (float)i / (float)m_sampleRate;
-            (*audioChannel.wy)[i] = samples[channel][i];
+          // Push full resolution layer.
+          AudioDataLayer audioLayer;
+          audioLayer.wx = std::make_shared<std::vector<float>>(m_sampleSize);
+          audioLayer.wy = std::make_shared<std::vector<float>>(m_sampleSize);
+          audioLayer.sampleSize = m_sampleSize;
+          audioLayer.sampleRate = m_sampleRate;
+          for (int i = 0; i < audioLayer.sampleSize; i++) {
+            (*audioLayer.wx)[i] = (float)i / (float)m_sampleRate;
+            (*audioLayer.wy)[i] = samples[channel][i];
           }
+          audioChannel.layers.push_back(audioLayer);
+
+          // Down sample layers.
+          while (audioLayer.sampleSize > AUDIO_WAVEFORM_RESOLUTION) {
+            downSampleLayer(audioLayer);
+            audioChannel.layers.push_back(audioLayer);
+          }
+
           m_audioChannels.push_back(audioChannel);
         }
         logger->coreLogger->trace("WaveformWindow generated {} channel data.",
@@ -71,8 +100,6 @@ void WaveformWindow::render() {
     if (m_channelNum > 0 &&
         ImPlot::BeginSubplots("Audio Channels", m_channelNum, 1, ImVec2(-1, -1),
                               ImPlotSubplotFlags_LinkAllX)) {
-      static std::array<float, AUDIO_WAVEFORM_RESOLUTION> sampleX;
-      static std::array<float, AUDIO_WAVEFORM_RESOLUTION> sampleY;
       for (int channel = 0; channel < m_channelNum; channel++) {
         AudioChannel& audioChannel = m_audioChannels[channel];
         std::stringstream channelName;
@@ -90,16 +117,21 @@ void WaveformWindow::render() {
           end = end > m_sampleSize ? m_sampleSize : end;
           // Resample data.
           int span = end - start;
-          int size = span > AUDIO_WAVEFORM_RESOLUTION
-                         ? AUDIO_WAVEFORM_RESOLUTION
-                         : span;
-          for (int i = 0; i < size; i++) {
-            int sampleIndx = start + ((float)i / (float)size) * span;
-            sampleX[i] = (float)sampleIndx / (float)m_sampleRate;
-            sampleY[i] = (*audioChannel.wy)[sampleIndx];
+          // Find best layer.
+          int i = audioChannel.layers.size() - 1;
+          while (i > 0 &&
+                 (span * audioChannel.layers[i].sampleRate / m_sampleRate <
+                  AUDIO_WAVEFORM_RESOLUTION)) {
+            i--;
           }
+          AudioDataLayer layer = audioChannel.layers[i];
+          int layerStart =
+              start * audioChannel.layers[i].sampleRate / m_sampleRate;
+          int layerSpan =
+              span * audioChannel.layers[i].sampleRate / m_sampleRate;
 
-          ImPlot::PlotLine("Audio", sampleX.data(), sampleY.data(), size);
+          ImPlot::PlotLine("", layer.wx->data() + layerStart,
+                           layer.wy->data() + layerStart, layerSpan);
           ImPlot::EndPlot();
         }
       }
