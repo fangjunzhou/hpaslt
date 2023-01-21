@@ -8,6 +8,7 @@
 #include "status_bar/status_bar.h"
 #include "play_control/play_control.h"
 
+#include "waveform_window/waveform_window.h"
 #include "console/console.h"
 
 #include "imgui_example/imgui_example.h"
@@ -39,6 +40,9 @@ void registerAllImGuiObjs() {
       std::make_shared<StatusBar>());
 
   /* -------------------------- Views ------------------------- */
+
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
+      std::make_shared<WaveformWindow>());
 
   hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<Console>());

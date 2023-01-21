@@ -92,7 +92,7 @@ void MainMenu::render() {
     }
 
     if (ImGui::BeginMenu(ICON_MD_WEB_ASSET " Views")) {
-      if (ImGui::MenuItem(ICON_MD_TERMINAL " Waveform Window", nullptr,
+      if (ImGui::MenuItem(ICON_MD_GRAPHIC_EQ " Waveform Window", nullptr,
                           &m_showWaveform)) {
         WaveformWindow::s_onEnable(m_showWaveform);
         // Save the config.
