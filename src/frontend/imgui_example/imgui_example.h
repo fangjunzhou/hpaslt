@@ -15,9 +15,11 @@ class ImGuiExample : public ImGuiObject {
    */
   static eventpp::CallbackList<void(bool)> s_onEnable;
 
-  ImGuiExample();
+  ImGuiExample() : ImGuiObject("ImGui Example") {
+    setupEnableCallback(s_onEnable);
+  }
 
-  ~ImGuiExample();
+  ~ImGuiExample() { resetEnableCallback(s_onEnable); }
 
   virtual void render() override;
 };

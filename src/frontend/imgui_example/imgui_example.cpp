@@ -10,12 +10,6 @@ namespace hpaslt {
 
 eventpp::CallbackList<void(bool)> ImGuiExample::s_onEnable;
 
-ImGuiExample::ImGuiExample() : ImGuiObject("ImGui Example") {
-  setupEnableCallback(s_onEnable);
-}
-
-ImGuiExample::~ImGuiExample() { resetEnableCallback(s_onEnable); }
-
 void ImGuiExample::render() {
   // Show demo window.
   ImGui::ShowDemoWindow(nullptr);
