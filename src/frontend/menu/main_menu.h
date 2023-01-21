@@ -22,6 +22,7 @@ class MainMenu : public ImGuiObject {
 
   /* -------------------------- Views ------------------------- */
 
+  bool m_showWaveform = false;
   bool m_showConsole = false;
 
   /* -------------------------- Debug ------------------------- */

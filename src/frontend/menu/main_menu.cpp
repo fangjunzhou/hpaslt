@@ -9,8 +9,10 @@
 #include "main_menu.h"
 #include "logger/logger.h"
 
-#include "frontend/imgui_example/imgui_example.h"
+#include "frontend/waveform_window/waveform_window.h"
 #include "frontend/console/console.h"
+
+#include "frontend/imgui_example/imgui_example.h"
 #include "frontend/frontend.h"
 
 #include "core/audio_workspace/audio_workspace.h"
@@ -40,10 +42,17 @@ std::string MainMenu::openAudioFile() {
 }
 
 void MainMenu::onFinishRegisterImGuiObjs() {
-  m_showExample = m_config->showExample;
-  ImGuiExample::s_onEnable(m_showExample);
+  /* -------------------------- Views ------------------------- */
+
+  m_showWaveform = m_config->showWaveform;
+  WaveformWindow::s_onEnable(m_showWaveform);
   m_showConsole = m_config->showConsole;
   Console::s_onEnable(m_showConsole);
+
+  /* -------------------------- Debug ------------------------- */
+
+  m_showExample = m_config->showExample;
+  ImGuiExample::s_onEnable(m_showExample);
 }
 
 MainMenu::MainMenu() : ImGuiObject("MainMenuBar") {
@@ -83,6 +92,16 @@ void MainMenu::render() {
     }
 
     if (ImGui::BeginMenu(ICON_MD_WEB_ASSET " Views")) {
+      if (ImGui::MenuItem(ICON_MD_TERMINAL " Waveform Window", nullptr,
+                          &m_showWaveform)) {
+        WaveformWindow::s_onEnable(m_showWaveform);
+        // Save the config.
+        m_config->showWaveform = m_showWaveform;
+        m_config->save();
+      }
+
+      ImGui::Separator();
+
       if (ImGui::MenuItem(ICON_MD_TERMINAL " Console", nullptr,
                           &m_showConsole)) {
         Console::s_onEnable(m_showConsole);
