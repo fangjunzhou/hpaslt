@@ -12,6 +12,7 @@
 #include "console/console.h"
 
 #include "imgui_example/imgui_example.h"
+#include "project_settings/project_settings.h"
 
 namespace hpaslt {
 
@@ -47,11 +48,15 @@ void registerAllImGuiObjs() {
   hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<Console>());
 
-  /* -------------------------- Debug ------------------------- */
+  /* ------------------------- HPASLT ------------------------- */
 
   // ImGui Example.
   hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<ImGuiExample>());
+
+  // Project Settings.
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
+      std::make_shared<ProjectSettings>());
 }
 
 }  // namespace hpaslt

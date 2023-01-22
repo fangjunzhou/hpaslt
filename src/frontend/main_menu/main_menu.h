@@ -25,10 +25,12 @@ class MainMenu : public ImGuiObject {
   bool m_showWaveform = false;
   bool m_showConsole = false;
 
-  /* -------------------------- Debug ------------------------- */
+  /* ------------------------- HPASLT ------------------------- */
 
   // If ImGuiExample window is displayed.
   bool m_showExample = false;
+  // If project settings window is displayed.
+  bool m_showProjectSettings = false;
 
   /**
    * @brief Open audio file on another thread.

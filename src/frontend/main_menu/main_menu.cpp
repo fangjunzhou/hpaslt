@@ -13,6 +13,8 @@
 #include "frontend/console/console.h"
 
 #include "frontend/imgui_example/imgui_example.h"
+#include "frontend/project_settings/project_settings.h"
+
 #include "frontend/frontend.h"
 
 #include "core/audio_workspace/audio_workspace.h"
@@ -112,13 +114,20 @@ void MainMenu::render() {
       ImGui::EndMenu();
     }
 
-    if (ImGui::BeginMenu(ICON_MD_BUG_REPORT " Debug")) {
+    if (ImGui::BeginMenu(ICON_MD_SETTINGS " HPASLT")) {
       if (ImGui::MenuItem(ICON_MD_BUG_REPORT " ImGui Example", nullptr,
                           &m_showExample)) {
         ImGuiExample::s_onEnable(m_showExample);
         // Save the config.
         m_config->showExample = m_showExample;
         m_config->save();
+      }
+
+      ImGui::Separator();
+
+      if (ImGui::MenuItem(ICON_MD_SETTINGS " Project Settings", nullptr,
+                          &m_showProjectSettings)) {
+        ProjectSettings::s_onEnable(m_showProjectSettings);
       }
 
       ImGui::EndMenu();
