@@ -23,6 +23,12 @@ class PlayControl : public ImGuiObject {
   eventpp::CallbackList<void(float, float)>::Handle
       m_onPlayingTimeChangedHandle;
 
+  /**
+   * @brief Helper method for switching from play and pause state.
+   *
+   */
+  void playPauseSwitch();
+
  public:
   /**
    * @brief Construct a new Status Bar object

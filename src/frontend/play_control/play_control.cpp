@@ -11,6 +11,16 @@
 
 namespace hpaslt {
 
+void PlayControl::playPauseSwitch() {
+  if (!m_isPlaying) {
+    logger->coreLogger->trace("Play");
+    AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->play();
+  } else {
+    logger->coreLogger->trace("Pause");
+    AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->pause();
+  }
+}
+
 PlayControl::PlayControl()
     : ImGuiObject("MainPlayConstrol"),
       m_isPlaying(false),
@@ -91,15 +101,9 @@ void PlayControl::render() {
 
     // Play.
     std::string playIcon = m_isPlaying ? ICON_MD_PAUSE : ICON_MD_PLAY_ARROW;
-    if (ImGui::MenuItem(playIcon.c_str())) {
-      if (!m_isPlaying) {
-        logger->coreLogger->trace("Play");
-        AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->play();
-      } else {
-        logger->coreLogger->trace("Pause");
-        AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->pause();
-      }
-    }
+    if (ImGui::MenuItem(playIcon.c_str())) playPauseSwitch();
+    // Space key play control.
+    if (ImGui::IsKeyPressed(ImGuiKey_Space)) playPauseSwitch();
 
     // Replay.
     if (ImGui::MenuItem(ICON_MD_REPLAY)) {
@@ -135,6 +139,11 @@ void PlayControl::render() {
       m_currTime = m_sliderTime;
       AudioWorkspace::getSingleton().lock()->getAudioPlayer().lock()->setTime(
           m_sliderTime);
+      AudioWorkspace::getSingleton()
+          .lock()
+          ->getAudioPlayer()
+          .lock()
+          ->getOnChangePlayingTime()(m_sliderTime, m_totalTime);
 
       // Enable play slider synchronization.
       m_syncSliderTime = true;
