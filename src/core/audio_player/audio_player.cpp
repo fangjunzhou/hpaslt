@@ -9,7 +9,8 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
                             unsigned long framesPerBuffer,
                             const PaStreamCallbackTimeInfo *timeInfo,
                             PaStreamCallbackFlags statusFlags, void *userData) {
-  AudioObject *audioObj = (AudioObject *)userData;
+  AudioPlayer *audioPlayer = (AudioPlayer *)userData;
+  AudioObject *audioObj = audioPlayer->m_audioObj.get();
   float *out = (float *)outputBuffer;
 
   // Prevent unused variable warnings.
@@ -28,13 +29,18 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
   for (unsigned long i = 0; i < framesPerBuffer; i++) {
     // Reach the end of the audio.
     if (cursor + i >= sampleNum) {
-      audioObj->setCursor(sampleNum);
+      // Set cursor.
+      audioObj->setCursor(0);
       audioObj->getMutex().unlock();
-
       // Invoke time callback.
       auto timeCallback = audioObj->getTimeCallback();
       if (timeCallback)
         (*timeCallback)(audioObj->getTime(), audioObj->getLength());
+      // Stop the stream.
+      audioPlayer->m_isPlaying = false;
+      audioPlayer->m_onChangePlayingStatus(false);
+      audioPlayer->m_needStopBeforeStartStream = true;
+      logger->coreLogger->trace("AudioPlayer finished.");
       return paComplete;
     }
     // Copy data.
@@ -55,7 +61,10 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
   return paContinue;
 }
 
-AudioPlayer::AudioPlayer() : m_stream(nullptr), m_isPlaying(false) {}
+AudioPlayer::AudioPlayer()
+    : m_stream(nullptr),
+      m_isPlaying(false),
+      m_needStopBeforeStartStream(false) {}
 
 AudioPlayer::~AudioPlayer() {
   // Check if need to clean up.
@@ -70,6 +79,9 @@ AudioPlayer::~AudioPlayer() {
 }
 
 void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
+  // Pause current stream.
+  pause();
+
   // Reset previous AudioObject callback.
   if (m_audioObj) {
     m_audioObj->resetTimeCallback();
@@ -112,10 +124,10 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
 
   // Open new stream.
   m_audioObj->getMutex().lock();
-  err = Pa_OpenStream(&m_stream, nullptr, &outputParameters,
-                      m_audioObj->getAudioFile().getSampleRate(),
-                      paFramesPerBufferUnspecified, paClipOff, paCallback,
-                      m_audioObj.get());
+  err =
+      Pa_OpenStream(&m_stream, nullptr, &outputParameters,
+                    m_audioObj->getAudioFile().getSampleRate(),
+                    paFramesPerBufferUnspecified, paClipOff, paCallback, this);
   m_audioObj->getMutex().unlock();
 
   if (err != paNoError) {
@@ -123,9 +135,10 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
     return;
   }
 
-  logger->coreLogger->trace("New pa stream created.");
+  // Reset m_needStopBeforeStartStream.
+  m_needStopBeforeStartStream = false;
 
-  // TODO: Set finish stream callback.
+  logger->coreLogger->trace("New pa stream created.");
 }
 
 void AudioPlayer::play() {
@@ -136,6 +149,14 @@ void AudioPlayer::play() {
     return;
   }
 
+  if (m_needStopBeforeStartStream) {
+    PaError err = Pa_StopStream(m_stream);
+    if (err != paNoError) {
+      portAudioError(err);
+      return;
+    }
+    m_needStopBeforeStartStream = false;
+  }
   PaError err = Pa_StartStream(m_stream);
   if (err != paNoError) {
     portAudioError(err);
@@ -164,6 +185,7 @@ void AudioPlayer::pause() {
 
   m_isPlaying = false;
   m_onChangePlayingStatus(false);
+  m_needStopBeforeStartStream = false;
 
   logger->coreLogger->trace("AudioPlayer paused.");
 }

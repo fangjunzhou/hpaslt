@@ -31,6 +31,12 @@ class AudioPlayer {
   bool m_isPlaying;
 
   /**
+   * @brief If the stream need to be stopped before start it for playing.
+   *
+   */
+  bool m_needStopBeforeStartStream;
+
+  /**
    * @brief Callback function when the playing status is changed.
    *
    */
