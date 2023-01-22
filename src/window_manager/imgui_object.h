@@ -99,8 +99,8 @@ class ImGuiObject {
    * @param enabled if the ImGuiObject should be enabled.
    */
   void setEnabled(bool enabled) {
-    logger->uiLogger->info("{} is set to {}", m_name,
-                           (enabled ? "enabled" : "disabled"));
+    logger->uiLogger->debug("{} is set to {}", m_name,
+                            (enabled ? "enabled" : "disabled"));
     m_enabled = enabled;
   }
 
