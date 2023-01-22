@@ -4,7 +4,7 @@
 #include "window_manager/window_mgr.h"
 
 #include "frontend.h"
-#include "menu/main_menu.h"
+#include "main_menu/main_menu.h"
 #include "status_bar/status_bar.h"
 #include "play_control/play_control.h"
 
