@@ -56,7 +56,6 @@ void MainMenu::onFinishRegisterImGuiObjs() {
 }
 
 MainMenu::MainMenu() : ImGuiObject("MainMenuBar") {
-  namespace fs = std::filesystem;
   m_config = std::make_unique<MainMenuConfig>("main_menu.json");
   // Try to load the config.
   m_config->load();
