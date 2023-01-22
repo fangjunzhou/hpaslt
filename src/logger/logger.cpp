@@ -60,4 +60,9 @@ std::vector<spdlog::sink_ptr> Logger::createSinks(std::string filePath) {
   return sinks;
 }
 
+void Logger::setLogLevel(spdlog::level::level_enum logLevel) {
+  coreLogger->set_level(logLevel);
+  uiLogger->set_level(logLevel);
+}
+
 }  // namespace hpaslt

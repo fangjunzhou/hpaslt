@@ -63,6 +63,13 @@ class Logger {
   std::weak_ptr<std::ostringstream> getConsoleOutputStream() {
     return m_consoleOutputStream;
   }
+
+  /**
+   * @brief Set the log level for all logger.
+   *
+   * @param logLevel
+   */
+  void setLogLevel(spdlog::level::level_enum logLevel);
 };
 
 extern std::unique_ptr<Logger> logger;
