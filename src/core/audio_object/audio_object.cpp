@@ -7,6 +7,7 @@ void AudioObject::loadAudioFile(const std::string& filePath) {
   m_mutex.lock();
 
   if (!m_audioFile.load(filePath)) {
+    m_mutex.unlock();
     throw std::invalid_argument("Audio file at path cannot be loaded.");
   }
 
