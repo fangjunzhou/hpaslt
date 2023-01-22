@@ -49,6 +49,20 @@ class WaveformWindow : public ImGuiObject {
   int m_sampleRate;
   int m_sampleSize;
 
+  /* ---------------------- Playing Time ---------------------- */
+  // Current playing time.
+  double m_currTime;
+  // Slider playing time.
+  double m_sliderTime;
+  // If synchronizing slider time with playing time.
+  bool m_syncSliderTime;
+  // Hash map for waveform slider dragging status.
+  std::unordered_map<int, bool> m_wasDragging;
+  // Total time of the audio clip.
+  float m_totalTime;
+  eventpp::CallbackList<void(float, float)>::Handle
+      m_onPlayingTimeChangedHandle;
+
   /**
    * @brief Down sample the layer and get a new layer with half the sample rate
    * and half sample size.

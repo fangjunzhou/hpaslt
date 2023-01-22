@@ -32,7 +32,11 @@ WaveformWindow::WaveformWindow()
     : ImGuiObject("Waveform"),
       m_channelNum(0),
       m_sampleRate(0),
-      m_sampleSize(0) {
+      m_sampleSize(0),
+      m_currTime(0),
+      m_sliderTime(0),
+      m_syncSliderTime(true),
+      m_totalTime(0) {
   // Setup window enable callback.
   setupEnableCallback(s_onEnable);
 
@@ -80,7 +84,21 @@ WaveformWindow::WaveformWindow()
                                   m_channelNum);
 
         m_audioMutex.unlock();
+
+        m_wasDragging.clear();
       });
+
+  // Play time callback.
+  m_onPlayingTimeChangedHandle =
+      AudioWorkspace::getSingleton()
+          .lock()
+          ->getAudioPlayer()
+          .lock()
+          ->getOnChangePlayingTime()
+          .append([this](float currTime, float totalTime) {
+            m_currTime = currTime;
+            m_totalTime = totalTime;
+          });
 }
 
 WaveformWindow::~WaveformWindow() {
@@ -88,6 +106,13 @@ WaveformWindow::~WaveformWindow() {
   resetEnableCallback(s_onEnable);
   // Remove audio loaded callback.
   AudioWorkspace::s_onAudioLoaded.remove(m_audioLoadedHandle);
+  // Reset play time callback.
+  AudioWorkspace::getSingleton()
+      .lock()
+      ->getAudioPlayer()
+      .lock()
+      ->getOnChangePlayingTime()
+      .remove(m_onPlayingTimeChangedHandle);
 }
 
 void WaveformWindow::render() {
@@ -107,6 +132,8 @@ void WaveformWindow::render() {
         if (ImPlot::BeginPlot(channelName.str().c_str())) {
           ImPlot::SetupAxes("Time", "Amplitude");
           ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 1, ImPlotCond_Always);
+          ImPlot::SetupAxisLimitsConstraints(
+              ImAxis_X1, 0, (float)m_sampleSize / (float)m_sampleRate);
           auto widthPix = ImPlot::GetPlotSize().x;
           int start = ImPlot::GetPlotLimits().X.Min * m_sampleRate;
           int end = ImPlot::GetPlotLimits().X.Max * m_sampleRate;
@@ -132,6 +159,40 @@ void WaveformWindow::render() {
 
           ImPlot::PlotLine("", layer.wx->data() + layerStart,
                            layer.wy->data() + layerStart, layerSpan);
+
+          // Sync play time.
+          if (m_syncSliderTime) {
+            m_sliderTime = m_currTime;
+          }
+          // Play line.
+          bool dragging =
+              ImPlot::DragLineX(0, &m_sliderTime, ImVec4(1, 0, 0, 1));
+          if (!m_wasDragging.contains(channel)) {
+            m_wasDragging[channel] = dragging;
+          }
+          if (!m_wasDragging[channel] && dragging) {
+            // Disable play slider synchronization.
+            m_syncSliderTime = false;
+          }
+          if (m_wasDragging[channel] && !dragging) {
+            // Update play time.
+            m_currTime = m_sliderTime;
+            AudioWorkspace::getSingleton()
+                .lock()
+                ->getAudioPlayer()
+                .lock()
+                ->setTime(m_sliderTime);
+            AudioWorkspace::getSingleton()
+                .lock()
+                ->getAudioPlayer()
+                .lock()
+                ->getOnChangePlayingTime()(m_sliderTime, m_totalTime);
+
+            // Enable play slider synchronization.
+            m_syncSliderTime = true;
+          }
+          m_wasDragging[channel] = dragging;
+
           ImPlot::EndPlot();
         }
       }
