@@ -11,8 +11,6 @@ namespace hpaslt {
 
 class MainMenuConfig : public Config {
  public:
-  MainMenuConfig(std::string fileName) : Config(fileName) {}
-
   /* -------------------------- Views ------------------------- */
 
   bool showWaveform = false;
@@ -21,6 +19,8 @@ class MainMenuConfig : public Config {
   /* -------------------------- Debug ------------------------- */
 
   bool showExample = false;
+
+  MainMenuConfig(std::string fileName) : Config(fileName) {}
 
   template <class Archive>
   void serialize(Archive& archive) {
