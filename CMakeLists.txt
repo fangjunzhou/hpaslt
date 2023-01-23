@@ -11,6 +11,15 @@ set(CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
 
+if (WIN32)
+    set(USE_MINGW ON)
+    set(MINGW_BIN_PATH "C:/msys64/mingw64/bin")
+elseif(UNIX AND NOT APPLE)
+    set(USE_MINGW OFF)
+else()
+    message("Platform not supported.")
+endif()
+
 # ---------------------- CMake variables --------------------- #
 
 set(LIBS "")
@@ -308,4 +317,22 @@ if (BUILD_SHARED_LIBS)
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_BINARY_DIR}/external/glew/bin/
         $<TARGET_FILE_DIR:hpaslt>)
+endif()
+
+# MinGW Shared Library.
+if (USE_MINGW)
+    # create a list of files to copy
+    set( MINGW_DLL_PATHS
+        ${MINGW_BIN_PATH}/libgcc_s_seh-1.dll
+        ${MINGW_BIN_PATH}/libstdc++-6.dll
+        ${MINGW_BIN_PATH}/libwinpthread-1.dll
+    )
+
+    # do the copying
+    foreach( file_i ${MINGW_DLL_PATHS})
+        add_custom_command(TARGET hpaslt POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${file_i}
+            $<TARGET_FILE_DIR:hpaslt>)
+    endforeach( file_i )
 endif()
