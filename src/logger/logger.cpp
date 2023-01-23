@@ -7,7 +7,6 @@
 
 namespace hpaslt {
 
-// TODO: Config the log level in a file.
 std::unique_ptr<Logger> logger =
     std::make_unique<Logger>("log", spdlog::level::trace, true);
 
