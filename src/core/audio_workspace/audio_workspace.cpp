@@ -79,8 +79,9 @@ void AudioWorkspace::loadAudioFile(const std::string& filePath) {
     try {
       m_audioObject->loadAudioFile(filePath);
     } catch (const std::invalid_argument& e) {
-      logger->coreLogger->error("AudioWorkspace cannot load audio file at {}.",
-                                filePath);
+      logger->coreLogger->error(
+          "AudioWorkspace cannot load audio file at {}, error: {}.", filePath,
+          e.what());
       return;
     }
 

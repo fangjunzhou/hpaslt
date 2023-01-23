@@ -22,7 +22,7 @@ class AudioObject {
    * @brief The current processing audio file.
    *
    */
-  AudioFile<float> m_audioFile;
+  std::shared_ptr<AudioFile<float>> m_audioFile;
 
   /**
    * @brief Current playing frame.
@@ -87,7 +87,7 @@ class AudioObject {
    *
    * @return AudioFile<float>&
    */
-  AudioFile<float>& getAudioFile() { return m_audioFile; }
+  AudioFile<float>& getAudioFile() { return *m_audioFile; }
 
   /**
    * @brief Get the mutex lock by reference.
