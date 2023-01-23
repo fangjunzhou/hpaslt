@@ -5,6 +5,7 @@
 
 #include "core/audio_object/audio_object.h"
 #include "window_manager/imgui_object.h"
+#include "serialization/project_settings/project_settings_config.h"
 
 namespace hpaslt {
 
@@ -62,6 +63,8 @@ class WaveformWindow : public ImGuiObject {
   float m_totalTime;
   eventpp::CallbackList<void(float, float)>::Handle
       m_onPlayingTimeChangedHandle;
+
+  std::shared_ptr<ProjectSettingsConfig> m_projectSettingsConfig;
 
   /**
    * @brief Down sample the layer and get a new layer with half the sample rate

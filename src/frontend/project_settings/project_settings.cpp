@@ -10,7 +10,7 @@ eventpp::CallbackList<void(bool)> ProjectSettings::s_onEnable;
 ProjectSettings::ProjectSettings() : ImGuiObject("Project Settings") {
   // Setup window enable callback.
   setupEnableCallback(s_onEnable);
-  m_config = std::make_unique<ProjectSettingsConfig>("project_settings.json");
+  m_config = ProjectSettingsConfig::getSingleton();
   // Try to load the config.
   m_config->load();
 }
@@ -73,6 +73,27 @@ void ProjectSettings::render() {
             map.Pan = pair.first;
             // Save pan button.
             m_config->panButton = pair.first;
+            m_config->save();
+          }
+          if (selected) ImGui::SetItemDefaultFocus();
+        }
+
+        ImGui::EndCombo();
+      }
+
+      // Time button.
+      const std::unordered_map<ImGuiMouseButton, std::string> timeButtons = {
+          {ImGuiMouseButton_Left, "Left"},
+          {ImGuiMouseButton_Middle, "Middle"},
+          {ImGuiMouseButton_Right, "Right"}};
+      const char* timeButtonPreview =
+          timeButtons.at(m_config->timeButton).c_str();
+      if (ImGui::BeginCombo("Time Mouse Button", timeButtonPreview)) {
+        for (auto& pair : timeButtons) {
+          const bool selected = (pair.first == m_config->timeButton);
+          if (ImGui::Selectable(pair.second.c_str(), selected)) {
+            // Save pan button.
+            m_config->timeButton = pair.first;
             m_config->save();
           }
           if (selected) ImGui::SetItemDefaultFocus();

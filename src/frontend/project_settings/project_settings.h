@@ -8,7 +8,7 @@ namespace hpaslt {
 
 class ProjectSettings : public ImGuiObject {
  private:
-  std::unique_ptr<ProjectSettingsConfig> m_config;
+  std::shared_ptr<ProjectSettingsConfig> m_config;
 
  public:
   /**

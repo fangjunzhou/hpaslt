@@ -2,6 +2,8 @@
 #include <implot.h>
 
 #include "core/audio_workspace/audio_workspace.h"
+#include "serialization/project_settings/project_settings_config.h"
+
 #include "waveform_window.h"
 
 #define AUDIO_WAVEFORM_RESOLUTION 8192
@@ -99,6 +101,8 @@ WaveformWindow::WaveformWindow()
             m_currTime = currTime;
             m_totalTime = totalTime;
           });
+
+  m_projectSettingsConfig = ProjectSettingsConfig::getSingleton();
 }
 
 WaveformWindow::~WaveformWindow() {
@@ -134,7 +138,7 @@ void WaveformWindow::render() {
           ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 1, ImPlotCond_Always);
           ImPlot::SetupAxisLimitsConstraints(
               ImAxis_X1, 0, (float)m_sampleSize / (float)m_sampleRate);
-          auto widthPix = ImPlot::GetPlotSize().x;
+          // Resample plot.
           int start = ImPlot::GetPlotLimits().X.Min * m_sampleRate;
           int end = ImPlot::GetPlotLimits().X.Max * m_sampleRate;
           // Clamp start and end.
@@ -190,6 +194,24 @@ void WaveformWindow::render() {
 
             // Enable play slider synchronization.
             m_syncSliderTime = true;
+          }
+          // TODO: Allow mouse click settings.
+          // Left click play line.
+          if (!dragging && ImPlot::IsPlotHovered() &&
+              ImGui::IsMouseClicked(m_projectSettingsConfig->timeButton)) {
+            ImPlotPoint pt = ImPlot::GetPlotMousePos();
+            m_sliderTime = pt.x;
+            m_currTime = m_sliderTime;
+            AudioWorkspace::getSingleton()
+                .lock()
+                ->getAudioPlayer()
+                .lock()
+                ->setTime(m_sliderTime);
+            AudioWorkspace::getSingleton()
+                .lock()
+                ->getAudioPlayer()
+                .lock()
+                ->getOnChangePlayingTime()(m_sliderTime, m_totalTime);
           }
           m_wasDragging[channel] = dragging;
 
