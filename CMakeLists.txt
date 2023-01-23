@@ -169,6 +169,8 @@ target_include_directories(
     hpaslt_serialization
     PUBLIC
     external/spdlog/include
+    external/imgui
+    external/implot
     external/eventpp/include
     external/cereal/include
     src

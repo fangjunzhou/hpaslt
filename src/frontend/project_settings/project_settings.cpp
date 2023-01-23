@@ -1,4 +1,5 @@
 #include <imgui.h>
+#include <implot.h>
 
 #include "project_settings.h"
 
@@ -24,7 +25,7 @@ void ProjectSettings::render() {
 
   ImGuiTabBarFlags tabBarFlags = ImGuiTabBarFlags_None;
   if (ImGui::BeginTabBar("SettingsTabBar", tabBarFlags)) {
-    // Log tab bar.
+    // Log tab.
     if (ImGui::BeginTabItem("Log Settings")) {
       // Log level.
       const std::unordered_map<spdlog::level::level_enum, std::string>
@@ -44,6 +45,34 @@ void ProjectSettings::render() {
             logger->setLogLevel(pair.first);
             // Save log level config.
             m_config->logLevel = pair.first;
+            m_config->save();
+          }
+          if (selected) ImGui::SetItemDefaultFocus();
+        }
+
+        ImGui::EndCombo();
+      }
+
+      ImGui::EndTabItem();
+    }
+
+    // ImPlot tab.
+    if (ImGui::BeginTabItem("ImPlot Settings")) {
+      // Pan button.
+      const std::unordered_map<ImGuiMouseButton, std::string> panButtons = {
+          {ImGuiMouseButton_Left, "Left"},
+          {ImGuiMouseButton_Middle, "Middle"},
+          {ImGuiMouseButton_Right, "Right"}};
+      const char* panButtonPreview = panButtons.at(m_config->panButton).c_str();
+      if (ImGui::BeginCombo("Pan Mouse Button", panButtonPreview)) {
+        for (auto& pair : panButtons) {
+          const bool selected = (pair.first == m_config->panButton);
+          if (ImGui::Selectable(pair.second.c_str(), selected)) {
+            // Update pan button.
+            ImPlotInputMap& map = ImPlot::GetInputMap();
+            map.Pan = pair.first;
+            // Save pan button.
+            m_config->panButton = pair.first;
             m_config->save();
           }
           if (selected) ImGui::SetItemDefaultFocus();
