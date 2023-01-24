@@ -41,7 +41,7 @@ void StatusBar::render() {
   ImGui::PopStyleVar(4);
 
   if (ImGui::BeginMenuBar()) {
-    ImGui::Text("Status Bar");
+    ImGui::Text("Status");
     ImGui::EndMenuBar();
   }
 
