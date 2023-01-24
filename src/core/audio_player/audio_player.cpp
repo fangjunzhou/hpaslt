@@ -3,6 +3,9 @@
 #include "logger/logger.h"
 #include "core/audio_object/audio_object.h"
 
+// TODO: Add settings for frame per buffer.
+#define FRAME_PER_BUFFER 4096
+
 namespace hpaslt {
 
 int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
@@ -124,10 +127,9 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
 
   // Open new stream.
   m_audioObj->getMutex().lock();
-  err =
-      Pa_OpenStream(&m_stream, nullptr, &outputParameters,
-                    m_audioObj->getAudioFile().getSampleRate(),
-                    paFramesPerBufferUnspecified, paClipOff, paCallback, this);
+  err = Pa_OpenStream(&m_stream, nullptr, &outputParameters,
+                      m_audioObj->getAudioFile().getSampleRate(),
+                      FRAME_PER_BUFFER, paClipOff, paCallback, this);
   m_audioObj->getMutex().unlock();
 
   if (err != paNoError) {
