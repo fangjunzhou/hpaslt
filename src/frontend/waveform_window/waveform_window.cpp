@@ -195,24 +195,40 @@ void WaveformWindow::render() {
             // Enable play slider synchronization.
             m_syncSliderTime = true;
           }
-          // TODO: Allow mouse click settings.
+          // Record mouse down position.
+          static std::unique_ptr<ImPlotPoint> mouseClickedPos;
+          if (ImPlot::IsPlotHovered() &&
+              ImGui::IsMouseClicked(m_projectSettingsConfig->timeButton)) {
+            mouseClickedPos =
+                std::make_unique<ImPlotPoint>(ImPlot::GetPlotMousePos());
+          }
+
           // Left click play line.
           if (!dragging && ImPlot::IsPlotHovered() &&
-              ImGui::IsMouseClicked(m_projectSettingsConfig->timeButton)) {
+              ImGui::IsMouseReleased(m_projectSettingsConfig->timeButton) &&
+              mouseClickedPos) {
             ImPlotPoint pt = ImPlot::GetPlotMousePos();
-            m_sliderTime = pt.x;
-            m_currTime = m_sliderTime;
-            AudioWorkspace::getSingleton()
-                .lock()
-                ->getAudioPlayer()
-                .lock()
-                ->setTime(m_sliderTime);
-            AudioWorkspace::getSingleton()
-                .lock()
-                ->getAudioPlayer()
-                .lock()
-                ->getOnChangePlayingTime()(m_sliderTime, m_totalTime);
+            if (pt.x == mouseClickedPos->x && pt.y == mouseClickedPos->y) {
+              m_sliderTime = pt.x;
+              m_currTime = m_sliderTime;
+              AudioWorkspace::getSingleton()
+                  .lock()
+                  ->getAudioPlayer()
+                  .lock()
+                  ->setTime(m_sliderTime);
+              AudioWorkspace::getSingleton()
+                  .lock()
+                  ->getAudioPlayer()
+                  .lock()
+                  ->getOnChangePlayingTime()(m_sliderTime, m_totalTime);
+            }
           }
+
+          // Clear mouse down position.
+          if (ImGui::IsMouseReleased(m_projectSettingsConfig->timeButton)) {
+            mouseClickedPos = nullptr;
+          }
+
           m_wasDragging[channel] = dragging;
 
           ImPlot::EndPlot();
