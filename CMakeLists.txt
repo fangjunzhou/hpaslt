@@ -11,13 +11,26 @@ set(CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
 
+set(_PLATFORM_NONE 0)
+set(_PLATFORM_WINDOWS 1)
+set(_PLATFORM_LINUX 2)
+set(_PLATFORM_MAC 3)
+add_compile_definitions(PLATFORM_WINDOWS=${_PLATFORM_WINDOWS})
+add_compile_definitions(PLATFORM_LINUX=${_PLATFORM_LINUX})
+add_compile_definitions(PLATFORM_MAC=${_PLATFORM_MAC})
 if (WIN32)
     set(USE_MINGW ON)
     set(MINGW_BIN_PATH "C:/msys64/mingw64/bin")
+    add_compile_definitions(PLATFORM=${_PLATFORM_WINDOWS})
 elseif(UNIX AND NOT APPLE)
     set(USE_MINGW OFF)
+    add_compile_definitions(PLATFORM=${_PLATFORM_LINUX})
+elseif(APPLE)
+    set(USE_MINGW OFF)
+    add_compile_definitions(PLATFORM=${_PLATFORM_MAC})
 else()
     message("Platform not supported.")
+    add_compile_definitions(PLATFORM=${_PLATFORM_NONE})
 endif()
 
 # ---------------------- CMake variables --------------------- #
@@ -311,12 +324,24 @@ add_custom_target(
 add_dependencies(hpaslt hpaslt_fonts)
 
 # GLEW Shared Library.
-if (BUILD_SHARED_LIBS)
-    # Copy GLEW shared library.
-    add_custom_command(TARGET hpaslt POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${PROJECT_BINARY_DIR}/external/glew/bin/
-        $<TARGET_FILE_DIR:hpaslt>)
+if (WIN32)
+    if (BUILD_SHARED_LIBS)
+        # Copy GLEW shared library.
+        add_custom_command(TARGET hpaslt POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${PROJECT_BINARY_DIR}/external/glew/bin/
+            $<TARGET_FILE_DIR:hpaslt>)
+    endif()
+elseif (APPLE)
+    # if (BUILD_SHARED_LIBS)
+    #     # Copy GLEW shared library.
+    #     add_custom_command(TARGET hpaslt POST_BUILD
+    #         COMMAND ${CMAKE_COMMAND} -E copy_directory
+    #         ${PROJECT_BINARY_DIR}/external/glew/lib/
+    #         $<TARGET_FILE_DIR:hpaslt>)
+    # endif()
+else()
+    message("Platform not supported.")
 endif()
 
 # MinGW Shared Library.

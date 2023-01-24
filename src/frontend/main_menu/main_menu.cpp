@@ -70,8 +70,15 @@ void MainMenu::render() {
     if (ImGui::BeginMenu(ICON_MD_FOLDER " File")) {
       // Open audio file.
       if (ImGui::MenuItem(ICON_MD_FILE_OPEN " Open Audio File", "CTRL+O")) {
-        // TODO: Implement sync file dialog on macos.
-        m_audioFilePath = std::async(std::launch::async, openAudioFile, this);
+#if (PLATFORM == PLATFORM_WINDOWS)
+        // Start a new thread for open audio file dialog.
+        m_audioFilePath =
+            std::async(std::launch::async, &MainMenu::openAudioFile, this);
+#elif (PLATFORM == PLATFORM_MAC)
+        std::promise<std::string> filePathPromise;
+        m_audioFilePath = filePathPromise.get_future();
+        filePathPromise.set_value(openAudioFile());
+#endif
       }
 
       ImGui::EndMenu();
