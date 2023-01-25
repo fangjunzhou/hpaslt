@@ -33,16 +33,22 @@ class ProjectSettingsConfig : public Config {
   ImGuiMouseButton panButton;
   ImGuiMouseButton timeButton;
 
+  /* ------------------------- Advance ------------------------ */
+
+  int audioStreamFPB;
+
   ProjectSettingsConfig(std::string fileName)
       : Config(fileName),
         logLevel(spdlog::level::info),
         panButton(ImGuiMouseButton_Middle),
-        timeButton(ImGuiMouseButton_Left) {}
+        timeButton(ImGuiMouseButton_Left),
+        audioStreamFPB(32) {}
 
   template <class Archive>
   void serialize(Archive& archive) {
     archive(CEREAL_NVP(logLevel));
     archive(CEREAL_NVP(panButton), CEREAL_NVP(timeButton));
+    archive(CEREAL_NVP(audioStreamFPB));
   }
 
   virtual void save() override { saveHelper(*this); }

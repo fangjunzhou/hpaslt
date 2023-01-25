@@ -3,9 +3,6 @@
 #include "logger/logger.h"
 #include "core/audio_object/audio_object.h"
 
-// TODO: Add settings for frame per buffer.
-#define FRAME_PER_BUFFER 4096
-
 namespace hpaslt {
 
 int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
@@ -67,7 +64,10 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
 AudioPlayer::AudioPlayer()
     : m_stream(nullptr),
       m_isPlaying(false),
-      m_needStopBeforeStartStream(false) {}
+      m_needStopBeforeStartStream(false) {
+  // Init project settings singleton.
+  m_config = ProjectSettingsConfig::getSingleton();
+}
 
 AudioPlayer::~AudioPlayer() {
   // Check if need to clean up.
@@ -79,6 +79,9 @@ AudioPlayer::~AudioPlayer() {
     }
     logger->coreLogger->trace("AudioPlayer destructed, pa stream cleaned up.");
   }
+
+  // Clear project settings singleton.
+  m_config = nullptr;
 }
 
 void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
@@ -129,7 +132,7 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
   m_audioObj->getMutex().lock();
   err = Pa_OpenStream(&m_stream, nullptr, &outputParameters,
                       m_audioObj->getAudioFile().getSampleRate(),
-                      FRAME_PER_BUFFER, paClipOff, paCallback, this);
+                      m_config->audioStreamFPB, paClipOff, paCallback, this);
   m_audioObj->getMutex().unlock();
 
   if (err != paNoError) {

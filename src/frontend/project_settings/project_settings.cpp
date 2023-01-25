@@ -2,6 +2,7 @@
 #include <implot.h>
 
 #include "project_settings.h"
+#include "frontend/common/tooltip.h"
 
 namespace hpaslt {
 
@@ -101,6 +102,28 @@ void ProjectSettings::render() {
 
         ImGui::EndCombo();
       }
+
+      ImGui::EndTabItem();
+    }
+
+    // Advance settings.
+    if (ImGui::BeginTabItem("Advance Settings")) {
+      /* ---------------------- Audio Stream ---------------------- */
+      ImGui::Text("Audio Stream Settings");
+
+      // Audio stream frame per buffer.
+      if (ImGui::DragInt("Audio Stream Frame per Buffer",
+                         &(m_config->audioStreamFPB), 1, 32, 8192)) {
+      }
+      if (ImGui::IsItemDeactivated()) {
+        m_config->save();
+      }
+      ImGui::SameLine();
+      Tooltip::helpMarker(
+          "This settings change the buffer size of the underlying audio data "
+          "structure. Smaller buffer size will lead to more smooth play "
+          "control. But this may also lead to unacceptable lag on old "
+          "machines.");
 
       ImGui::EndTabItem();
     }
