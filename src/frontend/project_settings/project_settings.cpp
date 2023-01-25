@@ -113,7 +113,7 @@ void ProjectSettings::render() {
 
       // Audio stream frame per buffer.
       if (ImGui::DragInt("Audio Stream Frame per Buffer",
-                         &(m_config->audioStreamFPB), 1, 32, 8192)) {
+                         &(m_config->audioStreamFPB), 1, 32, 65536)) {
       }
       if (ImGui::IsItemDeactivated()) {
         m_config->save();
