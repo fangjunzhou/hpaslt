@@ -5,6 +5,7 @@
 #include <portaudio.h>
 #include <eventpp/callbacklist.h>
 
+#include "serialization/project_settings/project_settings_config.h"
 #include "logger/logger.h"
 #include "core/audio_object/audio_object.h"
 
@@ -12,6 +13,12 @@ namespace hpaslt {
 
 class AudioPlayer {
  private:
+  /**
+   * @brief The serialized project settings config.
+   *
+   */
+  std::shared_ptr<ProjectSettingsConfig> m_config;
+
   /**
    * @brief Currently playing AudioObject.
    *

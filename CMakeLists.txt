@@ -225,6 +225,8 @@ target_link_libraries(
     hpaslt_logger
     spdlog
     eventpp
+    imgui
+    implot
 )
 list(APPEND LIBS hpaslt_serialization)
 
@@ -246,6 +248,7 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_core
+    hpaslt_serialization
     hpaslt_commands
     hpaslt_logger
     PortAudio

@@ -33,7 +33,7 @@
       "name": "LLDB Launch HPASLT",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/bin/hpaslt",
+      "program": "${workspaceFolder}/build/hpaslt",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
