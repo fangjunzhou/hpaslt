@@ -45,6 +45,9 @@ add_subdirectory(external/spdlog)
 # Eventpp
 add_subdirectory(external/eventpp)
 
+# Pathfind
+add_subdirectory(external/pathfind)
+
 # Audio File
 set(BUILD_TESTS OFF CACHE BOOL "Build tests" FORCE)
 set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
@@ -145,6 +148,16 @@ target_link_libraries(implot PUBLIC imgui)
 
 # ---------------------- Infrastructure ---------------------- #
 
+# Common.
+file(
+    GLOB_RECURSE
+    HPASLT_COMMON_SRC
+    src/common/*.cpp
+    src/common/*.cpp
+)
+add_library(hpaslt_common ${HPASLT_COMMON_SRC})
+list(APPEND LIBS hpaslt_common)
+
 # Logger.
 file(
     GLOB_RECURSE
@@ -199,6 +212,7 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_serialization
+    hpaslt_common
     hpaslt_logger
     spdlog
     eventpp
@@ -254,6 +268,7 @@ target_include_directories(
 )
 target_link_libraries(
     hpaslt_window_mgr
+    hpaslt_common
     hpaslt_logger
     spdlog
     eventpp
@@ -306,8 +321,8 @@ list(APPEND LIBS hpaslt_frontend)
 # ------------------------------------------------------------ #
 
 add_executable(hpaslt src/main.cpp)
-target_include_directories(hpaslt PUBLIC src)
-target_link_libraries(hpaslt ${LIBS})
+target_include_directories(hpaslt PUBLIC src external/pathfind/src)
+target_link_libraries(hpaslt ${LIBS} pathfind)
 
 # ------------------------------------------------------------ #
 #                           Resources                          #

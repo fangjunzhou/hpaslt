@@ -38,3 +38,6 @@
 [submodule "external/implot"]
 	path = external/implot
 	url = git@github.com:epezent/implot.git
+[submodule "external/pathfind"]
+	path = external/pathfind
+	url = git@github.com:bkloppenborg/pathfind.git
