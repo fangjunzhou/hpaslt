@@ -26,7 +26,7 @@ Console::Console() : ImGuiObject("Console") {
 Console::~Console() { resetEnableCallback(s_onEnable); }
 
 void Console::render() {
-  // TODO: Use seperate thread to parse log level.
+  // TODO: Use separate thread to parse log level.
   // Convert the console ostringstream to istringstream.
   std::unique_ptr<std::istringstream> iss = nullptr;
   {

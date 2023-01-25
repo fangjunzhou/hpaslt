@@ -16,7 +16,7 @@
 
 int main(int argc, char const* argv[]) {
   /* ------------------------- Context ------------------------ */
-  // TODO: Setup working directory.
+  // Setup working directory.
   std::filesystem::path executablePath = PathFind::FindExecutable();
   hpaslt::workspaceContext::hpasltWorkingDirectory =
       executablePath.parent_path().string();
