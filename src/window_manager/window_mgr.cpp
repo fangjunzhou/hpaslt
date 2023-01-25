@@ -1,6 +1,9 @@
 #include <IconsMaterialDesign.h>
 #include <implot.h>
 
+#include <filesystem>
+
+#include "common/workspace_context.h"
 #include "logger/logger.h"
 #include "window_mgr.h"
 
@@ -117,16 +120,31 @@ WindowManager::WindowManager()
   ImGui_ImplOpenGL3_Init("#version 150");
 
   // Load fonts here.
-  m_io->Fonts->AddFontFromFileTTF("fonts/ubuntu/Ubuntu-Regular.ttf", 16.0f);
+  std::filesystem::path fontPath =
+      std::filesystem::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
+      "fonts/ubuntu/Ubuntu-Regular.ttf";
+  if (std::filesystem::exists(fontPath)) {
+    m_io->Fonts->AddFontFromFileTTF(fontPath.c_str(), 16.0f);
+  } else {
+    logger->coreLogger->error("Font loaded failed.");
+  }
 
-  // Merge icon from material design.
-  static const ImWchar icons_ranges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};
-  ImFontConfig icons_config;
-  icons_config.MergeMode = true;
-  icons_config.PixelSnapH = true;
-  icons_config.GlyphOffset = ImVec2(0, 2.5);
-  m_io->Fonts->AddFontFromFileTTF("fonts/MaterialIcons-Regular.ttf", 16.0f,
-                                  &icons_config, icons_ranges);
+  std::filesystem::path materialIconPath =
+      std::filesystem::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
+      "fonts/MaterialIcons-Regular.ttf";
+  if (std::filesystem::exists(materialIconPath) &&
+      std::filesystem::exists(fontPath)) {
+    // Merge icon from material design.
+    static const ImWchar icons_ranges[] = {ICON_MIN_MD, ICON_MAX_16_MD, 0};
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    icons_config.GlyphOffset = ImVec2(0, 2.5);
+    m_io->Fonts->AddFontFromFileTTF(materialIconPath.c_str(), 16.0f,
+                                    &icons_config, icons_ranges);
+  } else {
+    logger->coreLogger->error("Icon loaded failed.");
+  }
   // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 }
 

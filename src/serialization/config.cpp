@@ -1,4 +1,5 @@
 #include "config.h"
+#include "common/workspace_context.h"
 
 namespace hpaslt {
 
@@ -23,7 +24,8 @@ void Config::checkAndCreateDir(const std::filesystem::path& fullPath) {
 
 Config::Config(const std::string& fileName) {
   namespace fs = std::filesystem;
-  auto fullPath = fs::path(m_baseDir) / fs::path(fileName);
+  auto fullPath = fs::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
+                  fs::path(m_baseDir) / fs::path(fileName);
   checkAndCreateDir(fullPath);
 
   m_savePath = fullPath.string();

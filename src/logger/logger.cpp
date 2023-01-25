@@ -2,13 +2,22 @@
 #include <filesystem>
 #include <ctime>
 #include <sstream>
+#include <filesystem>
 
 #include "logger.h"
 
 namespace hpaslt {
 
-std::unique_ptr<Logger> logger =
-    std::make_unique<Logger>("log", spdlog::level::trace, true);
+std::unique_ptr<Logger> logger = nullptr;
+
+void initLogger(std::string workingDirectory) {
+  std::filesystem::path loggerDirPath =
+      std::filesystem::path(workingDirectory) / "log";
+  logger = std::make_unique<Logger>(loggerDirPath.c_str(), spdlog::level::trace,
+                                    true);
+}
+
+void terminateLogger() { logger = nullptr; }
 
 Logger::Logger(std::string logDirPath, spdlog::level::level_enum level,
                bool enableConsoleSink) {

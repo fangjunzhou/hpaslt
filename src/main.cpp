@@ -1,8 +1,12 @@
 #include <memory>
+#include <pathfind.hpp>
+#include <filesystem>
 
 /* --------------------- Infrastructure --------------------- */
+#include "common/workspace_context.h"
 #include "logger/logger.h"
 #include "commands/commands.h"
+#include "logger/logger.h"
 /* -------------------------- Core -------------------------- */
 #include "core/audio_player/audio_player.h"
 #include "core/audio_workspace/audio_workspace.h"
@@ -11,7 +15,17 @@
 #include "frontend/frontend.h"
 
 int main(int argc, char const* argv[]) {
-  hpaslt::logger->coreLogger->info("HPASLT started.");
+  /* ------------------------- Context ------------------------ */
+  // TODO: Setup working directory.
+  std::filesystem::path executablePath = PathFind::FindExecutable();
+  hpaslt::workspaceContext::hpasltWorkingDirectory =
+      executablePath.parent_path().string();
+
+  /* ------------------------- Logger ------------------------- */
+  hpaslt::initLogger(hpaslt::workspaceContext::hpasltWorkingDirectory);
+  hpaslt::logger->coreLogger->info(
+      "HPASLT started at {}.",
+      hpaslt::workspaceContext::hpasltWorkingDirectory);
 
   /* ---------------------------------------------------------- */
   /*                     Core Initialization                    */
@@ -79,6 +93,9 @@ int main(int argc, char const* argv[]) {
   /* ---------------------------------------------------------- */
 
   hpaslt::logger->coreLogger->info("HPASLT terminated.");
+
+  /* ------------------------- Logger ------------------------- */
+  hpaslt::terminateLogger();
 
   return exitRes;
 }

@@ -74,4 +74,8 @@ class Logger {
 
 extern std::unique_ptr<Logger> logger;
 
+extern void initLogger(std::string workingDirectory);
+
+extern void terminateLogger();
+
 }  // namespace hpaslt
