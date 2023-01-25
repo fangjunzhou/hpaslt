@@ -40,4 +40,4 @@
 	url = git@github.com:epezent/implot.git
 [submodule "external/pathfind"]
 	path = external/pathfind
-	url = git@github.com:bkloppenborg/pathfind.git
+	url = git@github.com:Fangjun-Zhou/pathfind.git
