@@ -2,14 +2,7 @@ cmake_minimum_required(VERSION 3.25.1)
 
 project(HPASLT)
 
-# --------------------- Project settings --------------------- #
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CXX_STANDARD 20)
-set(CMAKE_BUILD_TYPE Debug)
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
+# ------------------------- Platform ------------------------- #
 
 set(_PLATFORM_NONE 0)
 set(_PLATFORM_WINDOWS 1)
@@ -32,6 +25,22 @@ else()
     message("Platform not supported.")
     add_compile_definitions(PLATFORM=${_PLATFORM_NONE})
 endif()
+
+# --------------------- Project settings --------------------- #
+
+if (WIN32)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
+elseif(APPLE)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} CACHE STRING "Output directory." FORCE)
+else()
+    message("Platform not supported.")
+    add_compile_definitions(PLATFORM=${_PLATFORM_NONE})
+endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD 20)
+set(CMAKE_BUILD_TYPE Debug)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
 
 # ---------------------- CMake variables --------------------- #
 
