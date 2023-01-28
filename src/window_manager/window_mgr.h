@@ -32,6 +32,12 @@ class WindowManager {
   ImGuiIO* m_io;
 
   /**
+   * @brief The imgui ini window config file path.
+   *
+   */
+  std::string m_imguiIniPath;
+
+  /**
    * @brief All the ImGuiObjects to be rendered.
    *
    */
