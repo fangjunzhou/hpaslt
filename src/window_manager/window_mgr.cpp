@@ -104,6 +104,12 @@ WindowManager::WindowManager()
   m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   m_io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+  std::filesystem::path iniFilePath =
+      std::filesystem::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
+      "imgui-config.ini";
+  m_imguiIniPath = iniFilePath.c_str();
+  m_io->IniFilename = m_imguiIniPath.c_str();
+
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
 
