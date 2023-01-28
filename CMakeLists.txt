@@ -332,7 +332,22 @@ list(APPEND LIBS hpaslt_frontend)
 #                        Main executable                       #
 # ------------------------------------------------------------ #
 
-add_executable(hpaslt src/main.cpp)
+if(APPLE)
+    add_executable(hpaslt MACOSX_BUNDLE src/main.cpp)
+    # TODO: Try to get latest git tag version as bundle version.
+    set_target_properties(
+        hpaslt
+        PROPERTIES
+        BUNDLE True
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.fishball.hpaslt
+        MACOSX_BUNDLE_BUNDLE_NAME hpaslt
+        MACOSX_BUNDLE_BUNDLE_VERSION "0.1.4"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1.4"
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/MacOSXBundleInfo.plist.in
+    )
+else()
+    add_executable(hpaslt src/main.cpp)
+endif()
 target_include_directories(hpaslt PUBLIC src external/pathfind/src)
 target_link_libraries(hpaslt ${LIBS} pathfind)
 
