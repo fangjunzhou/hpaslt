@@ -75,7 +75,7 @@ WindowManager::WindowManager()
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  m_window = glfwCreateWindow(960, 540, "HPASLT", nullptr, nullptr);
+  m_window = glfwCreateWindow(1280, 720, "HPASLT", nullptr, nullptr);
   if (!m_window) {
     hpaslt::logger->uiLogger->error("GLFW window creation failed!");
     throw std::runtime_error("GLFW window creation failed!");
