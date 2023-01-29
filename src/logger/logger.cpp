@@ -13,8 +13,8 @@ std::unique_ptr<Logger> logger = nullptr;
 void initLogger(std::string workingDirectory) {
   std::filesystem::path loggerDirPath =
       std::filesystem::path(workingDirectory) / "log";
-  logger = std::make_unique<Logger>(loggerDirPath.c_str(), spdlog::level::trace,
-                                    true);
+  logger = std::make_unique<Logger>(loggerDirPath.string(),
+                                    spdlog::level::trace, true);
 }
 
 void terminateLogger() { logger = nullptr; }

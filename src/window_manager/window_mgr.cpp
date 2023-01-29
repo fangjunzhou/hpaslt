@@ -107,7 +107,7 @@ WindowManager::WindowManager()
   std::filesystem::path iniFilePath =
       std::filesystem::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
       "imgui-config.ini";
-  m_imguiIniPath = iniFilePath.c_str();
+  m_imguiIniPath = iniFilePath.string();
   m_io->IniFilename = m_imguiIniPath.c_str();
 
   // Setup Dear ImGui style
@@ -130,7 +130,7 @@ WindowManager::WindowManager()
       std::filesystem::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
       "fonts/ubuntu/Ubuntu-Regular.ttf";
   if (std::filesystem::exists(fontPath)) {
-    m_io->Fonts->AddFontFromFileTTF(fontPath.c_str(), 16.0f);
+    m_io->Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 16.0f);
   } else {
     logger->coreLogger->error("Font loaded failed.");
   }
@@ -146,7 +146,7 @@ WindowManager::WindowManager()
     icons_config.MergeMode = true;
     icons_config.PixelSnapH = true;
     icons_config.GlyphOffset = ImVec2(0, 2.5);
-    m_io->Fonts->AddFontFromFileTTF(materialIconPath.c_str(), 16.0f,
+    m_io->Fonts->AddFontFromFileTTF(materialIconPath.string().c_str(), 16.0f,
                                     &icons_config, icons_ranges);
   } else {
     logger->coreLogger->error("Icon loaded failed.");

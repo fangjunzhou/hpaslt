@@ -116,7 +116,8 @@
     "xstring": "cpp",
     "xtr1common": "cpp",
     "xutility": "cpp",
-    "__availability": "cpp"
+    "__availability": "cpp",
+    "*.rh": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++20",
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
