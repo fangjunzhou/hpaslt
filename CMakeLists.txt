@@ -65,6 +65,9 @@ add_subdirectory(external/audiofile)
 # Port Audio
 add_subdirectory(external/portaudio)
 
+# FFTW
+add_subdirectory(external/fftw)
+
 # Native File Dialog
 add_subdirectory(external/nativefiledialog)
 
@@ -244,6 +247,7 @@ target_include_directories(
     PUBLIC
     external/portaudio/include
     external/audiofile
+    external/fftw/api
     src
 )
 target_link_libraries(
@@ -251,6 +255,7 @@ target_link_libraries(
     hpaslt_serialization
     hpaslt_commands
     hpaslt_logger
+    fftw3
     PortAudio
 )
 list(APPEND LIBS hpaslt_core)
