@@ -42,7 +42,7 @@ class ProjectSettingsConfig : public Config {
         logLevel(spdlog::level::info),
         panButton(ImGuiMouseButton_Middle),
         timeButton(ImGuiMouseButton_Left),
-        audioStreamFPB(32) {}
+        audioStreamFPB(1024) {}
 
   template <class Archive>
   void serialize(Archive& archive) {
