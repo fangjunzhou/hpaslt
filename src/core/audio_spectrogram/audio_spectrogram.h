@@ -75,6 +75,33 @@ class AudioSpectrogram {
   int getNfft() { return m_nfft; }
 
   /**
+   * @brief Get the original audio object sample rate.
+   *
+   * @return int
+   */
+  int getAudioSampleRate() {
+    return m_audioObj->getAudioFile().getSampleRate();
+  }
+
+  /**
+   * @brief Get the original audio object sample frequency.
+   * This is frequency corresponding to the last bin in each spectrogram frame.
+   *
+   * @return float
+   */
+  float getAudioSampleFreq() { return 1 / (float)getAudioSampleRate(); }
+
+  /**
+   * @brief Get the sample rate of the spectrogram.
+   * The spectrogram sample rate should be original audio sample rate / nfft.
+   *
+   * @return int
+   */
+  float getSpectrogramSampleRate() {
+    return (float)getAudioSampleRate() / (float)m_nfft;
+  }
+
+  /**
    * @brief Construct a new AudioSpectrogram object.
    *
    */
