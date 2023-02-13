@@ -7,43 +7,49 @@
 
 namespace hpaslt {
 
-/**
- * @brief A frame of audio spectrogram.
- *
- */
-class SpectrogramFrame {
+class RawSpectrogram {
  private:
   /**
-   * @brief The fft bin size.
-   * This is also the size of the frame size.
+   * @brief the raw spectrogram of the fft conversion.
+   * The size of this vector should be m_nfft * m_spectrogramLength.
    *
    */
-  int m_nfft;
+  fftwf_complex *m_rawSpectrogram;
 
   /**
-   * @brief The ptr pointing to the start of the frame.
+   * @brief The size of the spectrogram.
+   * The size should be m_nfft * m_spectrogramLength.
    *
    */
-  fftw_complex* m_frame;
+  int m_spectrogramSize;
 
  public:
   /**
-   * @brief Construct a new SpectrogramFrame object.
+   * @brief Get the raw spectrogram array pointer.
    *
-   * @param nfft
-   * @param framePtr
+   * @return fftwf_complex*
    */
-  SpectrogramFrame(int nfft, fftw_complex* framePtr) {
-    m_nfft = nfft;
-    m_frame = framePtr;
-  }
+  fftwf_complex *getRawSpectrogram() { return m_rawSpectrogram; }
 
-  fftw_complex& operator[](int indx) {
-    if (indx >= m_nfft || indx < 0) {
-      throw std::invalid_argument("Frame index out of range.");
-    }
-    return m_frame[indx];
-  }
+  /**
+   * @brief Get the size of the raw spectrogram array.
+   *
+   * @return int
+   */
+  int getSpectrogramSize() { return m_spectrogramSize; }
+
+  /**
+   * @brief Construct a new RawSpectrogram object.
+   *
+   * @param size The size of the raw spectrogram array.
+   */
+  RawSpectrogram(int size);
+
+  /**
+   * @brief Destroy the RawSpectrogram object.
+   *
+   */
+  ~RawSpectrogram();
 };
 
 class AudioSpectrogram {
@@ -61,10 +67,16 @@ class AudioSpectrogram {
   int m_nfft;
 
   /**
-   * @brief the raw spectrogram of the fft conversion.
+   * @brief The length of the spectrogram.
    *
    */
-  std::vector<fftw_complex> m_rawSpectrogram;
+  int m_spectrogramLength;
+
+  /**
+   * @brief the raw spectrogram of all channels.
+   *
+   */
+  std::vector<RawSpectrogram> m_rawSpectrograms;
 
  public:
   /**
@@ -102,6 +114,13 @@ class AudioSpectrogram {
   }
 
   /**
+   * @brief Get the reference to the raw spectrogram reference.
+   *
+   * @return std::vector<RawSpectrogram>&
+   */
+  std::vector<RawSpectrogram> &getRawSpectrogram() { return m_rawSpectrograms; }
+
+  /**
    * @brief Construct a new AudioSpectrogram object.
    *
    */
@@ -120,14 +139,6 @@ class AudioSpectrogram {
    * @param nfft
    */
   void generateSpectrogram(std::shared_ptr<AudioObject> audioObj, int nfft);
-
-  /**
-   * @brief operator overload for []. Get a frame.
-   *
-   * @param indx
-   * @return SpectrogramFrame
-   */
-  SpectrogramFrame operator[](int indx);
 };
 
 }  // namespace hpaslt
