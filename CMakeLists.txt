@@ -66,6 +66,7 @@ add_subdirectory(external/audiofile)
 add_subdirectory(external/portaudio)
 
 # FFTW
+set(ENABLE_FLOAT ON CACHE BOOL "FFTW Float Build" FORCE)
 add_subdirectory(external/fftw)
 
 # Native File Dialog
@@ -255,7 +256,7 @@ target_link_libraries(
     hpaslt_serialization
     hpaslt_commands
     hpaslt_logger
-    fftw3
+    fftw3f
     PortAudio
 )
 list(APPEND LIBS hpaslt_core)
