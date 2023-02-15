@@ -108,6 +108,27 @@ TEST_F(SignalGeneratorTest, GenerateSignal) {
   EXPECT_TRUE(isFrequency(freq));
 }
 
+TEST_F(SignalGeneratorTest, OverlaySignal) {
+  // Change the length of the audio.
+  m_signalGenerator->changeLength(m_audioFile->getSampleRate() *
+                                  TEST_AUDIO_LENGTH);
+
+  // Check the new audio length.
+  EXPECT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
+  EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
+
+  // Generate signal.
+  m_signalGenerator->generateSignal(32);
+
+  // Overlay 2 layers of new signal.
+  m_signalGenerator->overlaySignal(64);
+  m_signalGenerator->overlaySignal(128);
+
+  // Test signal.
+  std::vector<float> freq{32, 64, 128};
+  EXPECT_TRUE(isFrequency(freq));
+}
+
 }  // namespace test
 
 }  // namespace hpaslt
