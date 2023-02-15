@@ -112,6 +112,9 @@ target_link_libraries(
     glfw
 )
 
+# Google Test
+add_subdirectory(external/googletest)
+
 # ----------------------- ImGui Console ---------------------- #
 
 set(IMGUI_CONSOLE_DIR external/imguiconsole)
@@ -169,6 +172,11 @@ file(
     src/common/*.cpp
 )
 add_library(hpaslt_common ${HPASLT_COMMON_SRC})
+target_include_directories(
+    hpaslt_common
+    PUBLIC
+    external/audiofile
+)
 list(APPEND LIBS hpaslt_common)
 
 # Logger.
@@ -341,6 +349,30 @@ list(APPEND LIBS hpaslt_frontend)
 add_executable(hpaslt src/main.cpp)
 target_include_directories(hpaslt PUBLIC src external/pathfind/src)
 target_link_libraries(hpaslt ${LIBS} pathfind)
+
+# ------------------------------------------------------------ #
+#                            Testing                           #
+# ------------------------------------------------------------ #
+
+enable_testing()
+
+file(
+    GLOB_RECURSE
+    TEST_SRC
+    tests/*.cpp
+    tests/*.h
+)
+add_executable(
+    hpaslt_tests
+    ${TEST_SRC}
+)
+target_include_directories(
+    hpaslt_tests
+    PUBLIC
+    src
+    external/googletest/googletest/include
+)
+target_link_libraries(hpaslt_tests ${LIBS} gtest_main)
 
 # ------------------------------------------------------------ #
 #                           Resources                          #
