@@ -374,6 +374,9 @@ target_include_directories(
 )
 target_link_libraries(hpaslt_tests ${LIBS} gtest_main)
 
+include(GoogleTest)
+gtest_discover_tests(hpaslt_tests)
+
 # ------------------------------------------------------------ #
 #                           Resources                          #
 # ------------------------------------------------------------ #
