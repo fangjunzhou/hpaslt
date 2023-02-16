@@ -39,8 +39,14 @@ endif()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD 20)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
+
+set(USE_OPENMP ON)
+
+set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # ---------------------- CMake variables --------------------- #
 
@@ -118,6 +124,17 @@ add_subdirectory(external/googletest)
 # Google Benchmark
 set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests" FORCE)
 add_subdirectory(external/googlebenchmark)
+
+# ------------------------------------------------------------ #
+#                        Change Compiler                       #
+# ------------------------------------------------------------ #
+
+if (APPLE)
+    set(CMAKE_C_COMPILER /usr/local/opt/llvm/bin/clang)
+    set(CMAKE_CXX_COMPILER /usr/local/opt/llvm/bin/clang++)
+    link_directories(/usr/local/opt/llvm/lib)
+
+endif()
 
 # ----------------------- ImGui Console ---------------------- #
 
@@ -271,6 +288,11 @@ target_link_libraries(
     fftw3f
     PortAudio
 )
+if(USE_OPENMP)
+    message("Link OpenMP")
+    target_link_libraries(hpaslt_core -fopenmp)
+    target_compile_options(hpaslt_core PRIVATE -fopenmp)
+endif(USE_OPENMP)
 list(APPEND LIBS hpaslt_core)
 
 # ------------------------- Rendering ------------------------ #
