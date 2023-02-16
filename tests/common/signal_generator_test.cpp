@@ -9,6 +9,11 @@ namespace hpaslt {
 
 namespace test {
 
+struct FreqComponent {
+  float freq;
+  float magnitude;
+};
+
 class SignalGeneratorTest : public ::testing::Test {
  protected:
   /**
@@ -48,14 +53,15 @@ class SignalGeneratorTest : public ::testing::Test {
    * @param freq the frequency list.
    * @return testing::AssertionResult
    */
-  testing::AssertionResult isFrequency(std::vector<float>& freq,
+  testing::AssertionResult isFrequency(std::vector<FreqComponent>& freq,
                                        float error = 0) {
     int sampleRate = m_audioFile->getSampleRate();
     for (int i = 0; i < m_audioFile->getNumSamplesPerChannel(); i++) {
       // Merge all the frequency together.
       float expectVal = 0;
       for (int j = 0; j < freq.size(); j++) {
-        expectVal += sin(2 * M_PI * i * freq[j] / sampleRate);
+        expectVal +=
+            sin(2 * M_PI * i * freq[j].freq / sampleRate) * freq[j].magnitude;
       }
 
       for (int channel = 0; channel < m_audioFile->getNumChannels();
@@ -101,10 +107,10 @@ TEST_F(SignalGeneratorTest, GenerateSignal) {
   EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32);
+  m_signalGenerator->generateSignal(32, 1);
 
   // Test signal.
-  std::vector<float> freq{32};
+  std::vector<FreqComponent> freq{{32, 1}};
   EXPECT_TRUE(isFrequency(freq));
 }
 
@@ -118,14 +124,14 @@ TEST_F(SignalGeneratorTest, OverlaySignal) {
   EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32);
+  m_signalGenerator->generateSignal(32, 1 / 3);
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(64);
-  m_signalGenerator->overlaySignal(128);
+  m_signalGenerator->overlaySignal(64, 1 / 3);
+  m_signalGenerator->overlaySignal(128, 1 / 3);
 
   // Test signal.
-  std::vector<float> freq{32, 64, 128};
+  std::vector<FreqComponent> freq{{32, 1 / 3}, {64, 1 / 3}, {128, 1 / 3}};
   EXPECT_TRUE(isFrequency(freq));
 }
 

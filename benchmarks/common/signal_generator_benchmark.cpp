@@ -29,12 +29,13 @@ BENCHMARK(changeSignalLengthBenchmark)
     ->RangeMultiplier(2)
     ->Range(44100, 44100 << 4)
     ->Setup(signalGeneratorSetup)
-    ->Teardown(signalGeneratorTeardown);
+    ->Teardown(signalGeneratorTeardown)
+    ->Unit(benchmark::kNanosecond);
 
 static void generateSignalBenchmark(benchmark::State& state) {
   signalGenerator->changeLength(state.range(0));
   for (auto _ : state) {
-    signalGenerator->generateSignal(32);
+    signalGenerator->generateSignal(32, 1);
   }
 }
 
@@ -42,6 +43,27 @@ BENCHMARK(generateSignalBenchmark)
     ->RangeMultiplier(2)
     ->Range(44100, 44100 << 4)
     ->Setup(signalGeneratorSetup)
-    ->Teardown(signalGeneratorTeardown);
+    ->Teardown(signalGeneratorTeardown)
+    ->Unit(benchmark::kMillisecond);
 
-BENCHMARK_MAIN();
+static void overlaySignalBenchmark(benchmark::State& state) {
+  signalGenerator->changeLength(state.range(0));
+  for (auto _ : state) {
+    state.PauseTiming();
+    // Reset the signal.
+    for (int i = 0; i < audioFile->getNumSamplesPerChannel(); i++) {
+      for (int channel = 0; channel < audioFile->getNumChannels(); channel++) {
+        audioFile->samples[channel][i] = 0;
+      }
+    }
+    state.ResumeTiming();
+    signalGenerator->overlaySignal(32, 1);
+  }
+}
+
+BENCHMARK(overlaySignalBenchmark)
+    ->RangeMultiplier(2)
+    ->Range(44100, 44100 << 4)
+    ->Setup(signalGeneratorSetup)
+    ->Teardown(signalGeneratorTeardown)
+    ->Unit(benchmark::kMillisecond);
