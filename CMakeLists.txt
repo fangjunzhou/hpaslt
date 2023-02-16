@@ -115,6 +115,10 @@ target_link_libraries(
 # Google Test
 add_subdirectory(external/googletest)
 
+# Google Benchmark
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests" FORCE)
+add_subdirectory(external/googlebenchmark)
+
 # ----------------------- ImGui Console ---------------------- #
 
 set(IMGUI_CONSOLE_DIR external/imguiconsole)
@@ -370,12 +374,32 @@ target_include_directories(
     hpaslt_tests
     PUBLIC
     src
+    external/audiofile
     external/googletest/googletest/include
 )
 target_link_libraries(hpaslt_tests ${LIBS} gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(hpaslt_tests)
+
+file(
+    GLOB_RECURSE
+    BENCHMARK_SRC
+    benchmarks/*.cpp
+    benchmarks/*.h
+)
+add_executable(
+    hpaslt_benchmarks
+    ${BENCHMARK_SRC}
+)
+target_include_directories(
+    hpaslt_benchmarks
+    PUBLIC
+    src
+    external/audiofile
+    external/googlebenchmark/include
+)
+target_link_libraries(hpaslt_benchmarks ${LIBS} benchmark)
 
 # ------------------------------------------------------------ #
 #                           Resources                          #

@@ -44,3 +44,6 @@
 [submodule "external/googletest"]
 	path = external/googletest
 	url = git@github.com:google/googletest.git
+[submodule "external/googlebenchmark"]
+	path = external/googlebenchmark
+	url = git@github.com:google/benchmark.git

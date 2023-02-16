@@ -52,6 +52,18 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "lldb"
+    },
+    {
+      "name": "LLDB Launch HPASLT Benchmark",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/hpaslt_benchmarks",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "lldb"
     }
   ]
 }
