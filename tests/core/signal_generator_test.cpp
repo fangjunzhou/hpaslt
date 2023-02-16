@@ -3,7 +3,7 @@
 #include <math.h>
 #include <AudioFile.h>
 
-#include "common/signal_generator/signal_generator.h"
+#include "core/signal_generator/signal_generator.h"
 
 namespace hpaslt {
 

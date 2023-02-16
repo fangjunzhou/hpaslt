@@ -1,6 +1,6 @@
 #include <benchmark/benchmark.h>
 
-#include "common/signal_generator/signal_generator.h"
+#include "core/signal_generator/signal_generator.h"
 
 std::shared_ptr<AudioFile<float>> audioFile = nullptr;
 
@@ -41,7 +41,7 @@ static void generateSignalBenchmark(benchmark::State& state) {
 
 BENCHMARK(generateSignalBenchmark)
     ->RangeMultiplier(2)
-    ->Range(44100, 44100 << 4)
+    ->Range(44100, 44100 << 5)
     ->Setup(signalGeneratorSetup)
     ->Teardown(signalGeneratorTeardown)
     ->Unit(benchmark::kMillisecond);
@@ -63,7 +63,7 @@ static void overlaySignalBenchmark(benchmark::State& state) {
 
 BENCHMARK(overlaySignalBenchmark)
     ->RangeMultiplier(2)
-    ->Range(44100, 44100 << 4)
+    ->Range(44100, 44100 << 5)
     ->Setup(signalGeneratorSetup)
     ->Teardown(signalGeneratorTeardown)
     ->Unit(benchmark::kMillisecond);
