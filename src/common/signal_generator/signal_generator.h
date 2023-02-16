@@ -33,15 +33,17 @@ class SignalGenerator {
    * @brief Generate a base signal on the current audio file.
    *
    * @param freq the frequency of the signal.
+   * @param magnitude the magnitude of the signal.
    */
-  void generateSignal(float freq);
+  void generateSignal(float freq, float magnitude);
 
   /**
    * @brief Overlay a new signal on the exist signal.
    *
    * @param freq the frequency of the signal.
+   * @param magnitude the magnitude of the signal.
    */
-  void overlaySignal(float freq);
+  void overlaySignal(float freq, float magnitude);
 };
 
 }  // namespace hpaslt
