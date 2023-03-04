@@ -40,6 +40,8 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
 
 set(USE_OPENMP ON)
