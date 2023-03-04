@@ -38,7 +38,6 @@ void AudioSpectrogram::generateSpectrogram(std::shared_ptr<AudioObject> audiObj,
     m_rawSpectrograms.push_back(RawSpectrogram(m_nfft * m_spectrogramLength));
   }
 
-  // TODO: Load the audio data with multi-threading.
   // Read the samples into the input fftw complex array.
   std::vector<fftwf_complex *> inputs;
   inputs.resize(channelNum);
@@ -47,8 +46,10 @@ void AudioSpectrogram::generateSpectrogram(std::shared_ptr<AudioObject> audiObj,
     inputs[channel] =
         (fftwf_complex *)fftwf_malloc(m_nfft * m_spectrogramLength);
     // Read the data in as real number.
+#pragma omp parallel for
     for (int i = 0; i < m_nfft * m_spectrogramLength; i++) {
       inputs[channel][i][0] = audioFile.samples[channel][i];
+      inputs[channel][i][1] = 0;
     }
   }
 
