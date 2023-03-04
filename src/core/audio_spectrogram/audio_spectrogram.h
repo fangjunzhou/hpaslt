@@ -139,6 +139,8 @@ class AudioSpectrogram {
    * @param nfft
    */
   void generateSpectrogram(std::shared_ptr<AudioObject> audioObj, int nfft);
+
+  // TODO: Use IFFT to get the original audio from the spectrogram.
 };
 
 }  // namespace hpaslt
