@@ -97,7 +97,7 @@ TEST_F(SignalGeneratorTest, ChangeLength) {
 
   // Check the new audio length.
   EXPECT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
-  EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
+  EXPECT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 }
 
 TEST_F(SignalGeneratorTest, GenerateSignal) {
@@ -107,7 +107,7 @@ TEST_F(SignalGeneratorTest, GenerateSignal) {
 
   // Check the new audio length.
   EXPECT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
-  EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
+  EXPECT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
   m_signalGenerator->generateSignal(32, 1);
@@ -124,7 +124,7 @@ TEST_F(SignalGeneratorTest, OverlaySignal) {
 
   // Check the new audio length.
   EXPECT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
-  EXPECT_EQ(m_audioFile->getLengthInSeconds(), 4);
+  EXPECT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
   m_signalGenerator->generateSignal(32, 1 / 3);
