@@ -46,4 +46,4 @@
 	url = git@github.com:google/googletest.git
 [submodule "external/googlebenchmark"]
 	path = external/googlebenchmark
-	url = git@github.com:google/benchmark.git
+	url = git@github.com:Fangjun-Zhou/google-benchmark.git
