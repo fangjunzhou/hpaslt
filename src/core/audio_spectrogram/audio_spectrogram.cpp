@@ -14,22 +14,16 @@ RawSpectrogram::~RawSpectrogram() {
   fftwf_free(m_rawSpectrogram);
 }
 
-void AudioSpectrogram::generateSpectrogram(std::shared_ptr<AudioObject> audiObj,
-                                           int nfft) {
+void AudioSpectrogram::generateSpectrogram(
+    std::shared_ptr<AudioFile<float>> AudioFile, int nfft) {
   // Set the sample rate and fft bin size.
-  m_audioObj = audiObj;
+  m_audioFile = AudioFile;
   m_nfft = nfft;
-  m_spectrogramLength =
-      m_audioObj->getAudioFile().getNumSamplesPerChannel() / m_nfft;
+  m_spectrogramLength = m_audioFile->getNumSamplesPerChannel() / m_nfft;
 
   /* ---------------- Generate the spectrogram ---------------- */
 
-  // Acquire the mutex lock of the audio object.
-  m_audioObj->getMutex().lock();
-
-  // Audio file reference.
-  AudioFile<float> &audioFile = m_audioObj->getAudioFile();
-  int channelNum = audioFile.getNumChannels();
+  int channelNum = m_audioFile->getNumChannels();
 
   // Clear the old raw spectrogram for all channels.
   m_rawSpectrograms.clear();
@@ -48,13 +42,10 @@ void AudioSpectrogram::generateSpectrogram(std::shared_ptr<AudioObject> audiObj,
     // Read the data in as real number.
 #pragma omp parallel for
     for (int i = 0; i < m_nfft * m_spectrogramLength; i++) {
-      inputs[channel][i][0] = audioFile.samples[channel][i];
+      inputs[channel][i][0] = m_audioFile->samples[channel][i];
       inputs[channel][i][1] = 0;
     }
   }
-
-  // Release the acquired lock.
-  m_audioObj->getMutex().unlock();
 
   // Convert the input data into the raw spectrogram.
   for (int channel = 0; channel < channelNum; channel++) {

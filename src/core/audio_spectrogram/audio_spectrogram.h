@@ -58,7 +58,7 @@ class AudioSpectrogram {
    * @brief The audio object shared pointer.
    *
    */
-  std::shared_ptr<AudioObject> m_audioObj;
+  std::shared_ptr<AudioFile<float>> m_audioFile;
 
   /**
    * @brief The fft bin size.
@@ -91,9 +91,7 @@ class AudioSpectrogram {
    *
    * @return int
    */
-  int getAudioSampleRate() {
-    return m_audioObj->getAudioFile().getSampleRate();
-  }
+  int getAudioSampleRate() { return m_audioFile->getSampleRate(); }
 
   /**
    * @brief Get the original audio object sample frequency.
@@ -138,7 +136,8 @@ class AudioSpectrogram {
    * @param audioObj
    * @param nfft
    */
-  void generateSpectrogram(std::shared_ptr<AudioObject> audioObj, int nfft);
+  void generateSpectrogram(std::shared_ptr<AudioFile<float>> audioFile,
+                           int nfft);
 
   // TODO: Use IFFT to get the original audio from the spectrogram.
 };
