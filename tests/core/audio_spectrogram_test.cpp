@@ -83,6 +83,50 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramNFFT) {
   EXPECT_EQ(m_audioSpectrogram->getNfft(), 512);
 }
 
+TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleRate) {
+  // Change the length of the audio.
+  m_signalGenerator->changeLength(m_audioFile->getSampleRate() *
+                                  TEST_AUDIO_LENGTH);
+
+  // Check the new audio length.
+  ASSERT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
+  ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
+
+  // Generate signal.
+  m_signalGenerator->generateSignal(32, 1 / 3);
+
+  // Overlay 2 layers of new signal.
+  m_signalGenerator->overlaySignal(64, 1 / 3);
+  m_signalGenerator->overlaySignal(128, 1 / 3);
+
+  // Convert the audio to spectrogram.
+  m_audioSpectrogram->generateSpectrogram(m_audioFile, 128);
+  EXPECT_EQ(m_audioSpectrogram->getAudioSampleRate(),
+            m_audioFile->getSampleRate());
+}
+
+TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleFreq) {
+  // Change the length of the audio.
+  m_signalGenerator->changeLength(m_audioFile->getSampleRate() *
+                                  TEST_AUDIO_LENGTH);
+
+  // Check the new audio length.
+  ASSERT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
+  ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
+
+  // Generate signal.
+  m_signalGenerator->generateSignal(32, 1 / 3);
+
+  // Overlay 2 layers of new signal.
+  m_signalGenerator->overlaySignal(64, 1 / 3);
+  m_signalGenerator->overlaySignal(128, 1 / 3);
+
+  // Convert the audio to spectrogram.
+  m_audioSpectrogram->generateSpectrogram(m_audioFile, 128);
+  EXPECT_EQ(m_audioSpectrogram->getAudioSampleFreq(),
+            (float)1 / m_audioFile->getSampleRate());
+}
+
 }  // namespace test
 
 }  // namespace hpaslt
