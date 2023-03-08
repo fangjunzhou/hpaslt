@@ -87,6 +87,13 @@ class AudioSpectrogram {
   int getNfft() { return m_nfft; }
 
   /**
+   * @brief Get the frame number of the spectrogram.
+   *
+   * @return int
+   */
+  int getSpectrogramLength() { return m_spectrogramLength; }
+
+  /**
    * @brief Get the original audio object sample rate.
    *
    * @return int
