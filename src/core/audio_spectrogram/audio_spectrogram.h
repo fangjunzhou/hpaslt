@@ -76,7 +76,7 @@ class AudioSpectrogram {
    * @brief the raw spectrogram of all channels.
    *
    */
-  std::vector<RawSpectrogram> m_rawSpectrograms;
+  std::vector<std::unique_ptr<RawSpectrogram>> m_rawSpectrograms;
 
  public:
   /**
@@ -116,7 +116,9 @@ class AudioSpectrogram {
    *
    * @return std::vector<RawSpectrogram>&
    */
-  std::vector<RawSpectrogram> &getRawSpectrogram() { return m_rawSpectrograms; }
+  std::vector<std::unique_ptr<RawSpectrogram>> &getRawSpectrogram() {
+    return m_rawSpectrograms;
+  }
 
   /**
    * @brief Construct a new AudioSpectrogram object.

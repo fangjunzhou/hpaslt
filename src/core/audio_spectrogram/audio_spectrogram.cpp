@@ -4,8 +4,7 @@ namespace hpaslt {
 
 RawSpectrogram::RawSpectrogram(int size) {
   // Allocate the fftw complex array.
-  m_rawSpectrogram =
-      (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * size);
+  m_rawSpectrogram = (fftwf_complex *)fftwf_alloc_complex(size);
   m_spectrogramSize = size;
 }
 
@@ -29,7 +28,8 @@ void AudioSpectrogram::generateSpectrogram(
   m_rawSpectrograms.clear();
   // Init raw spectrogram for all channels.
   for (int i = 0; i < channelNum; i++) {
-    m_rawSpectrograms.push_back(RawSpectrogram(m_nfft * m_spectrogramLength));
+    m_rawSpectrograms.push_back(
+        std::make_unique<RawSpectrogram>(m_nfft * m_spectrogramLength));
   }
 
   // Read the samples into the input fftw complex array.
@@ -38,7 +38,7 @@ void AudioSpectrogram::generateSpectrogram(
   for (int channel = 0; channel < channelNum; channel++) {
     // Alloc the input array.
     inputs[channel] =
-        (fftwf_complex *)fftwf_malloc(m_nfft * m_spectrogramLength);
+        (fftwf_complex *)fftwf_alloc_complex(m_nfft * m_spectrogramLength);
     // Read the data in as real number.
 #pragma omp parallel for
     for (int i = 0; i < m_nfft * m_spectrogramLength; i++) {
@@ -54,7 +54,7 @@ void AudioSpectrogram::generateSpectrogram(
       // pointer.
       fftwf_complex *in = inputs[channel] + m_nfft * frame;
       fftwf_complex *out =
-          m_rawSpectrograms[channel].getRawSpectrogram() + m_nfft * frame;
+          m_rawSpectrograms[channel]->getRawSpectrogram() + m_nfft * frame;
 
       // Start the fftw plan.
       fftwf_plan p =
