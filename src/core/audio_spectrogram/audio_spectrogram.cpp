@@ -14,9 +14,9 @@ RawSpectrogram::~RawSpectrogram() {
 }
 
 void AudioSpectrogram::generateSpectrogram(
-    std::shared_ptr<AudioFile<float>> AudioFile, int nfft) {
+    std::shared_ptr<AudioFile<float>> audioFile, int nfft) {
   // Set the sample rate and fft bin size.
-  m_audioFile = AudioFile;
+  m_audioFile = audioFile;
   m_nfft = nfft;
   m_spectrogramLength = m_audioFile->getNumSamplesPerChannel() / m_nfft;
 
