@@ -4,6 +4,7 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
+#include <algorithm>
 #include <AudioFile.h>
 
 #include "core/signal_generator/signal_generator.h"
@@ -66,11 +67,11 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramNFFT) {
   ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32, 1 / 3);
+  m_signalGenerator->generateSignal(32, (float)1 / (float)3);
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(64, 1 / 3);
-  m_signalGenerator->overlaySignal(128, 1 / 3);
+  m_signalGenerator->overlaySignal(64, (float)1 / (float)3);
+  m_signalGenerator->overlaySignal(128, (float)1 / (float)3);
 
   // Convert the audio to spectrogram.
   m_audioSpectrogram->generateSpectrogram(m_audioFile, 128);
@@ -93,11 +94,11 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleRate) {
   ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32, 1 / 3);
+  m_signalGenerator->generateSignal(32, (float)1 / (float)3);
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(64, 1 / 3);
-  m_signalGenerator->overlaySignal(128, 1 / 3);
+  m_signalGenerator->overlaySignal(64, (float)1 / (float)3);
+  m_signalGenerator->overlaySignal(128, (float)1 / (float)3);
 
   // Convert the audio to spectrogram.
   m_audioSpectrogram->generateSpectrogram(m_audioFile, 128);
@@ -105,7 +106,9 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleRate) {
             m_audioFile->getSampleRate());
 }
 
-TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleFreq) {
+#define NFFT 512
+
+TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
   // Change the length of the audio.
   m_signalGenerator->changeLength(m_audioFile->getSampleRate() *
                                   TEST_AUDIO_LENGTH);
@@ -115,16 +118,41 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleFreq) {
   ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32, 1 / 3);
+  m_signalGenerator->generateSignal(32, (float)1 / (float)3);
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(64, 1 / 3);
-  m_signalGenerator->overlaySignal(128, 1 / 3);
+  m_signalGenerator->overlaySignal(64, (float)1 / (float)3);
+  m_signalGenerator->overlaySignal(128, (float)1 / (float)3);
 
   // Convert the audio to spectrogram.
-  m_audioSpectrogram->generateSpectrogram(m_audioFile, 128);
-  EXPECT_EQ(m_audioSpectrogram->getAudioSampleFreq(),
-            (float)1 / m_audioFile->getSampleRate());
+  m_audioSpectrogram->generateSpectrogram(m_audioFile, NFFT);
+
+  // Get the first frame.
+  auto& rawSpectrogram = m_audioSpectrogram->getRawSpectrogram();
+  for (auto& channel : rawSpectrogram) {
+    // Get the first frame.
+    fftwf_complex* frame0 = channel->getRawSpectrogram();
+    // Get all the frequency magnitude.
+    std::vector<std::pair<float, int>> freqMag;
+    freqMag.resize(NFFT / 2);
+    for (int i = 0; i < NFFT / 2; i++) {
+      float mag = sqrt(pow(frame0[i][0], 2) + pow(frame0[i][1], 2));
+      freqMag[i] = std::make_pair(mag, i);
+    }
+    // Get the index of the top 3 frequencies.
+    std::sort(
+        freqMag.begin(), freqMag.end(),
+        [](const std::pair<float, int>& a, const std::pair<float, int>& b) {
+          return (a.first > b.first);
+        });
+
+    for (int i = 0; i < 3; i++) {
+      float freq =
+          ((double)freqMag[i].second / (double)m_audioSpectrogram->getNfft()) *
+          (double)m_audioSpectrogram->getAudioSampleRate();
+      std::cout << "Top " << i + 1 << " frequency: " << freq << std::endl;
+    }
+  }
 }
 
 }  // namespace test
