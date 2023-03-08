@@ -118,25 +118,27 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
   ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
   // Generate signal.
-  m_signalGenerator->generateSignal(32, (float)1 / (float)3);
+  m_signalGenerator->generateSignal(512, (float)1 / (float)3);
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(64, (float)1 / (float)3);
-  m_signalGenerator->overlaySignal(128, (float)1 / (float)3);
+  m_signalGenerator->overlaySignal(1024, (float)1 / (float)3);
+  m_signalGenerator->overlaySignal(2048, (float)1 / (float)3);
 
   // Convert the audio to spectrogram.
   m_audioSpectrogram->generateSpectrogram(m_audioFile, NFFT);
 
-  // Get the first frame.
   auto& rawSpectrogram = m_audioSpectrogram->getRawSpectrogram();
-  for (auto& channel : rawSpectrogram) {
-    // Get the first frame.
-    fftwf_complex* frame0 = channel->getRawSpectrogram();
+  for (int ch = 0; ch < rawSpectrogram.size(); ch++) {
+    auto& channel = rawSpectrogram[ch];
+    // Get the middle frame.
+    fftwf_complex* frame =
+        channel->getRawSpectrogram() +
+        (m_audioSpectrogram->getSpectrogramLength() / 2) * NFFT;
     // Get all the frequency magnitude.
     std::vector<std::pair<float, int>> freqMag;
     freqMag.resize(NFFT / 2);
     for (int i = 0; i < NFFT / 2; i++) {
-      float mag = sqrt(pow(frame0[i][0], 2) + pow(frame0[i][1], 2));
+      float mag = sqrt(pow(frame[i][0], 2) + pow(frame[i][1], 2));
       freqMag[i] = std::make_pair(mag, i);
     }
     // Get the index of the top 3 frequencies.
@@ -150,7 +152,8 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
       float freq =
           ((double)freqMag[i].second / (double)m_audioSpectrogram->getNfft()) *
           (double)m_audioSpectrogram->getAudioSampleRate();
-      std::cout << "Top " << i + 1 << " frequency: " << freq << std::endl;
+      std::cout << "Top " << i + 1 << " frequency in channel " << ch << ": "
+                << freq << std::endl;
     }
   }
 }
