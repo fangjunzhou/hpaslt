@@ -117,7 +117,8 @@
     "xtr1common": "cpp",
     "xutility": "cpp",
     "__availability": "cpp",
-    "*.rh": "cpp"
+    "*.rh": "cpp",
+    "__verbose_abort": "cpp"
   },
   "explorer.copyRelativePathSeparator": "/"
 }
