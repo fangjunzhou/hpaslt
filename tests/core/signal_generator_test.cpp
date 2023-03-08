@@ -56,7 +56,7 @@ class SignalGeneratorTest : public ::testing::Test {
    * @param freq the frequency list.
    * @return testing::AssertionResult
    */
-  testing::AssertionResult isFrequency(std::vector<FreqComponent>& freq,
+  testing::AssertionResult isFrequency(const std::vector<FreqComponent>& freq,
                                        float error = 0) {
     int sampleRate = m_audioFile->getSampleRate();
     for (int i = 0; i < m_audioFile->getNumSamplesPerChannel(); i++) {
