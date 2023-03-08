@@ -6,6 +6,7 @@
 #include <math.h>
 #include <algorithm>
 #include <AudioFile.h>
+#include <limits>
 
 #include "core/signal_generator/signal_generator.h"
 #include "core/audio_spectrogram/audio_spectrogram.h"
@@ -53,6 +54,35 @@ class AudioSpectrogramTest : public ::testing::Test {
     m_audioFile = nullptr;
     m_signalGenerator = nullptr;
     m_audioSpectrogram = nullptr;
+  }
+
+  /**
+   * @brief Check if the freq list contains the target frequency within err.
+   *
+   * @param freq a vector of frequencies.
+   * @param target the target frequency.
+   * @param err allowed error.
+   * @return testing::AssertionResult
+   */
+  testing::AssertionResult containsFreq(const std::vector<float>& freq,
+                                        float target, float err) {
+    float minDiffFreq = 0;
+    float minDiff = std::numeric_limits<float>::max();
+
+    for (int i = 0; i < freq.size(); i++) {
+      if (std::abs(freq[i] - target) <= err) {
+        return testing::AssertionSuccess();
+      }
+      if (std::abs(freq[i] - target) <= minDiff) {
+        minDiff = std::abs(freq[i] - target);
+        minDiffFreq = freq[i];
+      }
+    }
+
+    return testing::AssertionFailure()
+           << "Minimum frequency error between " << target << " and "
+           << minDiffFreq << " is " << minDiff
+           << ". This is larger than allowed error " << err;
   }
 };
 
@@ -107,6 +137,7 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramSampleRate) {
 }
 
 #define NFFT 512
+#define MAX_ERR 32
 
 TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
   // Change the length of the audio.
@@ -117,12 +148,15 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
   ASSERT_EQ(m_audioFile->getNumSamplesPerChannel(), 44100 * TEST_AUDIO_LENGTH);
   ASSERT_EQ(m_audioFile->getLengthInSeconds(), TEST_AUDIO_LENGTH);
 
+  const std::vector<float> freqs{512, 1024, 2048};
+
   // Generate signal.
-  m_signalGenerator->generateSignal(512, (float)1 / (float)3);
+  m_signalGenerator->generateSignal(freqs[0], (float)1 / (float)freqs.size());
 
   // Overlay 2 layers of new signal.
-  m_signalGenerator->overlaySignal(1024, (float)1 / (float)3);
-  m_signalGenerator->overlaySignal(2048, (float)1 / (float)3);
+  for (int i = 1; i < freqs.size(); i++) {
+    m_signalGenerator->overlaySignal(freqs[i], (float)1 / (float)freqs.size());
+  }
 
   // Convert the audio to spectrogram.
   m_audioSpectrogram->generateSpectrogram(m_audioFile, NFFT);
@@ -152,8 +186,8 @@ TEST_F(AudioSpectrogramTest, GenerateSpectrogramPeakFreq) {
       float freq =
           ((double)freqMag[i].second / (double)m_audioSpectrogram->getNfft()) *
           (double)m_audioSpectrogram->getAudioSampleRate();
-      std::cout << "Top " << i + 1 << " frequency in channel " << ch << ": "
-                << freq << std::endl;
+      // Check if the frequency is in the generated frequency list.
+      EXPECT_TRUE(containsFreq(freqs, freq, MAX_ERR));
     }
   }
 }
