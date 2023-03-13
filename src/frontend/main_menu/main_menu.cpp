@@ -74,6 +74,10 @@ void MainMenu::render() {
         // Start a new thread for open audio file dialog.
         m_audioFilePath =
             std::async(std::launch::async, &MainMenu::openAudioFile, this);
+#elif (PLATFORM == PLATFORM_LINUX)
+        // Start a new thread for open audio file dialog.
+        m_audioFilePath =
+            std::async(std::launch::async, &MainMenu::openAudioFile, this);
 #elif (PLATFORM == PLATFORM_MAC)
         std::promise<std::string> filePathPromise;
         m_audioFilePath = filePathPromise.get_future();

@@ -32,6 +32,8 @@ if (WIN32)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
 elseif(APPLE)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} CACHE STRING "Output directory." FORCE)
+elseif(UNIX AND NOT APPLE)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
 else()
     message("Platform not supported.")
     add_compile_definitions(PLATFORM=${_PLATFORM_NONE})
@@ -449,6 +451,14 @@ if (WIN32)
             $<TARGET_FILE_DIR:hpaslt>)
     endif()
 elseif (APPLE)
+    # if (BUILD_SHARED_LIBS)
+    #     # Copy GLEW shared library.
+    #     add_custom_command(TARGET hpaslt POST_BUILD
+    #         COMMAND ${CMAKE_COMMAND} -E copy_directory
+    #         ${PROJECT_BINARY_DIR}/external/glew/lib/
+    #         $<TARGET_FILE_DIR:hpaslt>)
+    # endif()
+elseif(UNIX AND NOT APPLE)
     # if (BUILD_SHARED_LIBS)
     #     # Copy GLEW shared library.
     #     add_custom_command(TARGET hpaslt POST_BUILD
