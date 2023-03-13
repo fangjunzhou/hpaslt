@@ -117,10 +117,8 @@
     "xtr1common": "cpp",
     "xutility": "cpp",
     "__availability": "cpp",
-    "*.rh": "cpp"
+    "*.rh": "cpp",
+    "__verbose_abort": "cpp"
   },
-  "C_Cpp.default.cppStandard": "c++20",
-  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-  "explorer.copyRelativePathSeparator": "/",
-  "C_Cpp.default.cStandard": "c17"
+  "explorer.copyRelativePathSeparator": "/"
 }

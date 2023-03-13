@@ -32,6 +32,8 @@ if (WIN32)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
 elseif(APPLE)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} CACHE STRING "Output directory." FORCE)
+elseif(UNIX AND NOT APPLE)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING "Output directory." FORCE)
 else()
     message("Platform not supported.")
     add_compile_definitions(PLATFORM=${_PLATFORM_NONE})
@@ -40,7 +42,15 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries." FORCE)
+
+set(USE_OPENMP ON)
+
+set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # ---------------------- CMake variables --------------------- #
 
@@ -64,6 +74,10 @@ add_subdirectory(external/audiofile)
 
 # Port Audio
 add_subdirectory(external/portaudio)
+
+# FFTW
+set(ENABLE_FLOAT ON CACHE BOOL "FFTW Float Build" FORCE)
+add_subdirectory(external/fftw)
 
 # Native File Dialog
 add_subdirectory(external/nativefiledialog)
@@ -107,6 +121,24 @@ target_link_libraries(
     ${GLEW_LIB}
     glfw
 )
+
+# Google Test
+add_subdirectory(external/googletest)
+
+# Google Benchmark
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests" FORCE)
+add_subdirectory(external/googlebenchmark)
+
+# ------------------------------------------------------------ #
+#                        Change Compiler                       #
+# ------------------------------------------------------------ #
+
+if (APPLE)
+    set(CMAKE_C_COMPILER /usr/local/opt/llvm/bin/clang)
+    set(CMAKE_CXX_COMPILER /usr/local/opt/llvm/bin/clang++)
+    link_directories(/usr/local/opt/llvm/lib)
+
+endif()
 
 # ----------------------- ImGui Console ---------------------- #
 
@@ -165,6 +197,11 @@ file(
     src/common/*.cpp
 )
 add_library(hpaslt_common ${HPASLT_COMMON_SRC})
+target_include_directories(
+    hpaslt_common
+    PUBLIC
+    external/audiofile
+)
 list(APPEND LIBS hpaslt_common)
 
 # Logger.
@@ -244,6 +281,7 @@ target_include_directories(
     PUBLIC
     external/portaudio/include
     external/audiofile
+    external/fftw/api
     src
 )
 target_link_libraries(
@@ -251,8 +289,14 @@ target_link_libraries(
     hpaslt_serialization
     hpaslt_commands
     hpaslt_logger
+    fftw3f
     PortAudio
 )
+if(USE_OPENMP)
+    message("Link OpenMP")
+    target_link_libraries(hpaslt_core -fopenmp)
+    target_compile_options(hpaslt_core PRIVATE -fopenmp)
+endif(USE_OPENMP)
 list(APPEND LIBS hpaslt_core)
 
 # ------------------------- Rendering ------------------------ #
@@ -337,6 +381,53 @@ target_include_directories(hpaslt PUBLIC src external/pathfind/src)
 target_link_libraries(hpaslt ${LIBS} pathfind)
 
 # ------------------------------------------------------------ #
+#                            Testing                           #
+# ------------------------------------------------------------ #
+
+enable_testing()
+
+file(
+    GLOB_RECURSE
+    TEST_SRC
+    tests/*.cpp
+    tests/*.h
+)
+add_executable(
+    hpaslt_tests
+    ${TEST_SRC}
+)
+target_include_directories(
+    hpaslt_tests
+    PUBLIC
+    src
+    external/audiofile
+    external/googletest/googletest/include
+)
+target_link_libraries(hpaslt_tests ${LIBS} gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(hpaslt_tests)
+
+file(
+    GLOB_RECURSE
+    BENCHMARK_SRC
+    benchmarks/*.cpp
+    benchmarks/*.h
+)
+add_executable(
+    hpaslt_benchmarks
+    ${BENCHMARK_SRC}
+)
+target_include_directories(
+    hpaslt_benchmarks
+    PUBLIC
+    src
+    external/audiofile
+    external/googlebenchmark/include
+)
+target_link_libraries(hpaslt_benchmarks ${LIBS} benchmark)
+
+# ------------------------------------------------------------ #
 #                           Resources                          #
 # ------------------------------------------------------------ #
 
@@ -360,6 +451,14 @@ if (WIN32)
             $<TARGET_FILE_DIR:hpaslt>)
     endif()
 elseif (APPLE)
+    # if (BUILD_SHARED_LIBS)
+    #     # Copy GLEW shared library.
+    #     add_custom_command(TARGET hpaslt POST_BUILD
+    #         COMMAND ${CMAKE_COMMAND} -E copy_directory
+    #         ${PROJECT_BINARY_DIR}/external/glew/lib/
+    #         $<TARGET_FILE_DIR:hpaslt>)
+    # endif()
+elseif(UNIX AND NOT APPLE)
     # if (BUILD_SHARED_LIBS)
     #     # Copy GLEW shared library.
     #     add_custom_command(TARGET hpaslt POST_BUILD

@@ -41,3 +41,9 @@
 [submodule "external/pathfind"]
 	path = external/pathfind
 	url = git@github.com:Fangjun-Zhou/pathfind.git
+[submodule "external/googletest"]
+	path = external/googletest
+	url = git@github.com:Fangjun-Zhou/googletest.git
+[submodule "external/googlebenchmark"]
+	path = external/googlebenchmark
+	url = git@github.com:Fangjun-Zhou/google-benchmark.git
