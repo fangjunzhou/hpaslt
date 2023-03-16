@@ -2,10 +2,10 @@
 
 #include <eventpp/callbacklist.h>
 #include <nfd.h>
+
 #include <future>
 
 #include "serialization/main_menu/main_menu_config.h"
-
 #include "window_manager/imgui_object.h"
 
 using namespace std::chrono_literals;

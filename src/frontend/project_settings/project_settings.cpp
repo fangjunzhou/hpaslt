@@ -1,7 +1,8 @@
+#include "project_settings.h"
+
 #include <imgui.h>
 #include <implot.h>
 
-#include "project_settings.h"
 #include "frontend/common/tooltip.h"
 
 namespace hpaslt {

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <fftw3.h>
+
+#include <vector>
 
 #include "core/audio_object/audio_object.h"
 

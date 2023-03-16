@@ -1,10 +1,9 @@
-#include <iostream>
-#include <filesystem>
-#include <ctime>
-#include <sstream>
-#include <filesystem>
-
 #include "logger.h"
+
+#include <ctime>
+#include <filesystem>
+#include <iostream>
+#include <sstream>
 
 namespace hpaslt {
 

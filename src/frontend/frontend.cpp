@@ -1,18 +1,16 @@
+#include "frontend.h"
+
 #include <nfd.h>
 
-#include "logger/logger.h"
-#include "window_manager/window_mgr.h"
-
-#include "frontend.h"
-#include "main_menu/main_menu.h"
-#include "status_bar/status_bar.h"
-#include "play_control/play_control.h"
-
-#include "waveform_window/waveform_window.h"
 #include "console/console.h"
-
 #include "imgui_example/imgui_example.h"
+#include "logger/logger.h"
+#include "main_menu/main_menu.h"
+#include "play_control/play_control.h"
 #include "project_settings/project_settings.h"
+#include "status_bar/status_bar.h"
+#include "waveform_window/waveform_window.h"
+#include "window_manager/window_mgr.h"
 
 namespace hpaslt {
 

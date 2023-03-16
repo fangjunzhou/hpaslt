@@ -1,10 +1,10 @@
+#include "waveform_window.h"
+
 #include <imgui.h>
 #include <implot.h>
 
 #include "core/audio_workspace/audio_workspace.h"
 #include "serialization/project_settings/project_settings_config.h"
-
-#include "waveform_window.h"
 
 #define AUDIO_WAVEFORM_RESOLUTION 8192
 

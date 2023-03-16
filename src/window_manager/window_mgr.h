@@ -1,14 +1,13 @@
 #pragma once
 
-#include <vector>
-#include <future>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+
+#include <future>
+#include <vector>
 
 #include "common.h"
 #include "imgui_object.h"

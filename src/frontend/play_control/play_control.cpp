@@ -1,11 +1,10 @@
-#include <iomanip>
-#include <sstream>
-
-#include <imgui.h>
+#include "play_control.h"
 
 #include <IconsMaterialDesign.h>
+#include <imgui.h>
 
-#include "play_control.h"
+#include <iomanip>
+#include <sstream>
 
 #include "core/audio_workspace/audio_workspace.h"
 

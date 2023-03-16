@@ -1,18 +1,17 @@
+#include <filesystem>
 #include <memory>
 #include <pathfind.hpp>
-#include <filesystem>
 
 /* --------------------- Infrastructure --------------------- */
-#include "common/workspace_context.h"
-#include "logger/logger.h"
 #include "commands/commands.h"
+#include "common/workspace_context.h"
 #include "logger/logger.h"
 /* -------------------------- Core -------------------------- */
 #include "core/audio_player/audio_player.h"
 #include "core/audio_workspace/audio_workspace.h"
 /* ------------------------ Rendering ----------------------- */
-#include "window_manager/window_mgr.h"
 #include "frontend/frontend.h"
+#include "window_manager/window_mgr.h"
 
 int main(int argc, char const* argv[]) {
   /* ------------------------- Context ------------------------ */

@@ -1,12 +1,12 @@
-#include <sstream>
-#include <iostream>
-#include <string>
-#include <regex>
-
 #include "console.h"
-#include "logger/logger.h"
+
+#include <iostream>
+#include <regex>
+#include <sstream>
+#include <string>
 
 #include "commands/commands.h"
+#include "logger/logger.h"
 
 namespace hpaslt {
 

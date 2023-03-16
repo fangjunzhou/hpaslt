@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
+#include <cereal/archives/json.hpp>
+#include <exception>
 #include <filesystem>
 #include <fstream>
-#include <exception>
-
-#include <cereal/archives/json.hpp>
+#include <string>
 
 #include "logger/logger.h"
 

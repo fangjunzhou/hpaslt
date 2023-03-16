@@ -1,3 +1,5 @@
+#include "window_mgr.h"
+
 #include <IconsMaterialDesign.h>
 #include <implot.h>
 
@@ -5,7 +7,6 @@
 
 #include "common/workspace_context.h"
 #include "logger/logger.h"
-#include "window_mgr.h"
 
 namespace hpaslt {
 

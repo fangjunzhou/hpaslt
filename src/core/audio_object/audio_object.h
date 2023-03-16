@@ -1,11 +1,10 @@
 #pragma once
 
-#include <string>
-#include <mutex>
-
+#include <AudioFile.h>
 #include <eventpp/callbacklist.h>
 
-#include <AudioFile.h>
+#include <mutex>
+#include <string>
 
 namespace hpaslt {
 

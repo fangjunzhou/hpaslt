@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>
 #include <mutex>
+#include <vector>
 
 #include "core/audio_object/audio_object.h"
-#include "window_manager/imgui_object.h"
 #include "serialization/project_settings/project_settings_config.h"
+#include "window_manager/imgui_object.h"
 
 namespace hpaslt {
 

@@ -1,6 +1,6 @@
-#include <thread>
-
 #include "audio_workspace.h"
+
+#include <thread>
 
 #include "commands/commands.h"
 #include "logger/logger.h"

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <string>
-#include <functional>
-
 #include <eventpp/callbacklist.h>
 
-#include "logger/logger.h"
+#include <functional>
+#include <string>
+
 #include "common.h"
+#include "logger/logger.h"
 
 namespace hpaslt {
 

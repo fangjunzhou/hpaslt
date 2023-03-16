@@ -1,7 +1,7 @@
 #include "audio_player.h"
 
-#include "logger/logger.h"
 #include "core/audio_object/audio_object.h"
+#include "logger/logger.h"
 
 namespace hpaslt {
 

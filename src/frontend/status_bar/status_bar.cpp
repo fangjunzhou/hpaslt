@@ -1,6 +1,6 @@
-#include <imgui.h>
-
 #include "status_bar.h"
+
+#include <imgui.h>
 
 namespace hpaslt {
 

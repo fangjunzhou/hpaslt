@@ -1,10 +1,11 @@
 #pragma once
 
-#include <cereal/archives/json.hpp>
-#include <cereal/details/helpers.hpp>
-#include <spdlog/spdlog.h>
 #include <imgui.h>
 #include <implot.h>
+#include <spdlog/spdlog.h>
+
+#include <cereal/archives/json.hpp>
+#include <cereal/details/helpers.hpp>
 
 #include "logger/logger.h"
 #include "serialization/config.h"

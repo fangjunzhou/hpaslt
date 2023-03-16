@@ -1,6 +1,6 @@
-#include <memory>
-
 #include <AudioFile.h>
+
+#include <memory>
 
 namespace hpaslt {
 

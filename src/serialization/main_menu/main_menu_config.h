@@ -1,9 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include <cereal/archives/json.hpp>
 #include <cereal/details/helpers.hpp>
+#include <string>
 
 #include "serialization/config.h"
 

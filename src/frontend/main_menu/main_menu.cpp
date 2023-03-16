@@ -1,23 +1,19 @@
+#include "main_menu.h"
+
+#include <IconsMaterialDesign.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include <IconsMaterialDesign.h>
-
 #include <chrono>
 
-#include "main_menu.h"
-#include "logger/logger.h"
-
-#include "frontend/waveform_window/waveform_window.h"
+#include "core/audio_workspace/audio_workspace.h"
 #include "frontend/console/console.h"
-
+#include "frontend/frontend.h"
 #include "frontend/imgui_example/imgui_example.h"
 #include "frontend/project_settings/project_settings.h"
-
-#include "frontend/frontend.h"
-
-#include "core/audio_workspace/audio_workspace.h"
+#include "frontend/waveform_window/waveform_window.h"
+#include "logger/logger.h"
 
 namespace hpaslt {
 
