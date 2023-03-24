@@ -12,7 +12,7 @@
 namespace hpaslt {
 
 class AudioPlayer {
- private:
+private:
   /**
    * @brief The serialized project settings config.
    *
@@ -72,7 +72,7 @@ class AudioPlayer {
                         const PaStreamCallbackTimeInfo *timeInfo,
                         PaStreamCallbackFlags statusFlags, void *userData);
 
- public:
+public:
   static void portAudioError(PaError err) {
     logger->coreLogger->error("Port Audio Error: {}", Pa_GetErrorText(err));
   }
@@ -174,4 +174,4 @@ class AudioPlayer {
   void setTime(float time);
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

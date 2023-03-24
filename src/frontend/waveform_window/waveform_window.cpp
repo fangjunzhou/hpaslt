@@ -12,7 +12,7 @@ namespace hpaslt {
 
 eventpp::CallbackList<void(bool)> WaveformWindow::s_onEnable;
 
-void WaveformWindow::downSampleLayer(AudioDataLayer& layer) {
+void WaveformWindow::downSampleLayer(AudioDataLayer &layer) {
   std::shared_ptr<std::vector<float>> wx = layer.wx;
   std::shared_ptr<std::vector<float>> wy = layer.wy;
 
@@ -31,13 +31,8 @@ void WaveformWindow::downSampleLayer(AudioDataLayer& layer) {
 }
 
 WaveformWindow::WaveformWindow()
-    : ImGuiObject("Waveform"),
-      m_channelNum(0),
-      m_sampleRate(0),
-      m_sampleSize(0),
-      m_currTime(0),
-      m_sliderTime(0),
-      m_syncSliderTime(true),
+    : ImGuiObject("Waveform"), m_channelNum(0), m_sampleRate(0),
+      m_sampleSize(0), m_currTime(0), m_sliderTime(0), m_syncSliderTime(true),
       m_totalTime(0) {
   // Setup window enable callback.
   setupEnableCallback(s_onEnable);
@@ -56,7 +51,7 @@ WaveformWindow::WaveformWindow()
         m_channelNum = m_audioObj->getAudioFile().getNumChannels();
         m_sampleRate = m_audioObj->getAudioFile().getSampleRate();
         m_sampleSize = m_audioObj->getAudioFile().getNumSamplesPerChannel();
-        auto& samples = m_audioObj->getAudioFile().samples;
+        auto &samples = m_audioObj->getAudioFile().samples;
         logger->coreLogger->trace("WaveformWindow copied audio data.");
 
         m_audioChannels.clear();
@@ -130,7 +125,7 @@ void WaveformWindow::render() {
         ImPlot::BeginSubplots("Audio Channels", m_channelNum, 1, ImVec2(-1, -1),
                               ImPlotSubplotFlags_LinkAllX)) {
       for (int channel = 0; channel < m_channelNum; channel++) {
-        AudioChannel& audioChannel = m_audioChannels[channel];
+        AudioChannel &audioChannel = m_audioChannels[channel];
         std::stringstream channelName;
         channelName << "Channel " << channel;
         if (ImPlot::BeginPlot(channelName.str().c_str())) {
@@ -243,4 +238,4 @@ void WaveformWindow::render() {
   ImGui::End();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

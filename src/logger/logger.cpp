@@ -72,4 +72,4 @@ void Logger::setLogLevel(spdlog::level::level_enum logLevel) {
   uiLogger->set_level(logLevel);
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

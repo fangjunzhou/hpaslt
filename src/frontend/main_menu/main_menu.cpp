@@ -88,7 +88,7 @@ void MainMenu::render() {
       if (ImGui::MenuItem("Undo", "CTRL+Z")) {
       }
       if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
-      }  // Disabled item
+      } // Disabled item
       ImGui::Separator();
       if (ImGui::MenuItem("Cut", "CTRL+X")) {
       }
@@ -161,4 +161,4 @@ void MainMenu::render() {
   }
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

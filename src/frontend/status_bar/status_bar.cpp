@@ -10,7 +10,7 @@ StatusBar::~StatusBar() {}
 
 void StatusBar::render() {
   // Status bar window.
-  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImVec2 statusPos = viewport->Pos;
   statusPos.y += viewport->Size.y - ImGui::GetFrameHeight();
   ImGui::SetNextWindowPos(statusPos);
@@ -48,4 +48,4 @@ void StatusBar::render() {
   ImGui::End();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

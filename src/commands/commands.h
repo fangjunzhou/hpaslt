@@ -8,12 +8,12 @@
 namespace hpaslt {
 
 class Commands {
- private:
+private:
   static std::shared_ptr<Commands> s_commands;
 
   std::shared_ptr<csys::System> m_system;
 
- public:
+public:
   /**
    * @brief Get the Commands singleton.
    * If the singleton does not exist, create one on the heap.
@@ -37,7 +37,7 @@ class Commands {
    * @brief Disable the default copy constructor for Commands.
    *
    */
-  Commands(const Commands&) = delete;
+  Commands(const Commands &) = delete;
 
   /**
    * @brief Construct a new Commands object
@@ -59,4 +59,4 @@ class Commands {
   std::weak_ptr<csys::System> getSystem() { return m_system; }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

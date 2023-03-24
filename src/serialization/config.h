@@ -11,13 +11,13 @@
 namespace hpaslt {
 
 class Config {
- private:
+private:
   // Base directories for all config files.
   static const std::string m_baseDir;
 
-  void checkAndCreateDir(const std::filesystem::path& fullPath);
+  void checkAndCreateDir(const std::filesystem::path &fullPath);
 
- protected:
+protected:
   /**
    * @brief The save path of current config file.
    *
@@ -29,8 +29,7 @@ class Config {
    *
    * @return std::shared_ptr<cereal::JSONOutputArchive>
    */
-  template <class T>
-  void saveHelper(T& target) {
+  template <class T> void saveHelper(T &target) {
     // Create the file stream.
     std::ofstream fs(m_savePath);
     // Create the cereal archive.
@@ -46,8 +45,7 @@ class Config {
    *
    * @return std::shared_ptr<cereal::JSONInputArchive>
    */
-  template <class T>
-  void loadHelper(T& target) {
+  template <class T> void loadHelper(T &target) {
     namespace fs = std::filesystem;
     // Check if the file path exists.
     if (!fs::exists(fs::path(m_savePath))) {
@@ -67,7 +65,7 @@ class Config {
     try {
       jsonArchive = std::make_unique<cereal::JSONInputArchive>(fstream);
       (*jsonArchive)(target);
-    } catch (const cereal::Exception& e) {
+    } catch (const cereal::Exception &e) {
       // Handle deserialization failed.
       logger->coreLogger->error("Cereal JSON parser error.");
       save();
@@ -78,13 +76,13 @@ class Config {
     logger->coreLogger->debug("Main menu config loaded from {}", m_savePath);
   }
 
- public:
+public:
   /**
    * @brief Construct a new Config object
    *
    * @param fileName the name of the config file.
    */
-  Config(const std::string& fileName);
+  Config(const std::string &fileName);
 
   /**
    * @brief Method to save the current config to the m_savePath.
@@ -98,4 +96,4 @@ class Config {
   virtual void load() { throw std::logic_error("Not implemented"); }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

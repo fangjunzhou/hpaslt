@@ -6,6 +6,6 @@ namespace workspaceContext {
 
 std::string hpasltWorkingDirectory;
 
-}  // namespace workspaceContext
+} // namespace workspaceContext
 
-}  // namespace hpaslt
+} // namespace hpaslt

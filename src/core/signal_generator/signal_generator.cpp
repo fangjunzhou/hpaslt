@@ -37,4 +37,4 @@ void SignalGenerator::overlaySignal(float freq, float magnitude) {
   }
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

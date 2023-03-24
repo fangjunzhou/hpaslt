@@ -38,9 +38,9 @@ void ProjectSettings::render() {
                        {spdlog::level::info, "Info"},
                        {spdlog::level::debug, "Debug"},
                        {spdlog::level::trace, "Trace"}};
-      const char* logLevelPreview = logLevels.at(m_config->logLevel).c_str();
+      const char *logLevelPreview = logLevels.at(m_config->logLevel).c_str();
       if (ImGui::BeginCombo("Log Level", logLevelPreview)) {
-        for (auto& pair : logLevels) {
+        for (auto &pair : logLevels) {
           const bool selected = (pair.first == m_config->logLevel);
           if (ImGui::Selectable(pair.second.c_str(), selected)) {
             // Update log level.
@@ -49,7 +49,8 @@ void ProjectSettings::render() {
             m_config->logLevel = pair.first;
             m_config->save();
           }
-          if (selected) ImGui::SetItemDefaultFocus();
+          if (selected)
+            ImGui::SetItemDefaultFocus();
         }
 
         ImGui::EndCombo();
@@ -65,19 +66,20 @@ void ProjectSettings::render() {
           {ImGuiMouseButton_Left, "Left"},
           {ImGuiMouseButton_Middle, "Middle"},
           {ImGuiMouseButton_Right, "Right"}};
-      const char* panButtonPreview = panButtons.at(m_config->panButton).c_str();
+      const char *panButtonPreview = panButtons.at(m_config->panButton).c_str();
       if (ImGui::BeginCombo("Pan Mouse Button", panButtonPreview)) {
-        for (auto& pair : panButtons) {
+        for (auto &pair : panButtons) {
           const bool selected = (pair.first == m_config->panButton);
           if (ImGui::Selectable(pair.second.c_str(), selected)) {
             // Update pan button.
-            ImPlotInputMap& map = ImPlot::GetInputMap();
+            ImPlotInputMap &map = ImPlot::GetInputMap();
             map.Pan = pair.first;
             // Save pan button.
             m_config->panButton = pair.first;
             m_config->save();
           }
-          if (selected) ImGui::SetItemDefaultFocus();
+          if (selected)
+            ImGui::SetItemDefaultFocus();
         }
 
         ImGui::EndCombo();
@@ -88,17 +90,18 @@ void ProjectSettings::render() {
           {ImGuiMouseButton_Left, "Left"},
           {ImGuiMouseButton_Middle, "Middle"},
           {ImGuiMouseButton_Right, "Right"}};
-      const char* timeButtonPreview =
+      const char *timeButtonPreview =
           timeButtons.at(m_config->timeButton).c_str();
       if (ImGui::BeginCombo("Time Mouse Button", timeButtonPreview)) {
-        for (auto& pair : timeButtons) {
+        for (auto &pair : timeButtons) {
           const bool selected = (pair.first == m_config->timeButton);
           if (ImGui::Selectable(pair.second.c_str(), selected)) {
             // Save pan button.
             m_config->timeButton = pair.first;
             m_config->save();
           }
-          if (selected) ImGui::SetItemDefaultFocus();
+          if (selected)
+            ImGui::SetItemDefaultFocus();
         }
 
         ImGui::EndCombo();
@@ -135,4 +138,4 @@ void ProjectSettings::render() {
   ImGui::End();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

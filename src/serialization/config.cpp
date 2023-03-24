@@ -6,7 +6,7 @@ namespace hpaslt {
 
 const std::string Config::m_baseDir = "config";
 
-void Config::checkAndCreateDir(const std::filesystem::path& fullPath) {
+void Config::checkAndCreateDir(const std::filesystem::path &fullPath) {
   namespace fs = std::filesystem;
   // Get the parent path of the file and create it.
   auto parentPath = fullPath.parent_path();
@@ -23,7 +23,7 @@ void Config::checkAndCreateDir(const std::filesystem::path& fullPath) {
   }
 }
 
-Config::Config(const std::string& fileName) {
+Config::Config(const std::string &fileName) {
   namespace fs = std::filesystem;
   auto fullPath = fs::path(hpaslt::workspaceContext::hpasltWorkingDirectory) /
                   fs::path(m_baseDir) / fs::path(fileName);
@@ -34,4 +34,4 @@ Config::Config(const std::string& fileName) {
   logger->coreLogger->info("Config object created at {}", m_savePath);
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

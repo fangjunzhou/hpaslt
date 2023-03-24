@@ -5,4 +5,4 @@ namespace hpaslt {
 std::shared_ptr<ProjectSettingsConfig>
     ProjectSettingsConfig::s_projectSettingsConfig = nullptr;
 
-}  // namespace hpaslt
+} // namespace hpaslt

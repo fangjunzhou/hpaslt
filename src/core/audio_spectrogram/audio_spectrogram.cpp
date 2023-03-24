@@ -74,4 +74,4 @@ void AudioSpectrogram::generateSpectrogram(
   }
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

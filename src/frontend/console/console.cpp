@@ -65,4 +65,4 @@ void Console::render() {
   m_consoleWindow->Draw();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

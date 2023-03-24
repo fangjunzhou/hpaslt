@@ -7,7 +7,7 @@
 namespace hpaslt {
 
 class PlayControl : public ImGuiObject {
- private:
+private:
   /* ----------------- Current Playing Status ----------------- */
   bool m_isPlaying;
   eventpp::CallbackList<void(bool)>::Handle m_onPlayingStatusChangedHandle;
@@ -29,7 +29,7 @@ class PlayControl : public ImGuiObject {
    */
   void playPauseSwitch();
 
- public:
+public:
   /**
    * @brief Construct a new Status Bar object
    *
@@ -45,4 +45,4 @@ class PlayControl : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

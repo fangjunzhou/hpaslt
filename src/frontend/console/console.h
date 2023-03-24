@@ -12,15 +12,15 @@ namespace hpaslt {
  *
  */
 class ConsoleWindow : public ImGuiConsole {
- public:
+public:
   ConsoleWindow(std::weak_ptr<csys::System> system);
 };
 
 class Console : public ImGuiObject {
- private:
+private:
   std::unique_ptr<ConsoleWindow> m_consoleWindow;
 
- public:
+public:
   /**
    * @brief callback event when open the window from other place.
    *
@@ -34,4 +34,4 @@ class Console : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

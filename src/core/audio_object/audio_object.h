@@ -9,7 +9,7 @@
 namespace hpaslt {
 
 class AudioObject {
- private:
+private:
   /**
    * @brief The lock to protect audio object.
    * Need to acquire the lock to access the audio object.
@@ -29,9 +29,9 @@ class AudioObject {
    */
   int m_cursor;
 
-  eventpp::CallbackList<void(float, float)>* m_onChangePlayingTime;
+  eventpp::CallbackList<void(float, float)> *m_onChangePlayingTime;
 
- public:
+public:
   /**
    * @brief Get the current playing frame.
    * This method is not thread safe.
@@ -53,7 +53,7 @@ class AudioObject {
    *
    * @return eventpp::CallbackList<void(float, float)>&
    */
-  eventpp::CallbackList<void(float, float)>* getTimeCallback() {
+  eventpp::CallbackList<void(float, float)> *getTimeCallback() {
     return m_onChangePlayingTime;
   }
 
@@ -68,7 +68,7 @@ class AudioObject {
    *
    * @param callback
    */
-  void setTimeCallback(eventpp::CallbackList<void(float, float)>* callback) {
+  void setTimeCallback(eventpp::CallbackList<void(float, float)> *callback) {
     m_onChangePlayingTime = callback;
   }
 
@@ -78,7 +78,7 @@ class AudioObject {
    *
    * @param filePath
    */
-  void loadAudioFile(const std::string& filePath);
+  void loadAudioFile(const std::string &filePath);
 
   /**
    * @brief Get the internal AudioFile reference.
@@ -86,7 +86,7 @@ class AudioObject {
    *
    * @return AudioFile<float>&
    */
-  AudioFile<float>& getAudioFile() { return *m_audioFile; }
+  AudioFile<float> &getAudioFile() { return *m_audioFile; }
 
   /**
    * @brief Get the mutex lock by reference.
@@ -94,7 +94,7 @@ class AudioObject {
    *
    * @return std::mutex&
    */
-  std::mutex& getMutex() { return m_mutex; }
+  std::mutex &getMutex() { return m_mutex; }
 
   /**
    * @brief Get the AudioFile length in seconds.
@@ -113,4 +113,4 @@ class AudioObject {
   float getTime();
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

@@ -9,7 +9,7 @@
 namespace hpaslt {
 
 class RawSpectrogram {
- private:
+private:
   /**
    * @brief the raw spectrogram of the fft conversion.
    * The size of this vector should be m_nfft * m_spectrogramLength.
@@ -24,7 +24,7 @@ class RawSpectrogram {
    */
   int m_spectrogramSize;
 
- public:
+public:
   /**
    * @brief Get the raw spectrogram array pointer.
    *
@@ -54,7 +54,7 @@ class RawSpectrogram {
 };
 
 class AudioSpectrogram {
- private:
+private:
   /**
    * @brief The audio object shared pointer.
    *
@@ -79,7 +79,7 @@ class AudioSpectrogram {
    */
   std::vector<std::unique_ptr<RawSpectrogram>> m_rawSpectrograms;
 
- public:
+public:
   /**
    * @brief Get the fft bin size of the spectrogram.
    *
@@ -144,4 +144,4 @@ class AudioSpectrogram {
   // TODO: Use IFFT to get the original audio from the spectrogram.
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

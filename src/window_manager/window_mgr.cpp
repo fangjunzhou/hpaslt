@@ -14,7 +14,7 @@ std::shared_ptr<WindowManager> WindowManager::s_windowMgr = nullptr;
 
 void WindowManager::enableDockspace() {
   // Enable dock space.
-  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImVec2 workPos = viewport->Pos;
   // Leave space for menu + play control.
   workPos.y += 2 * ImGui::GetFrameHeight();
@@ -47,7 +47,7 @@ void WindowManager::enableDockspace() {
   ImGui::PopStyleVar(3);
 
   // Submit the DockSpace
-  ImGuiIO& io = ImGui::GetIO();
+  ImGuiIO &io = ImGui::GetIO();
   if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
     ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
@@ -116,7 +116,7 @@ WindowManager::WindowManager()
 
   // When viewports are enabled we tweak WindowRounding/WindowBg so platform
   // windows can look identical to regular ones.
-  ImGuiStyle& style = ImGui::GetStyle();
+  ImGuiStyle &style = ImGui::GetStyle();
   if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
     style.WindowRounding = 0.0f;
     style.Colors[ImGuiCol_WindowBg].w = 1.0f;
@@ -182,17 +182,21 @@ int WindowManager::execute() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    if (m_mainMenuBar) m_mainMenuBar->render();
+    if (m_mainMenuBar)
+      m_mainMenuBar->render();
 
-    if (m_playControl) m_playControl->render();
+    if (m_playControl)
+      m_playControl->render();
 
     enableDockspace();
 
-    if (m_mainStatusBar) m_mainStatusBar->render();
+    if (m_mainStatusBar)
+      m_mainStatusBar->render();
 
     // Render ImGuiObjects.
     for (int i = 0; i < m_renderObjs.size(); i++) {
-      if (!m_renderObjs[i]->getEnabled()) continue;
+      if (!m_renderObjs[i]->getEnabled())
+        continue;
 
       m_renderObjs[i]->render();
     }
@@ -207,7 +211,7 @@ int WindowManager::execute() {
     //  For this specific demo app we could also call
     //  glfwMakeContextCurrent(window) directly)
     if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-      GLFWwindow* backup_current_context = glfwGetCurrentContext();
+      GLFWwindow *backup_current_context = glfwGetCurrentContext();
       ImGui::UpdatePlatformWindows();
       ImGui::RenderPlatformWindowsDefault();
       glfwMakeContextCurrent(backup_current_context);
@@ -225,4 +229,4 @@ void WindowManager::pushRenderObject(std::shared_ptr<ImGuiObject> renderObj) {
   m_renderObjs.push_back(renderObj);
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

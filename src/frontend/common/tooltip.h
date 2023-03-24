@@ -5,8 +5,8 @@
 namespace hpaslt {
 
 class Tooltip {
- public:
-  static void helpMarker(const char* desc) {
+public:
+  static void helpMarker(const char *desc) {
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort)) {
       ImGui::BeginTooltip();
@@ -18,4 +18,4 @@ class Tooltip {
   }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

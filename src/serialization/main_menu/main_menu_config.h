@@ -9,7 +9,7 @@
 namespace hpaslt {
 
 class MainMenuConfig : public Config {
- public:
+public:
   /* -------------------------- Views ------------------------- */
 
   bool showWaveform = false;
@@ -21,8 +21,7 @@ class MainMenuConfig : public Config {
 
   MainMenuConfig(std::string fileName) : Config(fileName) {}
 
-  template <class Archive>
-  void serialize(Archive& archive) {
+  template <class Archive> void serialize(Archive &archive) {
     archive(CEREAL_NVP(showWaveform), CEREAL_NVP(showConsole));
     archive(CEREAL_NVP(showExample));
   }
@@ -32,4 +31,4 @@ class MainMenuConfig : public Config {
   virtual void load() override { loadHelper(*this); }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

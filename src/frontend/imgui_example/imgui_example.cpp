@@ -18,4 +18,4 @@ void ImGuiExample::render() {
   ImPlot::ShowDemoWindow(nullptr);
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

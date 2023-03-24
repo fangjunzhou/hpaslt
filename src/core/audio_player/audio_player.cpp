@@ -56,14 +56,14 @@ int AudioPlayer::paCallback(const void *inputBuffer, void *outputBuffer,
 
   // Invoke time callback.
   auto timeCallback = audioObj->getTimeCallback();
-  if (timeCallback) (*timeCallback)(audioObj->getTime(), audioObj->getLength());
+  if (timeCallback)
+    (*timeCallback)(audioObj->getTime(), audioObj->getLength());
 
   return paContinue;
 }
 
 AudioPlayer::AudioPlayer()
-    : m_stream(nullptr),
-      m_isPlaying(false),
+    : m_stream(nullptr), m_isPlaying(false),
       m_needStopBeforeStartStream(false) {
   // Init project settings singleton.
   m_config = ProjectSettingsConfig::getSingleton();
@@ -147,7 +147,8 @@ void AudioPlayer::loadAudioObject(std::weak_ptr<AudioObject> audioObj) {
 }
 
 void AudioPlayer::play() {
-  if (!m_audioObj) return;
+  if (!m_audioObj)
+    return;
 
   if (m_isPlaying) {
     logger->coreLogger->trace("AudioPlayer already playing.");
@@ -175,7 +176,8 @@ void AudioPlayer::play() {
 }
 
 void AudioPlayer::pause() {
-  if (!m_audioObj) return;
+  if (!m_audioObj)
+    return;
 
   if (!m_isPlaying) {
     logger->coreLogger->trace("AudioPlayer already paused.");
@@ -196,7 +198,8 @@ void AudioPlayer::pause() {
 }
 
 void AudioPlayer::replay() {
-  if (!m_audioObj) return;
+  if (!m_audioObj)
+    return;
 
   m_audioObj->setCursor(0);
   auto timeCallback = m_audioObj->getTimeCallback();
@@ -206,7 +209,8 @@ void AudioPlayer::replay() {
 }
 
 void AudioPlayer::stop() {
-  if (!m_audioObj) return;
+  if (!m_audioObj)
+    return;
 
   pause();
   m_audioObj->setCursor(0);
@@ -216,7 +220,8 @@ void AudioPlayer::stop() {
 }
 
 void AudioPlayer::setTime(float time) {
-  if (!m_audioObj) return;
+  if (!m_audioObj)
+    return;
 
   m_audioObj->getMutex().lock();
 
@@ -238,4 +243,4 @@ void AudioPlayer::setTime(float time) {
   m_audioObj->getMutex().unlock();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

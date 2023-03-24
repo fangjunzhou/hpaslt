@@ -5,14 +5,14 @@
 namespace hpaslt {
 
 class SignalGenerator {
- private:
+private:
   /**
    * @brief The current working audio file.
    *
    */
   std::shared_ptr<AudioFile<float>> m_workingAudioFile;
 
- public:
+public:
   /**
    * @brief Bind the current working audio file.
    *
@@ -46,4 +46,4 @@ class SignalGenerator {
   void overlaySignal(float freq, float magnitude);
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

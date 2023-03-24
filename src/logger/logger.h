@@ -12,7 +12,7 @@
 namespace hpaslt {
 
 class Logger {
- private:
+private:
   /**
    * @brief The ostringstream for console sink.
    *
@@ -27,7 +27,7 @@ class Logger {
    */
   std::vector<spdlog::sink_ptr> createSinks(std::string filePath);
 
- public:
+public:
   /**
    * @brief Core logger.
    *
@@ -78,4 +78,4 @@ extern void initLogger(std::string workingDirectory);
 
 extern void terminateLogger();
 
-}  // namespace hpaslt
+} // namespace hpaslt

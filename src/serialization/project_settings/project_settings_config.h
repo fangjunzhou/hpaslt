@@ -13,10 +13,10 @@
 namespace hpaslt {
 
 class ProjectSettingsConfig : public Config {
- private:
+private:
   static std::shared_ptr<ProjectSettingsConfig> s_projectSettingsConfig;
 
- public:
+public:
   static std::shared_ptr<ProjectSettingsConfig> getSingleton() {
     if (!s_projectSettingsConfig) {
       s_projectSettingsConfig =
@@ -39,14 +39,11 @@ class ProjectSettingsConfig : public Config {
   int audioStreamFPB;
 
   ProjectSettingsConfig(std::string fileName)
-      : Config(fileName),
-        logLevel(spdlog::level::info),
-        panButton(ImGuiMouseButton_Middle),
-        timeButton(ImGuiMouseButton_Left),
+      : Config(fileName), logLevel(spdlog::level::info),
+        panButton(ImGuiMouseButton_Middle), timeButton(ImGuiMouseButton_Left),
         audioStreamFPB(1024) {}
 
-  template <class Archive>
-  void serialize(Archive& archive) {
+  template <class Archive> void serialize(Archive &archive) {
     archive(CEREAL_NVP(logLevel));
     archive(CEREAL_NVP(panButton), CEREAL_NVP(timeButton));
     archive(CEREAL_NVP(audioStreamFPB));
@@ -66,4 +63,4 @@ class ProjectSettingsConfig : public Config {
   }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

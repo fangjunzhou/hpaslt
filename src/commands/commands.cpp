@@ -16,4 +16,4 @@ Commands::~Commands() {
   logger->coreLogger->debug("Commands destroyed csys::System.");
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

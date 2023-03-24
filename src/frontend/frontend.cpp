@@ -57,4 +57,4 @@ void registerAllImGuiObjs() {
       std::make_shared<ProjectSettings>());
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

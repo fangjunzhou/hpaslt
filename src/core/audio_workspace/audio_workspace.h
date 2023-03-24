@@ -16,7 +16,7 @@ namespace hpaslt {
 /* ---------------------------------------------------------- */
 
 class AudioWorkspace {
- private:
+private:
   /**
    * @brief AudioWorkspace singleton.
    *
@@ -35,7 +35,7 @@ class AudioWorkspace {
    */
   std::shared_ptr<AudioObject> m_audioObject;
 
- public:
+public:
   /**
    * @brief Get the AudioWorkspace singleton.
    *
@@ -92,7 +92,7 @@ class AudioWorkspace {
    *
    * @param filePath
    */
-  void loadAudioFile(const std::string& filePath);
+  void loadAudioFile(const std::string &filePath);
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

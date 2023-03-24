@@ -24,4 +24,4 @@ void frontendTerminate();
  */
 void registerAllImGuiObjs();
 
-}  // namespace hpaslt
+} // namespace hpaslt

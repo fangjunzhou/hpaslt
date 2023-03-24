@@ -15,20 +15,20 @@
 namespace hpaslt {
 
 class WindowManager {
- private:
+private:
   static std::shared_ptr<WindowManager> s_windowMgr;
 
   /**
    * @brief the main GLFW window.
    *
    */
-  GLFWwindow* m_window;
+  GLFWwindow *m_window;
 
   /**
    * @brief ImGui IO pointer.
    *
    */
-  ImGuiIO* m_io;
+  ImGuiIO *m_io;
 
   /**
    * @brief The imgui ini window config file path.
@@ -66,7 +66,7 @@ class WindowManager {
    */
   void enableDockspace();
 
- public:
+public:
   /**
    * @brief Get the WindowManager singleton.
    * If the singleton does not exist, create one on the heap.
@@ -93,7 +93,7 @@ class WindowManager {
    * @brief Disable the copy constructor for WindowManager.
    *
    */
-  WindowManager(const WindowManager&) = delete;
+  WindowManager(const WindowManager &) = delete;
 
   /**
    * @brief Construct a new Window Manager object.
@@ -149,4 +149,4 @@ class WindowManager {
   }
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

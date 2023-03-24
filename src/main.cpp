@@ -13,7 +13,7 @@
 #include "frontend/frontend.h"
 #include "window_manager/window_mgr.h"
 
-int main(int argc, char const* argv[]) {
+int main(int argc, char const *argv[]) {
   /* ------------------------- Context ------------------------ */
   // Setup working directory.
   std::filesystem::path executablePath = PathFind::FindExecutable();

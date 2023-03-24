@@ -8,7 +8,7 @@
 namespace hpaslt {
 
 class ImGuiExample : public ImGuiObject {
- public:
+public:
   /**
    * @brief callback event when open the window from other place.
    *
@@ -24,4 +24,4 @@ class ImGuiExample : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

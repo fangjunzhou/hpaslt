@@ -13,7 +13,7 @@ using namespace std::chrono_literals;
 namespace hpaslt {
 
 class MainMenu : public ImGuiObject {
- private:
+private:
   std::unique_ptr<MainMenuConfig> m_config;
 
   /* -------------------------- File -------------------------- */
@@ -39,10 +39,10 @@ class MainMenu : public ImGuiObject {
    */
   std::string openAudioFile();
 
- protected:
+protected:
   virtual void onFinishRegisterImGuiObjs() override;
 
- public:
+public:
   /**
    * @brief Construct a new Main Menu object
    *
@@ -58,4 +58,4 @@ class MainMenu : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

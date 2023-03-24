@@ -10,4 +10,4 @@ namespace hpaslt {
  */
 extern eventpp::CallbackList<void()> finishRegisterImGuiObjs;
 
-}  // namespace hpaslt
+} // namespace hpaslt

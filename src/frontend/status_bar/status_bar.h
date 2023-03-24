@@ -5,8 +5,8 @@
 namespace hpaslt {
 
 class StatusBar : public ImGuiObject {
- private:
- public:
+private:
+public:
   /**
    * @brief Construct a new Status Bar object
    *
@@ -22,4 +22,4 @@ class StatusBar : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

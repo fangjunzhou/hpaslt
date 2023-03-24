@@ -21,12 +21,8 @@ void PlayControl::playPauseSwitch() {
 }
 
 PlayControl::PlayControl()
-    : ImGuiObject("MainPlayConstrol"),
-      m_isPlaying(false),
-      m_currTime(0),
-      m_sliderTime(0),
-      m_syncSliderTime(true),
-      m_totalTime(0) {
+    : ImGuiObject("MainPlayConstrol"), m_isPlaying(false), m_currTime(0),
+      m_sliderTime(0), m_syncSliderTime(true), m_totalTime(0) {
   m_onPlayingStatusChangedHandle =
       AudioWorkspace::getSingleton()
           .lock()
@@ -65,7 +61,7 @@ PlayControl::~PlayControl() {
 
 void PlayControl::render() {
   // Status bar window.
-  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImVec2 statusPos = viewport->Pos;
   statusPos.y += ImGui::GetFrameHeight();
   ImGui::SetNextWindowPos(statusPos);
@@ -100,9 +96,11 @@ void PlayControl::render() {
 
     // Play.
     std::string playIcon = m_isPlaying ? ICON_MD_PAUSE : ICON_MD_PLAY_ARROW;
-    if (ImGui::MenuItem(playIcon.c_str())) playPauseSwitch();
+    if (ImGui::MenuItem(playIcon.c_str()))
+      playPauseSwitch();
     // Space key play control.
-    if (ImGui::IsKeyPressed(ImGuiKey_Space)) playPauseSwitch();
+    if (ImGui::IsKeyPressed(ImGuiKey_Space))
+      playPauseSwitch();
 
     // Replay.
     if (ImGui::MenuItem(ICON_MD_REPLAY)) {
@@ -161,4 +159,4 @@ void PlayControl::render() {
   ImGui::End();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

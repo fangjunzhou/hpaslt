@@ -2,7 +2,7 @@
 
 namespace hpaslt {
 
-void AudioObject::loadAudioFile(const std::string& filePath) {
+void AudioObject::loadAudioFile(const std::string &filePath) {
   std::shared_ptr<AudioFile<float>> targetFile =
       std::make_shared<AudioFile<float>>();
   if (!targetFile->load(filePath)) {
@@ -20,7 +20,8 @@ void AudioObject::loadAudioFile(const std::string& filePath) {
   setCursor(0);
   m_mutex.unlock();
 
-  if (m_onChangePlayingTime) (*m_onChangePlayingTime)(getTime(), getLength());
+  if (m_onChangePlayingTime)
+    (*m_onChangePlayingTime)(getTime(), getLength());
 }
 
 float AudioObject::getLength() {
@@ -47,4 +48,4 @@ float AudioObject::getTime() {
   return (float)cursorFrame / (float)sampleRate;
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt

@@ -6,10 +6,10 @@
 namespace hpaslt {
 
 class ProjectSettings : public ImGuiObject {
- private:
+private:
   std::shared_ptr<ProjectSettingsConfig> m_config;
 
- public:
+public:
   /**
    * @brief callback event when open the window from other place.
    *
@@ -31,4 +31,4 @@ class ProjectSettings : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

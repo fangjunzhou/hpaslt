@@ -11,14 +11,14 @@
 namespace hpaslt {
 
 class ImGuiObject {
- private:
+private:
   /**
    * @brief The name of the ImGuiObject.
    *
    */
   std::string m_name;
 
- protected:
+protected:
   /**
    * @brief If the current ImGuiObject should be rendered.
    *
@@ -42,7 +42,7 @@ class ImGuiObject {
    *
    * @param callbackList
    */
-  void setupEnableCallback(eventpp::CallbackList<void(bool)>& callbackList) {
+  void setupEnableCallback(eventpp::CallbackList<void(bool)> &callbackList) {
     m_enabled = false;
 
     // Listen to the change event.
@@ -55,7 +55,7 @@ class ImGuiObject {
    *
    * @param callbackList
    */
-  void resetEnableCallback(eventpp::CallbackList<void(bool)>& callbackList) {
+  void resetEnableCallback(eventpp::CallbackList<void(bool)> &callbackList) {
     callbackList.remove(m_enableCallbackHandle);
   }
 
@@ -65,7 +65,7 @@ class ImGuiObject {
    */
   virtual void onFinishRegisterImGuiObjs() {}
 
- public:
+public:
   /**
    * @brief Construct a new ImGuiObject object.
    *
@@ -111,4 +111,4 @@ class ImGuiObject {
   virtual void render() {}
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt

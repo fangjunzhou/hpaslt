@@ -19,7 +19,7 @@ void AudioWorkspace::registerConosleCommands() {
 
   system->RegisterCommand(
       "loadAudioCurr", "Load audio to current workspace.",
-      [](const csys::String& audioFilePath) {
+      [](const csys::String &audioFilePath) {
         std::shared_ptr<AudioWorkspace> currWorkspace =
             AudioWorkspace::getSingleton().lock();
 
@@ -73,12 +73,12 @@ AudioWorkspace::~AudioWorkspace() {
   m_audioObject = nullptr;
 }
 
-void AudioWorkspace::loadAudioFile(const std::string& filePath) {
+void AudioWorkspace::loadAudioFile(const std::string &filePath) {
   // Launch the loading thread.
   std::thread loadThread([this, filePath]() {
     try {
       m_audioObject->loadAudioFile(filePath);
-    } catch (const std::invalid_argument& e) {
+    } catch (const std::invalid_argument &e) {
       logger->coreLogger->error(
           "AudioWorkspace cannot load audio file at {}, error: {}.", filePath,
           e.what());
@@ -97,4 +97,4 @@ void AudioWorkspace::loadAudioFile(const std::string& filePath) {
   loadThread.detach();
 }
 
-}  // namespace hpaslt
+} // namespace hpaslt
