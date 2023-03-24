@@ -9,6 +9,11 @@
 
 namespace hpaslt {
 
+/**
+ * @class AudioDataLayer
+ * @brief A down sampled audio layer for implot to render.
+ *
+ */
 struct AudioDataLayer {
   std::shared_ptr<std::vector<float>> wx;
   std::shared_ptr<std::vector<float>> wy;
@@ -16,12 +21,18 @@ struct AudioDataLayer {
   int sampleSize;
 };
 
+/**
+ * @class AudioChannel
+ * @brief A collection of AudioDataLayer to support rendering in different
+ * resolution.
+ *
+ */
 struct AudioChannel {
   std::vector<AudioDataLayer> layers;
 };
 
 class WaveformWindow : public ImGuiObject {
- private:
+private:
   using LoadAudioCallback =
       eventpp::CallbackList<void(std::weak_ptr<AudioObject>)>;
 
@@ -51,9 +62,9 @@ class WaveformWindow : public ImGuiObject {
   int m_sampleSize;
 
   /* ---------------------- Playing Time ---------------------- */
-  // Current playing time.
+  // Current playing time, normally sync with workspace playing time.
   double m_currTime;
-  // Slider playing time.
+  // Slider playing time, sync with implot rendering component.
   double m_sliderTime;
   // If synchronizing slider time with playing time.
   bool m_syncSliderTime;
@@ -74,7 +85,7 @@ class WaveformWindow : public ImGuiObject {
    */
   void downSampleLayer(AudioDataLayer &layer);
 
- public:
+public:
   /**
    * @brief callback event when open the window from other place.
    *
@@ -96,4 +107,4 @@ class WaveformWindow : public ImGuiObject {
   virtual void render() override;
 };
 
-}  // namespace hpaslt
+} // namespace hpaslt
