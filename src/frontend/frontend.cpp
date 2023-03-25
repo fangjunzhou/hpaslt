@@ -8,6 +8,7 @@
 #include "main_menu/main_menu.h"
 #include "play_control/play_control.h"
 #include "project_settings/project_settings.h"
+#include "spectrogram_window/spectrogram_window.h"
 #include "status_bar/status_bar.h"
 #include "waveform_window/waveform_window.h"
 #include "window_manager/window_mgr.h"
@@ -42,6 +43,9 @@ void registerAllImGuiObjs() {
 
   hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<WaveformWindow>());
+
+  hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
+      std::make_shared<SpectrogramWindow>());
 
   hpaslt::WindowManager::getSingleton().lock()->pushRenderObject(
       std::make_shared<Console>());

@@ -23,6 +23,7 @@ private:
   /* -------------------------- Views ------------------------- */
 
   bool m_showWaveform = false;
+  bool m_showSpectrogram = false;
   bool m_showConsole = false;
 
   /* ------------------------- HPASLT ------------------------- */

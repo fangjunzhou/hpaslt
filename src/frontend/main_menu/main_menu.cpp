@@ -12,6 +12,7 @@
 #include "frontend/frontend.h"
 #include "frontend/imgui_example/imgui_example.h"
 #include "frontend/project_settings/project_settings.h"
+#include "frontend/spectrogram_window/spectrogram_window.h"
 #include "frontend/waveform_window/waveform_window.h"
 #include "logger/logger.h"
 
@@ -44,6 +45,8 @@ void MainMenu::onFinishRegisterImGuiObjs() {
 
   m_showWaveform = m_config->showWaveform;
   WaveformWindow::s_onEnable(m_showWaveform);
+  m_showSpectrogram = m_config->showSpectrogram;
+  SpectrogramWindow::s_onEnable(m_showSpectrogram);
   m_showConsole = m_config->showConsole;
   Console::s_onEnable(m_showConsole);
 
@@ -105,6 +108,14 @@ void MainMenu::render() {
         WaveformWindow::s_onEnable(m_showWaveform);
         // Save the config.
         m_config->showWaveform = m_showWaveform;
+        m_config->save();
+      }
+
+      if (ImGui::MenuItem(ICON_MD_GRAPHIC_EQ " Spectrogram Window", nullptr,
+                          &m_showSpectrogram)) {
+        SpectrogramWindow::s_onEnable(m_showSpectrogram);
+        // Save the config.
+        m_config->showSpectrogram = m_showSpectrogram;
         m_config->save();
       }
 

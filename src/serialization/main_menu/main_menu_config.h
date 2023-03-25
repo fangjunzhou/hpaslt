@@ -4,6 +4,7 @@
 #include <cereal/details/helpers.hpp>
 #include <string>
 
+#include "cereal/cereal.hpp"
 #include "serialization/config.h"
 
 namespace hpaslt {
@@ -13,6 +14,7 @@ public:
   /* -------------------------- Views ------------------------- */
 
   bool showWaveform = false;
+  bool showSpectrogram = false;
   bool showConsole = false;
 
   /* -------------------------- Debug ------------------------- */
@@ -22,7 +24,8 @@ public:
   MainMenuConfig(std::string fileName) : Config(fileName) {}
 
   template <class Archive> void serialize(Archive &archive) {
-    archive(CEREAL_NVP(showWaveform), CEREAL_NVP(showConsole));
+    archive(CEREAL_NVP(showWaveform), CEREAL_NVP(showSpectrogram),
+            CEREAL_NVP(showConsole));
     archive(CEREAL_NVP(showExample));
   }
 
