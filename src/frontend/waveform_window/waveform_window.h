@@ -62,6 +62,7 @@ private:
   int m_sampleSize;
 
   /* ---------------------- Playing Time ---------------------- */
+
   // Current playing time, normally sync with workspace playing time.
   double m_currTime;
   // Slider playing time, sync with implot rendering component.
