@@ -37,7 +37,7 @@ WaveformWindow::WaveformWindow()
   // Setup window enable callback.
   setupEnableCallback(s_onEnable);
 
-  // Setuo audio loaded callback.
+  // Setup audio loaded callback.
   m_audioLoadedHandle = AudioWorkspace::s_onAudioLoaded.append(
       [&](std::weak_ptr<AudioObject> audioObj) {
         logger->coreLogger->trace("WaveformWindow load new AudioObject.");
