@@ -1,4 +1,9 @@
 #include "core/audio_object/audio_object.h"
+
+#include <GL/glew.h>
+#include <memory>
+
+#include "core/audio_spectrogram/audio_spectrogram.h"
 #include "window_manager/imgui_object.h"
 
 namespace hpaslt {
@@ -25,6 +30,17 @@ private:
    *
    */
   LoadAudioCallback::Handle m_audioLoadedHandle;
+
+  /* ----------------------- Spectrogram ---------------------- */
+
+  std::shared_ptr<AudioSpectrogram> m_audioSpectrogram;
+
+  /* -------------------- OpenGL Rendering -------------------- */
+
+  /**
+   * @brief The OpenGL texture id.
+   */
+  GLuint m_spectrogramTextureId;
 
 public:
   /**
